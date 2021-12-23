@@ -63,7 +63,7 @@ def suppress(vA1, vA, vr, vrj):
     return vA1
 
 
-def delta(vA, vr, vrj):
+def delta(vA, vr, vp):
     """[summary]
 
     Args:
@@ -74,8 +74,7 @@ def delta(vA, vr, vrj):
     Returns:
         [type]: [description]
     """
-    vp = vr - vrj
-    mp = makeadjoint(vrj, vp)  # 2 mul's
+    mp = makeadjoint(vr, vp)  # 2 mul's
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
@@ -185,11 +184,9 @@ def pbairstow_even(pa, vrs, options=Options()):
             tol = max(tol, tol_i)
             vA1, _ = horner(pb, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
-                # mp = makeadjoint(vrs[j], vrs[i] - vrs[j])  # 2 mul's
-                # vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-                vA1 -= delta(vA, vrs[i], vrs[j])
-            mA1 = makeadjoint(vrs[i], vA1)  # 2 mul's
-            vrs[i] -= mA1.mdot(vA) / mA1.det()  # Gauss-Seidel fashion
+                vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
+            vrs[i] -= delta(vA, vrs[i], vA1)
+            
         if tol < options.tol:
             found = True
             break

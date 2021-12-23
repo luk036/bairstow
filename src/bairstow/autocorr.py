@@ -47,20 +47,12 @@ def pbairstow_autocorr(pa, vrs, options=Options()):
                 continue
             tol = max(tol, tol_i)
             vA1, _ = horner(pb, vrs[i])
-
             for j in filter(lambda j: j != i, range(M)):  # exclude i
-                # mp = makeadjoint(vrs[j], vrs[i] - vrs[j])  # 2 mul's
-                # vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-                vA1 -= delta(vA, vrs[i], vrs[j])
-
+                vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             for j in range(M):
                 vrn = vector2(-vrs[j].x, 1.0) / vrs[j].y
-                # mp = makeadjoint(vrn, vrs[i] - vrn)  # 2 mul's
-                # vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-                vA1 -= delta(vA, vrs[i], vrn)
-
-            mA1 = makeadjoint(vrs[i], vA1)  # 2 mul's
-            vrs[i] -= mA1.mdot(vA) / mA1.det()  # Gauss-Seidel fashion
+                vA1 -= delta(vA, vrn, vrs[i] - vrn)
+            vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
             found = True
             break
