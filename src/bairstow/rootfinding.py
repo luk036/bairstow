@@ -6,21 +6,6 @@ from .vector2 import vector2
 PI = acos(-1.0)
 
 
-def makeG(vr, vp):
-    """[summary]
-
-    Args:
-        vr ([type]): [description]
-        vp ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    r, q = vr.x, vr.y
-    p, s = vp.x, vp.y
-    return matrix2(vector2(p * r + s, p), vector2(p * q, s))
-
-
 def makeadjoint(vr, vp):
     """[summary]
 
@@ -144,17 +129,17 @@ def initial_guess(pa):
         [type]: [description]
     """
     N = len(pa) - 1
-    M = N // 2
     c = -pa[1] / (N * pa[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(pa, c)
     re = pow(abs(Pc), 1.0 / N)
-    k = 2 * PI / N
+    k = PI / N
     m = c * c + re * re
     vr0s = []
-    for i in range(1, M + 1):
-        r0 = 2 * (c + re * cos(k * i))
-        q0 = m + r0
+    for i in range(1, N, 2):
+        temp = re * cos(k * i)
+        r0 = 2 * (c + temp)
+        q0 = m + 2 * c * temp
         vr0s += [vector2(r0, q0)]
     return vr0s
 
@@ -178,15 +163,14 @@ def pbairstow_even(pa, vrs, options=Options()):
         tol = 0.0
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             vA, pb = horner(pa, vrs[i])
-            toli = abs(vA.x) + abs(vA.y)
+            toli = max(abs(vA.x), abs(vA.y))
             if toli < options.tol:
                 converged[i] = True
                 continue
             tol = max(tol, toli)
             vA1, _ = horner(pb, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
-                vp = vrs[i] - vrs[j]
-                mp = makeadjoint(vrs[j], vp)  # 2 mul's
+                mp = makeadjoint(vrs[j], vrs[i] - vrs[j])  # 2 mul's
                 vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
                 # vA1 = suppress(vA, vA1, vrs[i], vrs[j])
             mA1 = makeadjoint(vrs[i], vA1)  # 2 mul's
