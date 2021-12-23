@@ -21,7 +21,7 @@ def makeadjoint(vr, vp):
     return matrix2(vector2(s, -p), vector2(-p * q, p * r + s))
 
 
-def suppress_orig(vA, vA1, vr, vrj):
+def suppress_orig(vA1, vA, vr, vrj):
     """[summary]
 
     Args:
@@ -45,7 +45,7 @@ def suppress_orig(vA, vA1, vr, vrj):
     return vA, vA1
 
 
-def suppress(vA, vA1, vr, vrj):
+def suppress(vA1, vA, vr, vrj):
     """[summary]
 
     Args:
@@ -61,6 +61,22 @@ def suppress(vA, vA1, vr, vrj):
     mp = makeadjoint(vrj, vp)  # 2 mul's
     vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
     return vA1
+
+
+def delta(vA, vr, vrj):
+    """[summary]
+
+    Args:
+        vA ([type]): [description]
+        vr ([type]): [description]
+        vrj ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    vp = vr - vrj
+    mp = makeadjoint(vrj, vp)  # 2 mul's
+    return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
 def check_newton(vA, vA1, vr):
@@ -155,24 +171,23 @@ def pbairstow_even(pa, vrs, options=Options()):
     Returns:
         [type]: [description]
     """
-    N = len(pa) - 1  # degree, assume even
-    M = N // 2
+    M = len(vrs)
     found = False
     converged = [False] * M
     for niter in range(options.max_iter):
         tol = 0.0
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             vA, pb = horner(pa, vrs[i])
-            toli = max(abs(vA.x), abs(vA.y))
-            if toli < options.tol:
+            tol_i = max(abs(vA.x), abs(vA.y))
+            if tol_i < options.tol:
                 converged[i] = True
                 continue
-            tol = max(tol, toli)
+            tol = max(tol, tol_i)
             vA1, _ = horner(pb, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
-                mp = makeadjoint(vrs[j], vrs[i] - vrs[j])  # 2 mul's
-                vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-                # vA1 = suppress(vA, vA1, vrs[i], vrs[j])
+                # mp = makeadjoint(vrs[j], vrs[i] - vrs[j])  # 2 mul's
+                # vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
+                vA1 -= delta(vA, vrs[i], vrs[j])
             mA1 = makeadjoint(vrs[i], vA1)  # 2 mul's
             vrs[i] -= mA1.mdot(vA) / mA1.det()  # Gauss-Seidel fashion
         if tol < options.tol:

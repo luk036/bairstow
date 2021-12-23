@@ -6,9 +6,9 @@ def test_rootfind():
     # vA1 = vector2(2.3, 3.4)
     # vr = vector2(4.5, 5.6)
     # vrj = vector2(6.7, 7.8)
-    # vAorig, vA1orig = suppress_orig(vA, vA1, vr, vrj)
+    # vAorig, vA1orig = suppress_orig(vA1, vA, vr, vrj)
     # print(check_newton(vAorig, vA1orig, vr))
-    # vA1 = suppress(vA, vA1, vr, vrj)
+    # vA1 = suppress(vA1, vA, vr, vrj)
     # print(check_newton(vA, vA1, vr))
     h = [5.0, 2.0, 9.0, 6.0, 2.0]
     vr0s = initial_guess(h)
@@ -29,9 +29,9 @@ def test_rootfind2():
     # vA1 = vector2(2.3, 3.4)
     # vr = vector2(4.5, 5.6)
     # vrj = vector2(6.7, 7.8)
-    # vAorig, vA1orig = suppress_orig(vA, vA1, vr, vrj)
+    # vAorig, vA1orig = suppress_orig(vA1, vA, vr, vrj)
     # print(check_newton(vAorig, vA1orig, vr))
-    # vA1 = suppress(vA, vA1, vr, vrj)
+    # vA1 = suppress(vA1, vA, vr, vrj)
     # print(check_newton(vA, vA1, vr))
     h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
     vr0s = initial_guess(h)
