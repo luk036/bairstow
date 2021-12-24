@@ -20,8 +20,8 @@ def test_rootfind():
     # print(vA1)
     _, niter, found = pbairstow_even(h, vr0s)
     print([niter, found])
-    # print([find_rootq(-r.x, -r.y) for r in vrs])
-    assert niter <= 9
+    # print([find_rootq(r.x, -r.y) for r in vrs])
+    assert niter <= 5
 
 
 def test_rootfind2():
@@ -43,5 +43,5 @@ def test_rootfind2():
     # print(vA1)
     _, niter, found = pbairstow_even(h, vr0s)
     print([niter, found])
-    # print([find_rootq(-r.x, -r.y) for r in vrs])
-    assert niter <= 31
+    # print([find_rootq(r.x, -r.y) for r in vrs])
+    assert niter <= 12

@@ -154,8 +154,8 @@ def initial_guess(pa):
     for i in range(1, N, 2):
         temp = re * cos(k * i)
         r0 = 2 * (c + temp)
-        q0 = m + 2 * c * temp
-        vr0s += [vector2(r0, q0)]
+        t0 = m + 2 * c * temp
+        vr0s += [vector2(r0, -t0)]
     return vr0s
 
 
@@ -193,21 +193,27 @@ def pbairstow_even(pa, vrs, options=Options()):
     return vrs, niter + 1, found
 
 
-def find_rootq(b, c):
+def find_rootq(r, t):
     """[summary]
 
+    x^2 - r*x + t  or x^2 - (r/t) * x + (1/t)
+
+    (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
+
+    determinant r/2 + q
+
     Args:
-        b ([type]): [description]
-        c ([type]): [description]
+        r ([type]): [description]
+        t ([type]): [description]
 
     Returns:
         [type]: [description]
     """
-    hb = b / 2.0
-    d = hb * hb - c
+    hr = r / 2.0
+    d = hr * hr - t
     if d < 0.0:
-        x1 = -hb + (sqrt(-d) if hb < 0.0 else -sqrt(-d)) * 1j
+        x1 = hr + sqrt(-d) * 1j
     else:
-        x1 = -hb + (sqrt(d) if hb < 0.0 else -sqrt(d))
-    x2 = c / x1
+        x1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))
+    x2 = t / x1
     return x1, x2

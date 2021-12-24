@@ -20,5 +20,5 @@ def test_autocorr():
     # print(vA1)
     _, niter, found = pbairstow_autocorr(h, vr0s)
     print([niter, found])
-    # print([find_rootq(-r.x, -r.y) for r in vrs])
-    assert niter <= 31
+    # print([find_rootq(r.x, -r.y) for r in vrs])
+    assert niter <= 12
