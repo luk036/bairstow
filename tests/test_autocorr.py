@@ -1,4 +1,5 @@
-from bairstow.autocorr import initial_autocorr, pbairstow_autocorr
+from bairstow.autocorr import extract_autocorr, initial_autocorr, pbairstow_autocorr
+from bairstow.rootfinding import find_rootq
 
 
 def test_autocorr():
@@ -18,7 +19,13 @@ def test_autocorr():
     # print(pb)
     # vA1, _ = horner(pb, vr0s[1])
     # print(vA1)
-    _, niter, found = pbairstow_autocorr(h, vr0s)
+    vrs, niter, found = pbairstow_autocorr(h, vr0s)
     print([niter, found])
     # print([find_rootq(r.x, -r.y) for r in vrs])
+
+    for vr in vrs:
+        vr = extract_autocorr(vr)
+        root = find_rootq(vr)
+        print(root)
+
     assert niter <= 12

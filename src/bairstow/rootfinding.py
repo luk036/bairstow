@@ -9,6 +9,9 @@ PI = acos(-1.0)
 def makeadjoint(vr, vp):
     """[summary]
 
+    p * r - m   -p
+    p * t       -m
+
     Args:
         vr ([type]): [description]
         vp ([type]): [description]
@@ -16,9 +19,9 @@ def makeadjoint(vr, vp):
     Returns:
         [type]: [description]
     """
-    r, q = vr.x, vr.y
-    p, s = vp.x, vp.y
-    return matrix2(vector2(s, -p), vector2(-p * q, p * r + s))
+    r, t = vr.x, vr.y
+    p, m = vp.x, vp.y
+    return matrix2(vector2(-m, p), vector2(-p * t, p * r - m))
 
 
 def suppress_orig(vA1, vA, vr, vrj):
@@ -124,9 +127,9 @@ def horner(pa, vr):
     pb = pa.copy()
     pb[1] += pb[0] * r
     for i in range(2, n):
-        pb[i] += pb[i - 2] * q + pb[i - 1] * r
-    pb[n] += pb[n - 2] * q
-    return vector2(pb[n - 1], pb[n]), pb[:-2]
+        pb[i] += pb[i - 1] * r - pb[i - 2] * q
+    pb[n] -= pb[n - 2] * q
+    return vector2(pb[n - 1], -pb[n]), pb[:-2]
 
 
 class Options:
@@ -155,7 +158,7 @@ def initial_guess(pa):
         temp = re * cos(k * i)
         r0 = 2 * (c + temp)
         t0 = m + 2 * c * temp
-        vr0s += [vector2(r0, -t0)]
+        vr0s += [vector2(r0, t0)]
     return vr0s
 
 
@@ -186,14 +189,14 @@ def pbairstow_even(pa, vrs, options=Options()):
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
-            
+
         if tol < options.tol:
             found = True
             break
     return vrs, niter + 1, found
 
 
-def find_rootq(r, t):
+def find_rootq(vr):
     """[summary]
 
     x^2 - r*x + t  or x^2 - (r/t) * x + (1/t)
@@ -209,6 +212,7 @@ def find_rootq(r, t):
     Returns:
         [type]: [description]
     """
+    r, t = vr.x, vr.y
     hr = r / 2.0
     d = hr * hr - t
     if d < 0.0:
