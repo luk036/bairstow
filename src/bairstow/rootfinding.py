@@ -1,4 +1,5 @@
 from math import acos, cos, pow, sqrt
+from typing import List, Tuple
 
 from .matrix2 import matrix2
 from .vector2 import vector2
@@ -6,105 +7,32 @@ from .vector2 import vector2
 PI = acos(-1.0)
 
 
-def makeadjoint(vr, vp):
+def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
     """[summary]
 
-    p * r - m   -p
-    p * t       -m
-
     Args:
-        vr ([type]): [description]
-        vp ([type]): [description]
+        vA (vector2): [description]
+        vr (vector2): [description]
+        vp (vector2): [description]
 
     Returns:
-        [type]: [description]
+        vector2: [description]
     """
     r, t = vr.x, vr.y
     p, m = vp.x, vp.y
-    return matrix2(vector2(-m, p), vector2(-p * t, p * r - m))
-
-
-def suppress_orig(vA1, vA, vr, vrj):
-    """[summary]
-
-    Args:
-        vA ([type]): [description]
-        vA1 ([type]): [description]
-        vr ([type]): [description]
-        vrj ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    vp = vr - vrj
-    p = vp.x
-    Ap = makeadjoint(vr, vp)  # 2 mul's
-    e = Ap.det()  # 2 mul's
-    va = Ap.dot(vA)  # 4 mul's
-    vA = va  # 2 mul's
-    a, b = va.x, va.y
-    vc = vA1 - vector2(a, a * p + b) / e  # 3 mul
-    vA1 = Ap.dot(vc)  # 4 mul
-    return vA, vA1
-
-
-def suppress(vA1, vA, vr, vrj):
-    """[summary]
-
-    Args:
-        vA ([type]): [description]
-        vA1 ([type]): [description]
-        vr ([type]): [description]
-        vrj ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    vp = vr - vrj
-    mp = makeadjoint(vrj, vp)  # 2 mul's
-    vA1 -= mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-    return vA1
-
-
-def delta(vA, vr, vp):
-    """[summary]
-
-    Args:
-        vA ([type]): [description]
-        vr ([type]): [description]
-        vrj ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    mp = makeadjoint(vr, vp)  # 2 mul's
+    mp = matrix2(vector2(-m, p), vector2(-p * t, p * r - m))
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
-def check_newton(vA, vA1, vr):
+def horner_eval(pa: list[float], r: float) -> float:
     """[summary]
 
     Args:
-        vA ([type]): [description]
-        vA1 ([type]): [description]
-        vr ([type]): [description]
+        pa (list[float]): [description]
+        r (float): [description]
 
     Returns:
-        [type]: [description]
-    """
-    mA1 = makeadjoint(vr, vA1)  # 2 mul's
-    return mA1.mdot(vA) / mA1.det()  # 6 mul's + 2 div's
-
-
-def horner_eval(pa, r):
-    """[summary]
-
-    Args:
-        pa ([type]): [description]
-        r ([type]): [description]
-
-    Returns:
-        [type]: [description]
+        float: [description]
     """
     pb = pa.copy()
     for i in range(len(pa)):
@@ -112,15 +40,15 @@ def horner_eval(pa, r):
     return pb[-1]
 
 
-def horner(pa, vr):
+def horner(pa: list[float], vr: vector2) -> Tuple[vector2, List[float]]:
     """[summary]
 
     Args:
-        pa ([type]): [description]
-        vr ([type]): [description]
+        pa (list[float]): [description]
+        vr (vector2): [description]
 
     Returns:
-        [type]: [description]
+        vector2: [description]
     """
     r, q = vr.x, vr.y
     n = len(pa) - 1
@@ -137,14 +65,14 @@ class Options:
     tol: float = 1e-12
 
 
-def initial_guess(pa):
+def initial_guess(pa: list[float]) -> list[vector2]:
     """[summary]
 
     Args:
-        pa ([type]): [description]
+        pa (list[float]): [description]
 
     Returns:
-        [type]: [description]
+        list[vector2]: [description]
     """
     N = len(pa) - 1
     c = -pa[1] / (N * pa[0])
@@ -162,13 +90,13 @@ def initial_guess(pa):
     return vr0s
 
 
-def pbairstow_even(pa, vrs, options=Options()):
+def pbairstow_even(pa: list[float], vrs: list[vector2], options: Options = Options()):
     """[summary]
 
     Args:
-        pa ([type]): [description]
-        vrs ([type]): [description]
-        options ([type], optional): [description]. Defaults to Options().
+        pa (list[float]): [description]
+        vrs (list[vector2]): [description]
+        options (Options, optional): [description]. Defaults to Options().
 
     Returns:
         [type]: [description]
@@ -196,7 +124,7 @@ def pbairstow_even(pa, vrs, options=Options()):
     return vrs, niter + 1, found
 
 
-def find_rootq(vr):
+def find_rootq(vr: vector2) -> Tuple[float, float]:
     """[summary]
 
     x^2 - r*x + t  or x^2 - (r/t) * x + (1/t)
@@ -206,11 +134,10 @@ def find_rootq(vr):
     determinant r/2 + q
 
     Args:
-        r ([type]): [description]
-        t ([type]): [description]
+        vr (vector2): [description]
 
     Returns:
-        [type]: [description]
+        Tuple[float, float]: [description]
     """
     r, t = vr.x, vr.y
     hr = r / 2.0

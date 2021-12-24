@@ -1,19 +1,19 @@
 from math import acos, cos, pow, sqrt
 
-from .rootfinding import Options, delta, horner, makeadjoint
+from .rootfinding import Options, delta, horner
 from .vector2 import vector2
 
 PI = acos(-1.0)
 
 
-def initial_autocorr(pa):
+def initial_autocorr(pa: list[float]) -> list[vector2]:
     """[summary]
 
     Args:
-        pa ([type]): [description]
+        pa (list[float]): [description]
 
     Returns:
-        [type]: [description]
+        list[vector2]: [description]
     """
     N = len(pa) - 1
     re = pow(abs(pa[-1]), 1.0 / N)
@@ -24,13 +24,15 @@ def initial_autocorr(pa):
     return vr0s
 
 
-def pbairstow_autocorr(pa, vrs, options=Options()):
+def pbairstow_autocorr(
+    pa: list[float], vrs: list[vector2], options: Options = Options()
+):
     """[summary]
 
     Args:
-        pa ([type]): [description]
-        vrs ([type]): [description]
-        options ([type], optional): [description]. Defaults to Options().
+        pa (list[float]): [description]
+        vrs (list[vector2]): [description]
+        options (Options, optional): [description]. Defaults to Options().
 
     Returns:
         [type]: [description]
@@ -60,7 +62,7 @@ def pbairstow_autocorr(pa, vrs, options=Options()):
     return vrs, niter + 1, found
 
 
-def extract_autocorr(vr):
+def extract_autocorr(vr: vector2) -> vector2:
     """Extract the quadratic function where its roots are within a unit circle
 
     x^2 - r*x + t  or x^2 - (r/t) * x + (1/t)
@@ -70,10 +72,10 @@ def extract_autocorr(vr):
     determinant r/2 + q
 
     Args:
-        vr ([type]): [description]
+        vr (vector2): [description]
 
     Returns:
-        [type]: [description]
+        vector2: [description]
     """
     r, t = vr.x, vr.y
     hr = r / 2.0
@@ -93,5 +95,4 @@ def extract_autocorr(vr):
         elif abs(x2) > 1.0:
             x2 = 1.0 / x2
             vr = vector2(x1 + x2, x1 * x2)
-
     return vr

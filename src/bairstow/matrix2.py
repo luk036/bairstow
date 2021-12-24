@@ -6,8 +6,8 @@ class matrix2(vector2):
         """[summary]
 
         Args:
-            x ([type]): [description]
-            y ([type]): [description]
+            x (vector2): [description]
+            y (vector2): [description]
         """
         vector2.__init__(self, x, y)
 
@@ -19,25 +19,22 @@ class matrix2(vector2):
         """
         return matrix2(self._x, self._y)
 
-    def mdot(self, rhs: vector2):
-        """[summary]
+    def mdot(self, rhs: vector2) -> vector2:
+        """matrix-vector product
 
         Args:
-            rhs ([type]): [description]
+            rhs (vector2): [description]
 
         Returns:
-            [type]: [description]
+            vector2: [description]
         """
         return vector2(self._x.dot(rhs), self._y.dot(rhs))
 
-    def det(self):
-        """[summary]
-
-        Args:
-            rhs ([type]): [description]
+    def det(self) -> float:
+        """determinant
 
         Returns:
-            [type]: [description]
+            float: [description]
         """
         a11, a12 = self.x.x, self.x.y
         a21, a22 = self.y.x, self.y.y
@@ -99,11 +96,11 @@ class matrix2(vector2):
         """
         return matrix2(self.x - rhs.x, self.y - rhs.y)
 
-    def __imul__(self, alpha):
+    def __imul__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
@@ -112,22 +109,22 @@ class matrix2(vector2):
         self._y *= alpha
         return self
 
-    def __mul__(self, alpha):
+    def __mul__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
         """
         return matrix2(self.x * alpha, self.y * alpha)
 
-    def __itruediv__(self, alpha):
+    def __itruediv__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
@@ -136,11 +133,11 @@ class matrix2(vector2):
         self._y /= alpha
         return self
 
-    def __truediv__(self, alpha):
+    def __truediv__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]

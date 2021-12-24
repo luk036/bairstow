@@ -59,39 +59,6 @@ class vector2:
         """
         return self._x * rhs._y - rhs._x * self._y
 
-    def __eq__(self, rhs) -> bool:
-        """[summary]
-
-        Args:
-            rhs ([type]): [description]
-
-        Returns:
-            bool: [description]
-        """
-        return (self._x, self._y) == (rhs._x, rhs._y)
-
-    def __lt__(self, rhs) -> bool:
-        """[summary]
-
-        Args:
-            rhs ([type]): [description]
-
-        Returns:
-            bool: [description]
-        """
-        return (self._x, self._y) < (rhs._x, rhs._y)
-
-    def __le__(self, rhs) -> bool:
-        """[summary]
-
-        Args:
-            rhs ([type]): [description]
-
-        Returns:
-            bool: [description]
-        """
-        return (self.x, self.y) <= (rhs.x, rhs.y)
-
     def __neg__(self):
         """[summary]
 
@@ -148,11 +115,11 @@ class vector2:
         """
         return vector2(self.x - rhs.x, self.y - rhs.y)
 
-    def __imul__(self, alpha):
+    def __imul__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
@@ -161,22 +128,22 @@ class vector2:
         self._y *= alpha
         return self
 
-    def __mul__(self, alpha):
+    def __mul__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
         """
         return vector2(self.x * alpha, self.y * alpha)
 
-    def __itruediv__(self, alpha):
+    def __itruediv__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
@@ -185,11 +152,11 @@ class vector2:
         self._y /= alpha
         return self
 
-    def __truediv__(self, alpha):
+    def __truediv__(self, alpha: float):
         """[summary]
 
         Args:
-            alpha ([type]): [description]
+            alpha (float): scalar
 
         Returns:
             [type]: [description]
@@ -203,13 +170,3 @@ class vector2:
             [type]: [description]
         """
         return "<{self.x}, {self.y}>".format(self=self)
-
-
-if __name__ == "__main__":
-    v = vector2(3, 4)
-    w = -v
-    print(w >= v)
-
-    v3d = vector2(v, 5)  # vector in 3d
-    w3d = vector2(w, 5)  # vector in 3d
-    print(w >= v)
