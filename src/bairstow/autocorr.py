@@ -84,7 +84,7 @@ def extract_autocorr(vr: vector2) -> vector2:
     hr = r / 2.0
     d = hr * hr - t
     if d < 0.0:  # complex conjugate root
-        if t > 0.0:
+        if t > 1.0:
             vr = vector2(r, 1.0) / t
     else:
         # two real roots

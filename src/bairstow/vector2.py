@@ -29,14 +29,6 @@ class vector2:
         """
         return self._y
 
-    def copy(self):
-        """[summary]
-
-        Returns:
-            [type]: [description]
-        """
-        return vector2(self._x, self._y)
-
     def dot(self, rhs):
         """[summary]
 
@@ -47,25 +39,6 @@ class vector2:
             [type]: [description]
         """
         return self._x * rhs._x + rhs._y * self._y
-
-    def cross(self, rhs):
-        """[summary]
-
-        Args:
-            rhs ([type]): [description]
-
-        Returns:
-            [type]: [description]
-        """
-        return self._x * rhs._y - rhs._x * self._y
-
-    def __neg__(self):
-        """[summary]
-
-        Returns:
-            [type]: [description]
-        """
-        return vector2(-self.x, -self.y)
 
     def __iadd__(self, rhs):
         """[summary]
