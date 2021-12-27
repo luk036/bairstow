@@ -82,9 +82,11 @@ def initial_guess(pa: List[float]) -> List[vector2]:
     # P = np.poly1d(pa)
     Pc = horner_eval(pa, c)
     re = pow(abs(Pc), 1.0 / N)
-    k = PI / N
     m = c * c + re * re
     vr0s = []
+    N //= 2
+    N *= 2 # make even
+    k = PI / N
     for i in range(1, N, 2):
         temp = re * cos(k * i)
         r0 = -2 * (c + temp)
@@ -105,22 +107,26 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
         [type]: [description]
     """
     M = len(vrs)
-    # found = False
+    found = False
     converged = [False] * M
     for niter in range(options.max_iter):
-        found = True
+        tol = 0
+        # found = True
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
+        # for i in range(M):
             vA, pb = horner(pa, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
-            if tol_i < options.tol:
+            if tol_i < 1e-15:
                 converged[i] = True
                 continue
-            found = False
+            # found = False
             vA1, _ = horner(pb, vrs[i])
+            tol = max(tol_i, tol)
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
-        if found:
+        if tol < options.tol:
+            found = True
             break
     return vrs, niter + 1, found
 

@@ -42,15 +42,15 @@ def pbairstow_autocorr(
     found = False
     converged = [False] * M
     for niter in range(options.max_iter):
-        # tol = 0.0
-        found = True  # initial
+        tol = 0.0
+        # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             vA, pb = horner(pa, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
-            if tol_i < options.tol:
+            if tol_i < 1e-15:
                 converged[i] = True
                 continue
-            # tol = max(tol, tol_i)
+            tol = max(tol, tol_i)
             found = False
             vA1, _ = horner(pb, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
@@ -59,11 +59,11 @@ def pbairstow_autocorr(
                 vrn = vector2(vrs[j].x, 1.0) / vrs[j].y
                 vA1 -= delta(vA, vrn, vrs[i] - vrn)
             vrs[i] -= delta(vA, vrs[i], vA1)
-        # if tol < options.tol:
-        #     found = True
-        #     break
-        if found:
+        if tol < options.tol:
+            found = True
             break
+        # if found:
+        #     break
     return vrs, niter + 1, found
 
 
