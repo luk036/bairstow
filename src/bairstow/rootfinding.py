@@ -85,7 +85,7 @@ def initial_guess(pa: List[float]) -> List[vector2]:
     m = c * c + re * re
     vr0s = []
     N //= 2
-    N *= 2 # make even
+    N *= 2  # make even
     k = PI / N
     for i in range(1, N, 2):
         temp = re * cos(k * i)
@@ -113,7 +113,7 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
         tol = 0
         # found = True
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
-        # for i in range(M):
+            # for i in range(M):
             vA, pb = horner(pa, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < 1e-15:

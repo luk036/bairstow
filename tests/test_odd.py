@@ -17,4 +17,3 @@ def test_odd2():
     print([niter, found])
     print([find_rootq(vr) for vr in vrs])
     assert niter <= 114
-
