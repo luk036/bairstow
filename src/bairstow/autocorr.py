@@ -1,7 +1,8 @@
-from math import acos, cos, pow, sqrt
+from math import acos, cos, sqrt
 from typing import List
 
-from .rootfinding import Options, delta, horner
+from .aberth import Options
+from .rootfinding import delta, horner
 from .vector2 import vector2
 
 PI = acos(-1.0)
@@ -17,7 +18,7 @@ def initial_autocorr(pa: List[float]) -> List[vector2]:
         List[vector2]: [description]
     """
     N = len(pa) - 1
-    re = pow(abs(pa[-1]), 1.0 / N)
+    re = abs(pa[-1]) ** (1.0 / N)
     N //= 2
     k = PI / N
     m = re * re
@@ -39,20 +40,22 @@ def pbairstow_autocorr(
         [type]: [description]
     """
     M = len(vrs)  # assume polynomial of h is even
+    N = len(pa) - 1
     found = False
     converged = [False] * M
     for niter in range(options.max_iter):
         tol = 0.0
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
-            vA, pb = horner(pa, vrs[i])
+            pb = pa.copy()
+            vA = horner(pb, N, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
-            if tol_i < 1e-15:
+            if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
             found = False
-            vA1, _ = horner(pb, vrs[i])
+            vA1 = horner(pb, N - 2, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             for j in range(M):

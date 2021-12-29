@@ -1,6 +1,7 @@
 from math import acos, cos, pow, sqrt
 from typing import List, Tuple
 
+from .aberth import Options, horner_eval
 from .matrix2 import matrix2
 from .vector2 import vector2
 
@@ -27,23 +28,7 @@ def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
-def horner_eval(pa: List[float], r: float) -> float:
-    """[summary]
-
-    Args:
-        pa (List[float]): [description]
-        r (float): [description]
-
-    Returns:
-        float: [description]
-    """
-    pb = pa.copy()
-    for i in range(len(pa)):
-        pb[i] += pb[i - 1] * r
-    return pb[-1]
-
-
-def horner(pa: List[float], vr: vector2) -> Tuple[vector2, List[float]]:
+def horner(pb: List[float], n: int, vr: vector2) -> Tuple[vector2, List[float]]:
     """[summary]
 
     Args:
@@ -54,18 +39,11 @@ def horner(pa: List[float], vr: vector2) -> Tuple[vector2, List[float]]:
         vector2: [description]
     """
     r, q = vr.x, vr.y
-    n = len(pa) - 1
-    pb = pa.copy()
     pb[1] -= pb[0] * r
     for i in range(2, n):
         pb[i] -= pb[i - 1] * r + pb[i - 2] * q
     pb[n] -= pb[n - 2] * q
-    return vector2(pb[n - 1], pb[n]), pb[:-2]
-
-
-class Options:
-    max_iter: int = 2000
-    tol: float = 1e-12
+    return vector2(pb[n - 1], pb[n])
 
 
 def initial_guess(pa: List[float]) -> List[vector2]:
@@ -80,7 +58,7 @@ def initial_guess(pa: List[float]) -> List[vector2]:
     N = len(pa) - 1
     c = -pa[1] / (N * pa[0])
     # P = np.poly1d(pa)
-    Pc = horner_eval(pa, c)
+    Pc = horner_eval(pa.copy(), N, c)
     re = pow(abs(Pc), 1.0 / N)
     m = c * c + re * re
     vr0s = []
@@ -107,6 +85,7 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
         [type]: [description]
     """
     M = len(vrs)
+    N = len(pa) - 1
     found = False
     converged = [False] * M
     for niter in range(options.max_iter):
@@ -114,13 +93,14 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
         # found = True
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             # for i in range(M):
-            vA, pb = horner(pa, vrs[i])
+            pb = pa.copy()
+            vA = horner(pb, N, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
-            if tol_i < 1e-15:
+            if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
             # found = False
-            vA1, _ = horner(pb, vrs[i])
+            vA1 = horner(pb, N - 2, vrs[i])
             tol = max(tol_i, tol)
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
