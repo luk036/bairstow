@@ -57,7 +57,7 @@ r = [
 def test_fir_even():
     vr0s = initial_guess(r)
     opts = Options()
-    opts.tol = 1e-1
+    opts.tol = 0.5e-1
     vrs, niter, found = pbairstow_even(r, vr0s, opts)
     print([niter, found])
     print([find_rootq(vr) for vr in vrs])
@@ -69,7 +69,7 @@ def test_fir_auto():
     vr0s = initial_autocorr(r)
     print("vrs: {}".format(len(vr0s)))
     opts = Options()
-    opts.tol = 1e-1
+    opts.tol = 0.5e-1
     vrs, niter, found = pbairstow_autocorr(r, vr0s, opts)
     print([niter, found])
 

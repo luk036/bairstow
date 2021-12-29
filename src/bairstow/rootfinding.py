@@ -1,7 +1,7 @@
-from math import acos, cos, pow, sqrt
+from math import acos, cos, sqrt
 from typing import List, Tuple
 
-from .aberth import Options, horner_eval
+from .aberth import Options
 from .matrix2 import matrix2
 from .vector2 import vector2
 
@@ -26,6 +26,21 @@ def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
     p, m = vp.x, vp.y
     mp = matrix2(vector2(-m, p), vector2(-p * q, p * r - m))
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
+
+
+def horner_eval(pb: List[float], n: int, z: float) -> float:
+    """[summary]
+
+    Args:
+        pa (List[float]): [description]
+        r (float): [description]
+
+    Returns:
+        float: [description]
+    """
+    for i in range(n):
+        pb[i + 1] += pb[i] * z
+    return pb[n]
 
 
 def horner(pb: List[float], n: int, vr: vector2) -> Tuple[vector2, List[float]]:
@@ -59,7 +74,7 @@ def initial_guess(pa: List[float]) -> List[vector2]:
     c = -pa[1] / (N * pa[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(pa.copy(), N, c)
-    re = pow(abs(Pc), 1.0 / N)
+    re = abs(Pc) ** (1.0 / N)
     m = c * c + re * re
     vr0s = []
     N //= 2
