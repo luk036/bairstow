@@ -58,6 +58,7 @@ def test_fir_even():
     vr0s = initial_guess(r)
     opts = Options()
     opts.tol = 0.5e-1
+    # opts.tol_suppress = 0.5e-1
     vrs, niter, found = pbairstow_even(r, vr0s, opts)
     print([niter, found])
     print([find_rootq(vr) for vr in vrs])

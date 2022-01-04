@@ -11,6 +11,7 @@ class Options:
     max_iter: int = 2000
     tol: float = 1e-12
     tol_ind: float = 1e-15
+    tol_suppress: float = 1e-1
 
 
 def horner_eval(pb: List[float], z):
