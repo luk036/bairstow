@@ -14,7 +14,23 @@ class Options:
     tol_suppress: float = 1e-1
 
 
-def horner_eval(pb: List[float], z):
+# def horner_eval(pb: List[float], z):
+#     """[summary]
+
+#     Args:
+#         pa (List[float]): [description]
+#         r (float): [description]
+
+#     Returns:
+#         float: [description]
+#     """
+#     ans = pb[0]
+#     for i in range(1, len(pb)):
+#         ans = ans * z + pb[i]
+#     return ans
+
+
+def horner_eval(pb: List[float], n: int, alpha: float) -> float:
     """[summary]
 
     Args:
@@ -24,10 +40,25 @@ def horner_eval(pb: List[float], z):
     Returns:
         float: [description]
     """
-    ans = pb[0]
-    for i in range(1, len(pb)):
-        ans = ans * z + pb[i]
-    return ans
+    for i in range(n):
+        pb[i + 1] += pb[i] * alpha
+    return pb[n]
+
+
+def horner_backward(pb: List[float], n: int, alpha: float) -> float:
+    """[summary]
+
+    Args:
+        pa (List[float]): [description]
+        r (float): [description]
+
+    Returns:
+        float: [description]
+    """
+    for i in range(0, n):
+        pb[-(i + 2)] -= pb[-(i + 1)]
+        pb[-(i + 2)] /= -alpha
+    return pb[0]
 
 
 # def initial_aberth_lds(pa: List) -> List:
@@ -64,7 +95,7 @@ def initial_aberth(pa: List) -> List:
     """
     N = len(pa) - 1
     c = -pa[1] / (N * pa[0])
-    Pc = horner_eval(pa, c)
+    Pc = horner_eval(pa, N, c)
     re = (-Pc) ** (1.0 / N)
     k = 2 * PI / N
     z0s = []
@@ -88,16 +119,17 @@ def aberth(pa: List, zs: List, options: Options = Options()):
     N = len(pa) - 1
     found = False
     converged = [False] * M
-    pb = [(N - i) * p for i, p in enumerate(pa[:-1])]
+    # pb = [(N - i) * p for i, p in enumerate(pa[:-1])]
     for niter in range(options.max_iter):
         tol = 0
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
-            P = horner_eval(pa, zs[i])
+            pb = pa.copy()
+            P = horner_eval(pb, N, zs[i])
             tol_i = abs(P)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            P1 = horner_eval(pb, zs[i])
+            P1 = horner_eval(pb, N - 1, zs[i])
             tol = max(tol_i, tol)
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 P1 -= P / (zs[i] - zs[j])

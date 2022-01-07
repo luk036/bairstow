@@ -19,6 +19,8 @@ def initial_autocorr(pa: List[float]) -> List[vector2]:
     """
     N = len(pa) - 1
     re = abs(pa[-1]) ** (1.0 / N)
+    if re > 1:
+        re = 1 / re
     N //= 2
     k = PI / N
     m = re * re
@@ -62,6 +64,8 @@ def pbairstow_autocorr(
                 vrn = vector2(vrs[j].x, 1.0) / vrs[j].y
                 vA1 -= delta(vA, vrn, vrs[i] - vrn)
             vrs[i] -= delta(vA, vrs[i], vA1)
+            if vrs[i].y > 1:
+                vrs[i] = vector2(vrs[i].x, 1.0) / vrs[i].y
         if tol < options.tol:
             found = True
             break

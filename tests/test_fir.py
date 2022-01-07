@@ -70,7 +70,7 @@ def test_fir_auto():
     vr0s = initial_autocorr(r)
     print("vrs: {}".format(len(vr0s)))
     opts = Options()
-    opts.tol = 0.5e-1
+    opts.tol = 1e-3
     vrs, niter, found = pbairstow_autocorr(r, vr0s, opts)
     print([niter, found])
 
@@ -79,4 +79,4 @@ def test_fir_auto():
 
     print([find_rootq(vr) for vr in vrs])
 
-    assert niter <= 6
+    assert niter <= 27

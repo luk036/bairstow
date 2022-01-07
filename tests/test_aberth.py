@@ -15,7 +15,7 @@ def test_aberth2():
     zs, niter, found = aberth(h, z0s)
     print([niter, found])
     print([z for z in zs])
-    assert niter <= 6
+    assert niter <= 7
 
 
 def test_aberth_fir():
