@@ -16,11 +16,11 @@ class Options:
 
 # def horner_eval(pb: List[float], z):
 #     """[summary]
-
+#
 #     Args:
 #         pa (List[float]): [description]
 #         r (float): [description]
-
+#
 #     Returns:
 #         float: [description]
 #     """
