@@ -101,9 +101,8 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
     """
     M = len(vrs)
     N = len(pa) - 1
-    found = False
     converged = [False] * M
-    for niter in range(options.max_iter):
+    for niter in range(1, options.max_iter):
         tol = 0
         # found = True
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
@@ -121,15 +120,12 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
-            found = True
-            break
-    return vrs, niter + 1, found
+            return vrs, niter, True
+    return vrs, options.max_iter, False
 
 
 def find_rootq(vr: vector2) -> Tuple[float, float]:
-    """[summary]
-
-    x^2 + r*x + t
+    """Solve x^2 + r*x + t = 0
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
 

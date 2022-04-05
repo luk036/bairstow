@@ -117,10 +117,8 @@ def aberth(pa: List, zs: List, options: Options = Options()):
     """
     M = len(zs)
     N = len(pa) - 1
-    found = False
     converged = [False] * M
-    # pb = [(N - i) * p for i, p in enumerate(pa[:-1])]
-    for niter in range(options.max_iter):
+    for niter in range(1, options.max_iter):
         tol = 0
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             pb = pa.copy()
@@ -135,6 +133,5 @@ def aberth(pa: List, zs: List, options: Options = Options()):
                 P1 -= P / (zs[i] - zs[j])
             zs[i] -= P / P1
         if tol < options.tol:
-            found = True
-            break
-    return zs, niter + 1, found
+            return zs, niter, True
+    return zs, options.max_iter, False

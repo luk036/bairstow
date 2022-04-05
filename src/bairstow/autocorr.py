@@ -43,9 +43,8 @@ def pbairstow_autocorr(
     """
     M = len(vrs)  # assume polynomial of h is even
     N = len(pa) - 1
-    found = False
     converged = [False] * M
-    for niter in range(options.max_iter):
+    for niter in range(1, options.max_iter):
         tol = 0.0
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
@@ -67,11 +66,8 @@ def pbairstow_autocorr(
             if vrs[i].y > 1:
                 vrs[i] = vector2(vrs[i].x, 1.0) / vrs[i].y
         if tol < options.tol:
-            found = True
-            break
-        # if found:
-        #     break
-    return vrs, niter + 1, found
+            return vrs, niter, True
+    return vrs, options.max_iter, False
 
 
 def extract_autocorr(vr: vector2) -> vector2:
