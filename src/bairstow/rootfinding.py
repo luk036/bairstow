@@ -140,7 +140,6 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
     converged = [False] * M
     for niter in range(1, options.max_iter):
         tol = 0.0
-        # found = True
         for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             # for i in range(M):
             pb = pa.copy()
@@ -149,7 +148,6 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            # found = False
             vA1 = horner(pb, N - 2, vrs[i])
             tol = max(tol_i, tol)
             for j in filter(lambda j: j != i, range(M)):  # exclude i

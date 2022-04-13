@@ -87,7 +87,6 @@ def extract_autocorr(vr: vector2) -> vector2:
     """Extract the quadratic function where its roots are within a unit circle
 
     x^2 + r*x + t  or x^2 + (r/t) * x + (1/t)
-
     (x + a1)(x + a2) = x^2 + (a1 + a2) x + a1 * a2
 
     Args:
