@@ -16,6 +16,12 @@ def initial_autocorr(pa: List[float]) -> List[vector2]:
 
     Returns:
         List[vector2]: [description]
+
+    Examples:
+        >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
+        >>> vr0s = initial_autocorr(h)
+        >>> print(vr0s[0])
+        <-1.060510561183008, 0.5623413251903492>
     """
     N = len(pa) - 1
     re = abs(pa[-1]) ** (1.0 / N)
@@ -40,6 +46,13 @@ def pbairstow_autocorr(
 
     Returns:
         [type]: [description]
+
+    Examples:
+        >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
+        >>> vr0s = initial_autocorr(h)
+        >>> vrs, niter, found = pbairstow_autocorr(h, vr0s)
+        >>> print(vrs[0])
+        <-0.1711207835281031, 0.5573808087014712>
     """
     M = len(vrs)  # assume polynomial of h is even
     N = len(pa) - 1
@@ -82,6 +95,11 @@ def extract_autocorr(vr: vector2) -> vector2:
 
     Returns:
         vector2: [description]
+
+    Examples:
+        >>> vr = extract_autocorr(vector2(-1, 4)) 
+        >>> print(vr)
+        <-0.25, 0.25>
     """
     r, t = vr.x, vr.y
     hr = r / 2.0

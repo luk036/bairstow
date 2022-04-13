@@ -1,7 +1,6 @@
 from cmath import exp
 from math import acos
 from typing import List
-from pytest import approx
 
 # from pylds.low_discr_seq import vdcorput
 
@@ -17,11 +16,11 @@ class Options:
 
 # def horner_eval(pb: List[float], z):
 #     """[summary]
-#
+
 #     Args:
 #         pa (List[float]): [description]
 #         r (float): [description]
-#
+
 #     Returns:
 #         float: [description]
 #     """
@@ -40,16 +39,6 @@ def horner_eval(pb: List[float], n: int, alpha: float) -> float:
 
     Returns:
         float: [description]
-
-    Examples:
-        >>> p = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
-        >>> n = len(p) - 1
-        >>> alpha = 6.3256
-        >>> P = horner_eval(p, n, alpha)
-        >>> P
-        -0.012701469838522064
-        >>> p[3]
-        -0.0020220560640132265
     """
     for i in range(n):
         pb[i + 1] += pb[i] * alpha
@@ -65,16 +54,6 @@ def horner_backward(pb: List[float], n: int, alpha: float) -> float:
 
     Returns:
         float: [description]
-
-    Examples:
-        >>> p = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
-        >>> n = len(p) - 1
-        >>> alpha = 6.3256
-        >>> P = horner_backward(p, n, alpha)
-        >>> -P * (alpha ** 5)
-        -0.013355264987140483
-        >>> p[3]
-        0.006920331351966613
     """
     for i in range(2, n + 2):
         pb[-i] -= pb[-(i - 1)]
@@ -113,12 +92,6 @@ def initial_aberth(pa: List) -> List:
 
     Returns:
         List: [description]
-
-    Examples:
-        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
-        >>> z0s = initial_aberth(h)
-        >>> z0s[0]
-        (0.3226947660967895+1.020475437054992j)
     """
     N = len(pa) - 1
     c = -pa[1] / (N * pa[0])
@@ -141,25 +114,15 @@ def aberth(pa: List, zs: List, options: Options = Options()):
 
     Returns:
         [type]: [description]
-
-    Examples:
-        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
-        >>> z0s = initial_aberth(h)
-        >>> zs, niter, found = aberth(h, z0s)
-        >>> zs[0]
-        (0.15072828355329482+1.3273158235619589j)
-        >>> opt = Options()
-        >>> opt.tol = 1e-8
-        >>> zs, niter, found = aberth(h, z0s, opt)
-        >>> zs[0]
-        (0.15072828355329482+1.3273158235619589j)
     """
     M = len(zs)
     N = len(pa) - 1
+    found = False
     converged = [False] * M
-    for niter in range(1, options.max_iter):
-        tol = 0.0
-        for i in filter(lambda i: not converged[i], range(M)):  # exclude converged
+    # pb = [(N - i) * p for i, p in enumerate(pa[:-1])]
+    for niter in range(options.max_iter):
+        tol = 0
+        for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
             pb = pa.copy()
             P = horner_eval(pb, N, zs[i])
             tol_i = abs(P)
@@ -172,5 +135,6 @@ def aberth(pa: List, zs: List, options: Options = Options()):
                 P1 -= P / (zs[i] - zs[j])
             zs[i] -= P / P1
         if tol < options.tol:
-            return zs, niter, True
-    return zs, options.max_iter, False
+            found = True
+            break
+    return zs, niter + 1, found
