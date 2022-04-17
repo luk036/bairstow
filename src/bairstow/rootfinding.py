@@ -1,12 +1,19 @@
 from math import acos, cos, sqrt
 from typing import List, Tuple
 
-from .aberth import Options
 from .matrix2 import matrix2
 from .vector2 import vector2
 
 PI = acos(-1.0)
 
+class Options:
+    max_iter: int = 2000
+    tol: float = 1e-12
+    tol_ind: float = 1e-15
+    # tol_suppress: float = 1e-1
+
+
+# def horner_eval(pb: List[float], z):
 
 def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
     """[summary]

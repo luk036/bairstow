@@ -2,20 +2,13 @@ from cmath import exp
 from math import acos
 from typing import List
 from pytest import approx
+from .rootfinding import Options
 
 # from pylds.low_discr_seq import vdcorput
 
 PI = acos(-1.0)
 
 
-class Options:
-    max_iter: int = 2000
-    tol: float = 1e-12
-    tol_ind: float = 1e-15
-    # tol_suppress: float = 1e-1
-
-
-# def horner_eval(pb: List[float], z):
 #     """[summary]
 #
 #     Args:

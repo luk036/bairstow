@@ -1,4 +1,5 @@
-from bairstow.aberth import Options, aberth, initial_aberth
+from bairstow.aberth import aberth, initial_aberth
+from bairstow.rootfinding import Options
 
 
 def test_aberth1():
@@ -75,8 +76,9 @@ def test_aberth_fir():
     opt.tol = 1e-8
     zs, niter, found = aberth(r, z0s, opt)
     print([niter, found])
-    print([z for z in zs])
-    assert niter <= 13
+    for z in zs:
+        print(z)
+    assert niter <= 12
 
 
 # def test_aberth_fir_lds():
