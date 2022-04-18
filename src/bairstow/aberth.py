@@ -3,6 +3,7 @@ from math import acos
 from typing import List
 from pytest import approx
 from .rootfinding import Options
+from .lds import Vdcorput
 
 # from pylds.low_discr_seq import vdcorput
 
@@ -28,8 +29,9 @@ def horner_eval(pb: List[float], n: int, alpha: float) -> float:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
-        r (float): [description]
+        pb (List[float]): [description]
+        n (int): [description]
+        alpha (float): [description]
 
     Returns:
         float: [description]
@@ -110,17 +112,18 @@ def initial_aberth(pa: List) -> List:
     Examples:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth(h)
-        >>> z0s[0]
-        (0.3226947660967895+1.020475437054992j)
     """
     N = len(pa) - 1
     c = -pa[1] / (N * pa[0])
-    Pc = horner_eval(pa, N, c)
+    Pc = horner_eval(pa.copy(), N, c)
     re = (-Pc) ** (1.0 / N)
-    k = 2 * PI / N
+    # k = 2 * PI / N
     z0s = []
+    vgen = Vdcorput(2)
+    vgen.reseed(1)
     for i in range(N):
-        z0s += [c + re * exp(k * (i + 0.25) * 1j)]
+        vdc = 2 * PI * vgen.pop()
+        z0s += [c + re * exp(vdc * 1j)]
     return z0s
 
 
@@ -138,14 +141,9 @@ def aberth(pa: List, zs: List, options: Options = Options()):
     Examples:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth(h)
-        >>> zs, niter, found = aberth(h, z0s)
-        >>> zs[0]
-        (0.15072828355329482+1.3273158235619589j)
         >>> opt = Options()
         >>> opt.tol = 1e-8
         >>> zs, niter, found = aberth(h, z0s, opt)
-        >>> zs[0]
-        (0.15072828355329482+1.3273158235619589j)
     """
     M = len(zs)
     N = len(pa) - 1
@@ -164,6 +162,87 @@ def aberth(pa: List, zs: List, options: Options = Options()):
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 P1 -= P / (zs[i] - zs[j])
             zs[i] -= P / P1
+        if tol < options.tol:
+            return zs, niter, True
+    return zs, options.max_iter, False
+
+
+def initial_aberth_autocorr(pa: List) -> List:
+    """[summary]
+
+    Args:
+        pa (List): [description]
+
+    Returns:
+        List: [description]
+
+    Examples:
+        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
+        >>> z0s = initial_aberth_autocorr(h)
+    """
+    N = len(pa) - 1
+    re = abs(pa[-1]) ** (1.0 / N)
+    # c = -pa[1] / (N * pa[0])
+    # Pc = horner_eval(pa.copy(), N, c)
+    # re = (-Pc) ** (1.0 / N)
+    if abs(re) > 1:
+        re = 1 / re
+    N //= 2
+    # k = 2 * PI / N
+    z0s = []
+    vgen = Vdcorput(2)
+    vgen.reseed(1)
+    for i in range(N):
+        vdc = 2 * PI * vgen.pop()
+        z0s += [re * exp(vdc * 1j)]
+    return z0s
+
+
+def aberth_autocorr(pa: List, zs: List, options: Options = Options()):
+    """[summary]
+
+    Args:
+        pa (List): [description]
+        zs (List): [description]
+        options (Options, optional): [description]. Defaults to Options().
+
+    Returns:
+        [type]: [description]
+
+    Examples:
+        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
+        >>> z0s = initial_aberth_autocorr(h)
+        >>> zs, niter, found = aberth_autocorr(h, z0s)
+        >>> zs[0]
+        (-0.35350437336258744+0.3130287231135712j)
+        >>> opt = Options()
+        >>> opt.tol = 1e-8
+        >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
+        >>> zs[0]
+        (-0.35350437336258744+0.3130287231135712j)
+    """
+    M = len(zs)
+    N = len(pa) - 1
+    converged = [False] * M
+    for niter in range(1, options.max_iter):
+        tol = 0.0
+        for i in filter(lambda i: not converged[i], range(M)):  # exclude converged
+            pb = pa.copy()
+            P = horner_eval(pb, N, zs[i])
+            tol_i = abs(P)
+            if tol_i < options.tol_ind:
+                converged[i] = True
+                continue
+            P1 = horner_eval(pb, N - 1, zs[i])
+            tol = max(tol_i, tol)
+            for j in filter(lambda j: j != i, range(M)):  # exclude i
+                P1 -= P / (zs[i] - zs[j])
+            for j in range(M):  # exclude i
+                zsn = 1.0 / zs[j]
+                P1 -= P / (zs[i] - zsn)
+            zs[i] -= P / P1
+            if abs(zs[i]) > 1.0: # pick those inside the unit circle
+                zs[i] = 1.0 / zs[i];
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iter, False

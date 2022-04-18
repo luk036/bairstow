@@ -77,11 +77,9 @@ def horner(pb: List[float], n: int, vr: vector2) -> vector2:
     Examples:
         >>> p = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> n = len(p) - 1
-        >>> P = horner(p, n, vector2(1.0, 2.0))
-        >>> print(P)
-        <114.0, 134.0>
-        >>> p[3]
-        15.0
+        >>> P = horner(p, n, vector2(-1.0, -2.0))
+        >>> P.x * 2.0 + P.y
+        18250.0
     """
     r, q = vr.x, vr.y
     pb[1] -= pb[0] * r
