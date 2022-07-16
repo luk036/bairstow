@@ -8,7 +8,7 @@ def test_backward2():
     n = len(p) - 1
     alpha = 6.3256
     P = horner_backward(p, n, alpha)
-    assert -P * (alpha ** 5) == approx(-0.013355264987140483)
+    assert -P * (alpha**5) == approx(-0.013355264987140483)
     assert p[3] == approx(0.006920331351966613)
 
 

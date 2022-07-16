@@ -1,9 +1,11 @@
 from cmath import exp
 from math import acos
 from typing import List
+
 from pytest import approx
-from .rootfinding import Options
+
 from .lds import Vdcorput
+from .rootfinding import Options
 
 # from pylds.low_discr_seq import vdcorput
 
@@ -241,8 +243,8 @@ def aberth_autocorr(pa: List, zs: List, options: Options = Options()):
                 zsn = 1.0 / zs[j]
                 P1 -= P / (zs[i] - zsn)
             zs[i] -= P / P1
-            if abs(zs[i]) > 1.0: # pick those inside the unit circle
-                zs[i] = 1.0 / zs[i];
+            if abs(zs[i]) > 1.0:  # pick those inside the unit circle
+                zs[i] = 1.0 / zs[i]
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iter, False

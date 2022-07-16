@@ -1,10 +1,9 @@
 from math import acos, cos, sqrt
 from typing import List
 
-from .rootfinding import Options
-from .rootfinding import delta, horner
-from .vector2 import vector2
 from .lds import Vdcorput
+from .rootfinding import Options, delta, horner
+from .vector2 import vector2
 
 PI = acos(-1.0)
 
@@ -164,7 +163,7 @@ def extract_autocorr(vr: vector2) -> vector2:
         vector2: [description]
 
     Examples:
-        >>> vr = extract_autocorr(vector2(-1, 4)) 
+        >>> vr = extract_autocorr(vector2(-1, 4))
         >>> print(vr)
         <-0.25, 0.25>
     """
@@ -173,7 +172,7 @@ def extract_autocorr(vr: vector2) -> vector2:
     d = hr * hr - t
     if d < 0.0:  # complex conjugate root
         if t > 1.0:
-            vr = vector2(r/t, 1.0/t)
+            vr = vector2(r / t, 1.0 / t)
     else:
         # two real roots
         a1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))

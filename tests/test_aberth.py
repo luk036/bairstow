@@ -1,5 +1,9 @@
-from bairstow.aberth import aberth, initial_aberth
-from bairstow.aberth import aberth_autocorr, initial_aberth_autocorr
+from bairstow.aberth import (
+    aberth,
+    aberth_autocorr,
+    initial_aberth,
+    initial_aberth_autocorr,
+)
 from bairstow.rootfinding import Options
 
 
@@ -92,7 +96,7 @@ def test_aberth_autocorr_fir():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 9 
+    assert niter <= 9
 
 
 # def test_aberth_fir_lds():

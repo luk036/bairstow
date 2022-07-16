@@ -1,5 +1,10 @@
-from bairstow.autocorr import extract_autocorr, initial_autocorr, pbairstow_autocorr
-from bairstow.autocorr import initial_autocorr_bad, pbairstow_autocorr_bad
+from bairstow.autocorr import (
+    extract_autocorr,
+    initial_autocorr,
+    initial_autocorr_bad,
+    pbairstow_autocorr,
+    pbairstow_autocorr_bad,
+)
 from bairstow.rootfinding import Options, find_rootq
 
 
