@@ -2,8 +2,6 @@ from cmath import exp
 from math import acos
 from typing import List
 
-from pytest import approx
-
 from .lds import Vdcorput
 from .rootfinding import Options
 

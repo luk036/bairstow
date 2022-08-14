@@ -89,7 +89,7 @@ def pbairstow_autocorr(
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
-            found = False
+            # found = False
             vA1 = horner(pb, N - 2, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
@@ -133,7 +133,7 @@ def pbairstow_autocorr_bad(
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
-            found = False
+            # found = False
             vA1 = horner(pb, N - 2, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
