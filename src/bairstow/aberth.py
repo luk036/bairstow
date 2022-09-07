@@ -1,14 +1,13 @@
 from cmath import exp
-from math import acos
+from math import pi
 from typing import List
-
-from .lds import Vdcorput
+# from pytest import approx
 from .rootfinding import Options
+from .lds import Vdcorput
 
-# from pylds.low_discr_seq import vdcorput
 
-PI = acos(-1.0)
-
+# PI = acos(-1.0)
+PI = pi
 
 #     """[summary]
 #

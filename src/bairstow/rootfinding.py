@@ -6,7 +6,6 @@ from .vector2 import vector2
 
 PI = acos(-1.0)
 
-
 class Options:
     max_iter: int = 2000
     tol: float = 1e-12
@@ -15,7 +14,6 @@ class Options:
 
 
 # def horner_eval(pb: List[float], z):
-
 
 def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
     """[summary]
@@ -177,7 +175,7 @@ def find_rootq(vr: vector2) -> Tuple[float, float]:
         Tuple[float, float]: [description]
 
     Examples:
-        >>> vr = find_rootq(vector2(-5, 6))
+        >>> vr = find_rootq(vector2(-5, 6)) 
         >>> print(vr)
         (3.0, 2.0)
     """
