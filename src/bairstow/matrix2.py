@@ -1,26 +1,26 @@
-from .vector2 import vector2
+from .vector2 import Vector2
 
 
-class matrix2(vector2):
-    def __init__(self, x: vector2, y: vector2):
+class Matrix2(Vector2):
+    def __init__(self, x: Vector2, y: Vector2):
         """[summary]
 
         Args:
-            x (vector2): [description]
-            y (vector2): [description]
+            x (Vector2): [description]
+            y (Vector2): [description]
         """
-        vector2.__init__(self, x, y)
+        Vector2.__init__(self, x, y)
 
-    def mdot(self, rhs: vector2) -> vector2:
+    def mdot(self, rhs: Vector2) -> Vector2:
         """matrix-vector product
 
         Args:
-            rhs (vector2): [description]
+            rhs (Vector2): [description]
 
         Returns:
-            vector2: [description]
+            Vector2: [description]
         """
-        return vector2(self._x.dot(rhs), self._y.dot(rhs))
+        return Vector2(self._x.dot(rhs), self._y.dot(rhs))
 
     def det(self) -> float:
         """determinant

@@ -1,8 +1,8 @@
 from math import acos, cos, sqrt
 from typing import List, Tuple
 
-from .matrix2 import matrix2
-from .vector2 import vector2
+from .matrix2 import Matrix2
+from .vector2 import Vector2
 
 PI = acos(-1.0)
 
@@ -15,28 +15,28 @@ class Options:
 
 # def horner_eval(pb: List[float], z):
 
-def delta(vA: vector2, vr: vector2, vp: vector2) -> vector2:
+def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
     """[summary]
 
     r * p - m   -p
     q * p       -m
 
     Args:
-        vA (vector2): [description]
-        vr (vector2): [description]
-        vp (vector2): [description]
+        vA (Vector2): [description]
+        vr (Vector2): [description]
+        vp (Vector2): [description]
 
     Returns:
-        vector2: [description]
+        Vector2: [description]
 
     Examples:
-        >>> d = delta(vector2(1, 2), vector2(2, 0), vector2(4, 5))
+        >>> d = delta(Vector2(1, 2), Vector2(2, 0), Vector2(4, 5))
         >>> print(d)
         <-0.2, -0.4>
     """
     r, q = vr.x, vr.y
     p, m = vp.x, vp.y
-    mp = matrix2(vector2(-m, p), vector2(-p * q, p * r - m))
+    mp = Matrix2(Vector2(-m, p), Vector2(-p * q, p * r - m))
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
@@ -64,20 +64,20 @@ def horner_eval(pb: List[float], n: int, z: float) -> float:
     return pb[n]
 
 
-def horner(pb: List[float], n: int, vr: vector2) -> vector2:
+def horner(pb: List[float], n: int, vr: Vector2) -> Vector2:
     """[summary]
 
     Args:
         pa (List[float]): [description]
-        vr (vector2): [description]
+        vr (Vector2): [description]
 
     Returns:
-        vector2: [description]
+        Vector2: [description]
 
     Examples:
         >>> p = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> n = len(p) - 1
-        >>> P = horner(p, n, vector2(-1.0, -2.0))
+        >>> P = horner(p, n, Vector2(-1.0, -2.0))
         >>> P.x * 2.0 + P.y
         18250.0
     """
@@ -86,17 +86,17 @@ def horner(pb: List[float], n: int, vr: vector2) -> vector2:
     for i in range(2, n):
         pb[i] -= pb[i - 1] * r + pb[i - 2] * q
     pb[n] -= pb[n - 2] * q
-    return vector2(pb[n - 1], pb[n])
+    return Vector2(pb[n - 1], pb[n])
 
 
-def initial_guess(pa: List[float]) -> List[vector2]:
+def initial_guess(pa: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
         pa (List[float]): [description]
 
     Returns:
-        List[vector2]: [description]
+        List[Vector2]: [description]
 
     Examples:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
@@ -108,26 +108,27 @@ def initial_guess(pa: List[float]) -> List[vector2]:
     c = -pa[1] / (N * pa[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(pa.copy(), N, c)
-    re = abs(Pc) ** (1.0 / N)
-    m = c * c + re * re
+    reff = abs(Pc) ** (1.0 / N)
+    m = c * c + reff * reff
     vr0s = []
     N //= 2
     N *= 2  # make even
     k = PI / N
     for i in range(1, N, 2):
-        temp = re * cos(k * i)
+        temp = reff * cos(k * i)
         r0 = -2 * (c + temp)
         t0 = m + 2 * c * temp
-        vr0s += [vector2(r0, t0)]
+        vr0s += [Vector2(r0, t0)]
     return vr0s
 
 
-def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Options()):
+def pbairstow_even(pa: List[float], vrs: List[Vector2], options = Options()) \
+-> Tuple[List[Vector2], int, bool]:
     """[summary]
 
     Args:
         pa (List[float]): [description]
-        vrs (List[vector2]): [description]
+        vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
     Returns:
@@ -163,19 +164,19 @@ def pbairstow_even(pa: List[float], vrs: List[vector2], options: Options = Optio
     return vrs, options.max_iter, False
 
 
-def find_rootq(vr: vector2) -> Tuple[float, float]:
+def find_rootq(vr: Vector2) -> Tuple[float, float]:
     """Solve x^2 + r*x + t = 0
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
 
     Args:
-        vr (vector2): [description]
+        vr (Vector2): [description]
 
     Returns:
         Tuple[float, float]: [description]
 
     Examples:
-        >>> vr = find_rootq(vector2(-5, 6)) 
+        >>> vr = find_rootq(Vector2(-5, 6)) 
         >>> print(vr)
         (3.0, 2.0)
     """

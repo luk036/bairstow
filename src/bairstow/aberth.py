@@ -1,11 +1,11 @@
 from cmath import exp
 from math import pi
-from typing import List
+from typing import List, Union, Tuple
 # from pytest import approx
 from .rootfinding import Options
 from .lds import Vdcorput
 
-
+FoC = Union[float, complex]
 # PI = acos(-1.0)
 PI = pi
 
@@ -24,7 +24,7 @@ PI = pi
 #     return ans
 
 
-def horner_eval(pb: List[float], n: int, alpha: float) -> float:
+def horner_eval(pb: List, n: int, alpha: FoC) -> FoC:
     """[summary]
 
     Args:
@@ -50,7 +50,7 @@ def horner_eval(pb: List[float], n: int, alpha: float) -> float:
     return pb[n]
 
 
-def horner_backward(pb: List[float], n: int, alpha: float) -> float:
+def horner_backward(pb: List, n: int, alpha: FoC) -> FoC:
     """[summary]
 
     Args:
@@ -76,30 +76,7 @@ def horner_backward(pb: List[float], n: int, alpha: float) -> float:
     return pb[-(n + 1)]
 
 
-# def initial_aberth_lds(pa: List) -> List:
-#     """[summary]
-
-#     Args:
-#         pa (List): [description]
-
-#     Returns:
-#         List: [description]
-#     """
-#     N = len(pa) - 1
-#     c = -pa[1] / (N * pa[0])
-#     Pc = horner_eval(pa.copy(), N, c)
-#     re = (-Pc) ** (1.0 / N)
-#     z0s = []
-#     two_PI = 2 * PI
-#     vdc_gen = vdcorput()
-
-#     for i in range(N):
-#         theta = two_PI * vdc_gen() + 0.25
-#         z0s += [c + re * exp(theta * 1j)]
-#     return z0s
-
-
-def initial_aberth(pa: List) -> List:
+def initial_aberth(pa: List[FoC]) -> List[complex]:
     """[summary]
 
     Args:
@@ -112,12 +89,12 @@ def initial_aberth(pa: List) -> List:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth(h)
     """
-    N = len(pa) - 1
-    c = -pa[1] / (N * pa[0])
-    Pc = horner_eval(pa.copy(), N, c)
-    re = (-Pc) ** (1.0 / N)
+    N: int = len(pa) - 1
+    c: FoC = -pa[1] / (N * pa[0])
+    Pc: FoC = horner_eval(pa.copy(), N, c)
+    re: FoC = (-Pc) ** (1.0 / N)
     # k = 2 * PI / N
-    z0s = []
+    z0s: List[complex] = []
     vgen = Vdcorput(2)
     vgen.reseed(1)
     for i in range(N):
@@ -126,7 +103,8 @@ def initial_aberth(pa: List) -> List:
     return z0s
 
 
-def aberth(pa: List, zs: List, options: Options = Options()):
+def aberth(pa: List[FoC], zs: List[complex], options = Options()) \
+-> Tuple[List[complex], int, bool]:
     """[summary]
 
     Args:
@@ -166,7 +144,7 @@ def aberth(pa: List, zs: List, options: Options = Options()):
     return zs, options.max_iter, False
 
 
-def initial_aberth_autocorr(pa: List) -> List:
+def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     """[summary]
 
     Args:
@@ -179,8 +157,8 @@ def initial_aberth_autocorr(pa: List) -> List:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth_autocorr(h)
     """
-    N = len(pa) - 1
-    re = abs(pa[-1]) ** (1.0 / N)
+    N: int = len(pa) - 1
+    re: float = abs(pa[-1]) ** (1.0 / N)
     # c = -pa[1] / (N * pa[0])
     # Pc = horner_eval(pa.copy(), N, c)
     # re = (-Pc) ** (1.0 / N)
@@ -197,7 +175,8 @@ def initial_aberth_autocorr(pa: List) -> List:
     return z0s
 
 
-def aberth_autocorr(pa: List, zs: List, options: Options = Options()):
+def aberth_autocorr(pa: List[float], zs: List[complex], options = Options())\
+-> Tuple[List[complex], int, bool]:
     """[summary]
 
     Args:
@@ -220,11 +199,11 @@ def aberth_autocorr(pa: List, zs: List, options: Options = Options()):
         >>> zs[0]
         (-0.35350437336258744+0.3130287231135712j)
     """
-    M = len(zs)
-    N = len(pa) - 1
-    converged = [False] * M
+    M: int = len(zs)
+    N: int = len(pa) - 1
+    converged: List[bool] = [False] * M
     for niter in range(1, options.max_iter):
-        tol = 0.0
+        tol: float = 0.0
         for i in filter(lambda i: not converged[i], range(M)):  # exclude converged
             pb = pa.copy()
             P = horner_eval(pb, N, zs[i])

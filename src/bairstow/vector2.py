@@ -1,4 +1,4 @@
-class vector2:
+class Vector2:
     __slots__ = ("_x", "_y")
 
     def __init__(self, x, y):
@@ -62,7 +62,7 @@ class vector2:
         Returns:
             [type]: [description]
         """
-        return vector2(self.x + rhs.x, self.y + rhs.y)
+        return Vector2(self.x + rhs.x, self.y + rhs.y)
 
     def __isub__(self, rhs):
         """[summary]
@@ -86,7 +86,7 @@ class vector2:
         Returns:
             [type]: [description]
         """
-        return vector2(self.x - rhs.x, self.y - rhs.y)
+        return Vector2(self.x - rhs.x, self.y - rhs.y)
 
     def __imul__(self, alpha: float):
         """[summary]
@@ -110,7 +110,7 @@ class vector2:
         Returns:
             [type]: [description]
         """
-        return vector2(self.x * alpha, self.y * alpha)
+        return Vector2(self.x * alpha, self.y * alpha)
 
     def __itruediv__(self, alpha: float):
         """[summary]
@@ -134,7 +134,7 @@ class vector2:
         Returns:
             [type]: [description]
         """
-        return vector2(self.x / alpha, self.y / alpha)
+        return Vector2(self.x / alpha, self.y / alpha)
 
     def __str__(self):
         """[summary]

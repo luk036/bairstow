@@ -3,20 +3,20 @@ from typing import List
 
 from .rootfinding import Options
 from .rootfinding import delta, horner
-from .vector2 import vector2
+from .vector2 import Vector2
 from .lds import Vdcorput
 
 PI = acos(-1.0)
 
 
-def initial_autocorr(pa: List[float]) -> List[vector2]:
+def initial_autocorr(pa: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
         pa (List[float]): [description]
 
     Returns:
-        List[vector2]: [description]
+        List[Vector2]: [description]
 
     Examples:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
@@ -29,21 +29,21 @@ def initial_autocorr(pa: List[float]) -> List[vector2]:
     N //= 2
     # k = PI / N
     m = re * re
-    # vr0s = [vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
+    # vr0s = [Vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    vr0s = [vector2(-2 * re * cos(PI * vgen.pop()), m) for _ in range(1, N, 2)]
+    vr0s = [Vector2(-2 * re * cos(PI * vgen.pop()), m) for _ in range(1, N, 2)]
     return vr0s
 
 
-def initial_autocorr_bad(pa: List[float]) -> List[vector2]:
+def initial_autocorr_bad(pa: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
         pa (List[float]): [description]
 
     Returns:
-        List[vector2]: [description]
+        List[Vector2]: [description]
     """
     N = len(pa) - 1
     re = abs(pa[-1]) ** (1.0 / N)
@@ -52,18 +52,18 @@ def initial_autocorr_bad(pa: List[float]) -> List[vector2]:
     N //= 2
     k = PI / N
     m = re * re
-    vr0s = [vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
+    vr0s = [Vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
     return vr0s
 
 
 def pbairstow_autocorr(
-    pa: List[float], vrs: List[vector2], options: Options = Options()
+    pa: List[float], vrs: List[Vector2], options: Options = Options()
 ):
     """[summary]
 
     Args:
         pa (List[float]): [description]
-        vrs (List[vector2]): [description]
+        vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
     Returns:
@@ -94,12 +94,12 @@ def pbairstow_autocorr(
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             for j in range(M):
-                vrn = vector2(vrs[j].x, 1.0) / vrs[j].y
+                vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
                 vA1 -= delta(vA, vrn, vrs[i] - vrn)
             vrs[i] -= delta(vA, vrs[i], vA1)
             vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:
-        #     vrs[i] = vector2(vrs[i].x, 1.0) / vrs[i].y
+        #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
         # for i in range(M):  # exclude converged
         if tol < options.tol:
             return vrs, niter, True
@@ -107,13 +107,13 @@ def pbairstow_autocorr(
 
 
 def pbairstow_autocorr_bad(
-    pa: List[float], vrs: List[vector2], options: Options = Options()
+    pa: List[float], vrs: List[Vector2], options: Options = Options()
 ):
     """[summary]
 
     Args:
         pa (List[float]): [description]
-        vrs (List[vector2]): [description]
+        vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
     Returns:
@@ -136,11 +136,11 @@ def pbairstow_autocorr_bad(
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             for j in range(M):
-                vrn = vector2(vrs[j].x, 1.0) / vrs[j].y
+                vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
                 vA1 -= delta(vA, vrn, vrs[i] - vrn)
             vrs[i] -= delta(vA, vrs[i], vA1)
         # if vrs[i].y > 1.0:
-        #     vrs[i] = vector2(vrs[i].x, 1.0) / vrs[i].y
+        #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
         for i in range(M):  # exclude converged
             vrs[i] = extract_autocorr(vrs[i])
         if tol < options.tol:
@@ -148,20 +148,20 @@ def pbairstow_autocorr_bad(
     return vrs, options.max_iter, False
 
 
-def extract_autocorr(vr: vector2) -> vector2:
+def extract_autocorr(vr: Vector2) -> Vector2:
     """Extract the quadratic function where its roots are within a unit circle
 
     x^2 + r*x + t  or (1/t) + (r/t) * x + x^2
     (x + a1)(x + a2) = x^2 + (a1 + a2) x + a1 * a2
 
     Args:
-        vr (vector2): [description]
+        vr (Vector2): [description]
 
     Returns:
-        vector2: [description]
+        Vector2: [description]
 
     Examples:
-        >>> vr = extract_autocorr(vector2(-1, 4)) 
+        >>> vr = extract_autocorr(Vector2(-1, 4)) 
         >>> print(vr)
         <-0.25, 0.25>
     """
@@ -170,7 +170,7 @@ def extract_autocorr(vr: vector2) -> vector2:
     d = hr * hr - t
     if d < 0.0:  # complex conjugate root
         if t > 1.0:
-            vr = vector2(r / t, 1.0 / t)
+            vr = Vector2(r / t, 1.0 / t)
     else:
         # two real roots
         a1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))
@@ -179,8 +179,8 @@ def extract_autocorr(vr: vector2) -> vector2:
             if abs(a2) > 1.0:
                 a2 = 1.0 / a2
             a1 = 1.0 / a1
-            vr = vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, a1 * a2)
         elif abs(a2) > 1.0:
             a2 = 1.0 / a2
-            vr = vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, a1 * a2)
     return vr
