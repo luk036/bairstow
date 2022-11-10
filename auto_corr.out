@@ -1,0 +1,64 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.4, pytest-6.2.5, py-1.10.0, pluggy-0.13.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+benchmark: 3.4.1 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/home/lubuntu/Documents/github/py/bairstow/.hypothesis/examples')
+rootdir: /home/lubuntu/Documents/github/py/bairstow, configfile: setup.cfg
+plugins: benchmark-3.4.1, hypothesis-6.53.0, cov-3.0.0, anyio-3.5.0, xdist-2.5.0, forked-1.4.0, sugar-0.9.4
+collecting ... collected 3 items
+
+tests/test_fir.py::test_fir_even PASSED                                  [ 33%]
+tests/test_fir.py::test_fir_auto FAILED                                  [ 66%]
+tests/test_fir.py::test_fir_auto_bad PASSED                              [100%]
+
+=================================== FAILURES ===================================
+________________________________ test_fir_auto _________________________________
+
+    def test_fir_auto():
+        vr0s = initial_autocorr(r)
+        print("vrs: {}".format(len(vr0s)))
+        opts = Options()
+        opts.tol = 1e-3
+        vrs, niter, found = pbairstow_autocorr(r, vr0s, opts)
+        print([niter, found])
+        for vr in vrs:
+            vr = extract_autocorr(vr)
+            print(find_rootq(vr))
+    
+>       assert niter <= 9
+E       assert 98 <= 9
+
+tests/test_fir.py:86: AssertionError
+----------------------------- Captured stdout call -----------------------------
+vrs: 12
+[98, True]
+(-0.9868810470197695, 0.6132419007802659)
+((-0.7097095112984987+0.7004686431862273j), (-0.7097095112984988-0.7004686431862274j))
+((0.02901236150489476+0.9783190955008185j), (0.029012361504894762-0.9783190955008186j))
+((-0.5047207758979074+0.8225429788263907j), (-0.5047207758979074-0.8225429788263908j))
+((0.23504567189463776+0.9674235985709526j), (0.2350456718946378-0.9674235985709528j))
+((-0.2976839168551785+0.8837015834892764j), (-0.2976839168551784-0.8837015834892763j))
+((0.8166719838782639+0.14206084732329313j), (0.8166719838782638-0.1420608473232931j))
+((-0.2683108891496214+0.9537479997863412j), (-0.26831088914962137-0.9537479997863412j))
+((-0.017085709555365893+0.994632156055982j), (-0.017085709555365893-0.994632156055982j))
+((-0.8642977450547941+0.4939931929963118j), (-0.864297745054794-0.49399319299631167j))
+((0.7883908793563953+0.6139231834554044j), (0.7883908793563953-0.6139231834554044j))
+((-0.5045265391304316+0.8555653611715255j), (-0.5045265391304314-0.8555653611715254j))
+
+---------- coverage: platform linux, python 3.10.4-final-0 -----------
+Name                          Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------------
+src/bairstow/__init__.py          6      0      0      0   100%
+src/bairstow/aberth.py           88     88     38      0     0%   1-231
+src/bairstow/autocorr.py         96      8     48      7    90%   27, 49->51, 105, 131-132, 147, 179, 183-184
+src/bairstow/lds.py              77     29     10      0    67%   108-109, 117, 126-127, 159, 167-168, 177, 209-210, 218-221, 230-231, 265-267, 275-280, 293-295
+src/bairstow/matrix2.py          10      0      2      0   100%
+src/bairstow/rootfinding.py      71      1     22      1    98%   164
+src/bairstow/skeleton.py         32     32      2      0     0%   23-135
+src/bairstow/vector2.py          39     12      2      0    71%   52-54, 65, 100-102, 113, 124-126, 145
+-------------------------------------------------------------------------
+TOTAL                           419    170    124      8    60%
+
+=========================== short test summary info ============================
+FAILED tests/test_fir.py::test_fir_auto - assert 98 <= 9
+========================= 1 failed, 2 passed in 1.13s ==========================

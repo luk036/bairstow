@@ -6,6 +6,7 @@ from .vector2 import Vector2
 
 PI = acos(-1.0)
 
+
 class Options:
     max_iter: int = 2000
     tol: float = 1e-12
@@ -14,6 +15,7 @@ class Options:
 
 
 # def horner_eval(pb: List[float], z):
+
 
 def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
     """[summary]
@@ -122,8 +124,9 @@ def initial_guess(pa: List[float]) -> List[Vector2]:
     return vr0s
 
 
-def pbairstow_even(pa: List[float], vrs: List[Vector2], options = Options()) \
--> Tuple[List[Vector2], int, bool]:
+def pbairstow_even(
+    pa: List[float], vrs: List[Vector2], options=Options()
+) -> Tuple[List[Vector2], int, bool]:
     """[summary]
 
     Args:
@@ -146,7 +149,8 @@ def pbairstow_even(pa: List[float], vrs: List[Vector2], options = Options()) \
     converged = [False] * M
     for niter in range(1, options.max_iter):
         tol = 0.0
-        for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
+        # exclude converged
+        for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
             pb = pa.copy()
             vA = horner(pb, N, vrs[i])
@@ -176,7 +180,7 @@ def find_rootq(vr: Vector2) -> Tuple[float, float]:
         Tuple[float, float]: [description]
 
     Examples:
-        >>> vr = find_rootq(Vector2(-5, 6)) 
+        >>> vr = find_rootq(Vector2(-5, 6))
         >>> print(vr)
         (3.0, 2.0)
     """

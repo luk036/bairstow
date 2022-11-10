@@ -1,10 +1,9 @@
 from math import acos, cos, sqrt
 from typing import List
 
-from .rootfinding import Options
-from .rootfinding import delta, horner
-from .vector2 import Vector2
 from .lds import Vdcorput
+from .rootfinding import Options, delta, horner
+from .vector2 import Vector2
 
 PI = acos(-1.0)
 
@@ -82,7 +81,7 @@ def pbairstow_autocorr(
     for niter in range(1, options.max_iter):
         tol = 0.0
         # found = True  # initial
-        for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
+        for i in filter(lambda i: converged[i] is False, range(M)):
             pb = pa.copy()
             vA = horner(pb, N, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
@@ -124,7 +123,7 @@ def pbairstow_autocorr_bad(
     converged = [False] * M
     for niter in range(1, options.max_iter):
         tol = 0.0
-        for i in filter(lambda i: converged[i] is False, range(M)):  # exclude converged
+        for i in filter(lambda i: converged[i] is False, range(M)):
             pb = pa.copy()
             vA = horner(pb, N, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
@@ -161,7 +160,7 @@ def extract_autocorr(vr: Vector2) -> Vector2:
         Vector2: [description]
 
     Examples:
-        >>> vr = extract_autocorr(Vector2(-1, 4)) 
+        >>> vr = extract_autocorr(Vector2(-1, 4))
         >>> print(vr)
         <-0.25, 0.25>
     """

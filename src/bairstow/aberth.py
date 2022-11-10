@@ -1,9 +1,11 @@
 from cmath import exp
 from math import pi
-from typing import List, Union, Tuple
+from typing import List, Tuple, Union
+
+from .lds import Vdcorput
+
 # from pytest import approx
 from .rootfinding import Options
-from .lds import Vdcorput
 
 FoC = Union[float, complex]
 # PI = acos(-1.0)
@@ -103,8 +105,9 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     return z0s
 
 
-def aberth(pa: List[FoC], zs: List[complex], options = Options()) \
--> Tuple[List[complex], int, bool]:
+def aberth(
+    pa: List[FoC], zs: List[complex], options=Options()
+) -> Tuple[List[complex], int, bool]:
     """[summary]
 
     Args:
@@ -127,7 +130,7 @@ def aberth(pa: List[FoC], zs: List[complex], options = Options()) \
     converged = [False] * M
     for niter in range(1, options.max_iter):
         tol = 0.0
-        for i in filter(lambda i: not converged[i], range(M)):  # exclude converged
+        for i in filter(lambda i: not converged[i], range(M)):
             pb = pa.copy()
             P = horner_eval(pb, N, zs[i])
             tol_i = abs(P)
@@ -175,8 +178,9 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     return z0s
 
 
-def aberth_autocorr(pa: List[float], zs: List[complex], options = Options())\
--> Tuple[List[complex], int, bool]:
+def aberth_autocorr(
+    pa: List[float], zs: List[complex], options=Options()
+) -> Tuple[List[complex], int, bool]:
     """[summary]
 
     Args:
@@ -204,7 +208,8 @@ def aberth_autocorr(pa: List[float], zs: List[complex], options = Options())\
     converged: List[bool] = [False] * M
     for niter in range(1, options.max_iter):
         tol: float = 0.0
-        for i in filter(lambda i: not converged[i], range(M)):  # exclude converged
+        # exclude converged
+        for i in filter(lambda i: not converged[i], range(M)):
             pb = pa.copy()
             P = horner_eval(pb, N, zs[i])
             tol_i = abs(P)
