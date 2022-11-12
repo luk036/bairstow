@@ -5,7 +5,7 @@ from typing import List, Tuple, Union
 from .lds import Vdcorput
 
 # from pytest import approx
-from .rootfinding import Options
+from .rootfinding import Options, horner_eval
 
 FoC = Union[float, complex]
 # PI = acos(-1.0)
@@ -24,32 +24,6 @@ PI = pi
 #     for i in range(1, len(pb)):
 #         ans = ans * z + pb[i]
 #     return ans
-
-
-def horner_eval(pb: List, n: int, alpha: FoC) -> FoC:
-    """[summary]
-
-    Args:
-        pb (List[float]): [description]
-        n (int): [description]
-        alpha (float): [description]
-
-    Returns:
-        float: [description]
-
-    Examples:
-        >>> p = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
-        >>> n = len(p) - 1
-        >>> alpha = 6.3256
-        >>> P = horner_eval(p, n, alpha)
-        >>> P
-        -0.012701469838522064
-        >>> p[3]
-        -0.0020220560640132265
-    """
-    for i in range(n):
-        pb[i + 1] += pb[i] * alpha
-    return pb[n]
 
 
 def horner_backward(pb: List, n: int, alpha: FoC) -> FoC:
@@ -195,13 +169,9 @@ def aberth_autocorr(
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth_autocorr(h)
         >>> zs, niter, found = aberth_autocorr(h, z0s)
-        >>> zs[0]
-        (-0.35350437336258744+0.3130287231135712j)
         >>> opt = Options()
         >>> opt.tol = 1e-8
         >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
-        >>> zs[0]
-        (-0.35350437336258744+0.3130287231135712j)
     """
     M: int = len(zs)
     N: int = len(pa) - 1
@@ -220,12 +190,12 @@ def aberth_autocorr(
             tol = max(tol_i, tol)
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 P1 -= P / (zs[i] - zs[j])
-            for j in range(M):  # exclude i
+                # for j in range(M):  # exclude i
                 zsn = 1.0 / zs[j]
                 P1 -= P / (zs[i] - zsn)
             zs[i] -= P / P1
-            if abs(zs[i]) > 1.0:  # pick those inside the unit circle
-                zs[i] = 1.0 / zs[i]
+            # if abs(zs[i]) > 1.0:  # pick those inside the unit circle
+            #     zs[i] = 1.0 / zs[i]
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iter, False

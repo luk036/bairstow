@@ -1,10 +1,4 @@
-from bairstow.autocorr import (
-    extract_autocorr,
-    initial_autocorr,
-    initial_autocorr_bad,
-    pbairstow_autocorr,
-    pbairstow_autocorr_bad,
-)
+from bairstow.autocorr import extract_autocorr, initial_autocorr, pbairstow_autocorr
 from bairstow.rootfinding import Options, find_rootq, initial_guess, pbairstow_even
 
 r = [
@@ -63,7 +57,7 @@ r = [
 def test_fir_even():
     vr0s = initial_guess(r)
     opts = Options()
-    opts.tol = 0.5e-1
+    opts.tol = 2e-2
     # opts.tol_suppress = 0.5e-1
     vrs, niter, found = pbairstow_even(r, vr0s, opts)
     print([niter, found])
@@ -76,25 +70,11 @@ def test_fir_auto():
     vr0s = initial_autocorr(r)
     print("vrs: {}".format(len(vr0s)))
     opts = Options()
-    opts.tol = 1e-2
+    opts.tol = 6e-4
     vrs, niter, found = pbairstow_autocorr(r, vr0s, opts)
     print([niter, found])
     for vr in vrs:
         vr = extract_autocorr(vr)
         print(find_rootq(vr))
 
-    assert niter <= 98
-
-
-def test_fir_auto_bad():
-    vr0s = initial_autocorr_bad(r)
-    print("vrs: {}".format(len(vr0s)))
-    opts = Options()
-    opts.tol = 1e-2
-    vrs, niter, found = pbairstow_autocorr_bad(r, vr0s, opts)
-    print([niter, found])
-    for vr in vrs:
-        vr = extract_autocorr(vr)
-        print(find_rootq(vr))
-
-    assert niter <= 129
+    assert niter <= 164

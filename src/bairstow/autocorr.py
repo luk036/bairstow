@@ -28,10 +28,10 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
     N //= 2
     # k = PI / N
     m = re * re
-    # vr0s = [Vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
+    # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    vr0s = [Vector2(-2 * re * cos(PI * vgen.pop()), m) for _ in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, N, 2)]
     return vr0s
 
 
@@ -51,7 +51,7 @@ def initial_autocorr_bad(pa: List[float]) -> List[Vector2]:
     N //= 2
     k = PI / N
     m = re * re
-    vr0s = [Vector2(-2 * re * cos(k * i), m) for i in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
     return vr0s
 
 
@@ -72,8 +72,6 @@ def pbairstow_autocorr(
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> vr0s = initial_autocorr(h)
         >>> vrs, niter, found = pbairstow_autocorr(h, vr0s)
-        >>> print(vrs[0])
-        <-0.1711207835281031, 0.5573808087014712>
     """
     M = len(vrs)  # assume polynomial of h is even
     N = len(pa) - 1
@@ -92,11 +90,11 @@ def pbairstow_autocorr(
             vA1 = horner(pb, N - 2, vrs[i])
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
-            for j in range(M):
-                vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
+                # for j in range(M):
+                vrn = Vector2(-vrs[j].x, 1.0) / vrs[j].y
                 vA1 -= delta(vA, vrn, vrs[i] - vrn)
             vrs[i] -= delta(vA, vrs[i], vA1)
-            vrs[i] = extract_autocorr(vrs[i])
+            # vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:
         #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
         # for i in range(M):  # exclude converged
@@ -105,53 +103,11 @@ def pbairstow_autocorr(
     return vrs, options.max_iter, False
 
 
-def pbairstow_autocorr_bad(
-    pa: List[float], vrs: List[Vector2], options: Options = Options()
-):
-    """[summary]
-
-    Args:
-        pa (List[float]): [description]
-        vrs (List[Vector2]): [description]
-        options (Options, optional): [description]. Defaults to Options().
-
-    Returns:
-        [type]: [description]
-    """
-    M = len(vrs)  # assume polynomial of h is even
-    N = len(pa) - 1
-    converged = [False] * M
-    for niter in range(1, options.max_iter):
-        tol = 0.0
-        for i in filter(lambda i: converged[i] is False, range(M)):
-            pb = pa.copy()
-            vA = horner(pb, N, vrs[i])
-            tol_i = max(abs(vA.x), abs(vA.y))
-            if tol_i < options.tol_ind:
-                converged[i] = True
-                continue
-            tol = max(tol, tol_i)
-            vA1 = horner(pb, N - 2, vrs[i])
-            for j in filter(lambda j: j != i, range(M)):  # exclude i
-                vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
-            for j in range(M):
-                vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
-                vA1 -= delta(vA, vrn, vrs[i] - vrn)
-            vrs[i] -= delta(vA, vrs[i], vA1)
-        # if vrs[i].y > 1.0:
-        #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
-        for i in range(M):  # exclude converged
-            vrs[i] = extract_autocorr(vrs[i])
-        if tol < options.tol:
-            return vrs, niter, True
-    return vrs, options.max_iter, False
-
-
 def extract_autocorr(vr: Vector2) -> Vector2:
     """Extract the quadratic function where its roots are within a unit circle
 
-    x^2 + r*x + t  or (1/t) + (r/t) * x + x^2
-    (x + a1)(x + a2) = x^2 + (a1 + a2) x + a1 * a2
+    x^2 - r*x - q  or (1/q) - (r/q) * x + x^2
+    (x - a1)(x - a2) = x^2 - (a1 + a2) x + a1 * a2
 
     Args:
         vr (Vector2): [description]
@@ -160,26 +116,26 @@ def extract_autocorr(vr: Vector2) -> Vector2:
         Vector2: [description]
 
     Examples:
-        >>> vr = extract_autocorr(Vector2(-1, 4))
+        >>> vr = extract_autocorr(Vector2(1, -4))
         >>> print(vr)
-        <-0.25, 0.25>
+        <0.25, -0.25>
     """
-    r, t = vr.x, vr.y
+    r, q = vr.x, vr.y
     hr = r / 2.0
-    d = hr * hr - t
+    d = hr * hr + q
     if d < 0.0:  # complex conjugate root
-        if t > 1.0:
-            vr = Vector2(r / t, 1.0 / t)
+        if -q > 1.0:
+            vr = Vector2(-r, 1.0) / q
     else:
         # two real roots
         a1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))
-        a2 = t / a1
+        a2 = -q / a1
         if abs(a1) > 1.0:
             if abs(a2) > 1.0:
                 a2 = 1.0 / a2
             a1 = 1.0 / a1
-            vr = Vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, -a1 * a2)
         elif abs(a2) > 1.0:
             a2 = 1.0 / a2
-            vr = Vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, -a1 * a2)
     return vr
