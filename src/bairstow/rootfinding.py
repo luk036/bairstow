@@ -42,6 +42,76 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
+def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
+    """[summary]
+
+    r * p + s   p
+    q * p       s
+
+    Args:
+        vA (Vector2): [description]
+        vr (Vector2): [description]
+        vp (Vector2): [description]
+
+    Returns:
+        Vector2: [description]
+
+    Examples:
+        >>> vA = Vector2(3, 3)
+        >>> vA1 = Vector2(1, 2)
+        >>> vri = Vector2(-2, 0)
+        >>> vrj = Vector2(4, 5)
+        >>> dr = suppress_old(vA, vA1, vri, vrj)
+        >>> print(dr)
+        <-16.78082191780822, 1.4383561643835616>
+    """
+    A, B = vA.x, vA.y
+    A1, B1 = vA1.x, vA1.y
+    vp = vri - vrj
+    r, q = vri.x, vri.y
+    p, s = vp.x, vp.y
+    f = r * p + s
+    qp = q * p
+    e = f * s - qp * p
+    a = A * s - B * p
+    b = B * f - A * qp
+    c = A1 * e - a
+    d = B1 * e - b - a * p
+    A = a * e
+    B = b * e
+    A1 = c * s - d * p
+    B1 = d * f - c * qp
+    return delta(Vector2(A, B), vri, Vector2(A1, B1))
+
+
+def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
+    """[summary]
+
+    r * p + s   p
+    q * p       s
+
+    Args:
+        vA (Vector2): [description]
+        vr (Vector2): [description]
+        vp (Vector2): [description]
+
+    Returns:
+        Vector2: [description]
+
+    Examples:
+        >>> vA = Vector2(3, 3)
+        >>> vA1 = Vector2(1, 2)
+        >>> vri = Vector2(-2, 0)
+        >>> vrj = Vector2(4, 5)
+        >>> dr = suppress(vA, vA1, vri, vrj)
+        >>> print(dr)
+        <-16.780821917808282, 1.4383561643835616>
+    """
+    vp = vri - vrj
+    vA1 -= delta(vA, vrj, vp)
+    return delta(vA, vri, vA1)
+
+
 def horner_eval(coeffs: List, degree: int, val):
     """Polynomial evaluation using Horner's scheme
 
