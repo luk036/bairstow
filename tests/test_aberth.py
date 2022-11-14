@@ -3,6 +3,8 @@ from bairstow.aberth import (
     aberth_autocorr,
     initial_aberth,
     initial_aberth_autocorr,
+    initial_aberth_autocorr_orig,
+    initial_aberth_orig,
 )
 from bairstow.rootfinding import Options
 
@@ -90,6 +92,28 @@ def test_aberth_fir():
 
 def test_aberth_autocorr_fir():
     z0s = initial_aberth_autocorr(r)
+    opt = Options()
+    opt.tol = 1e-14
+    zs, niter, found = aberth_autocorr(r, z0s, opt)
+    print([niter, found])
+    for z in zs:
+        print(z)
+    assert niter <= 12
+
+
+def test_aberth_fir_orig():
+    z0s = initial_aberth_orig(r)
+    opt = Options()
+    opt.tol = 1e-8
+    zs, niter, found = aberth(r, z0s, opt)
+    print([niter, found])
+    for z in zs:
+        print(z)
+    assert niter <= 13
+
+
+def test_aberth_autocorr_fir_orig():
+    z0s = initial_aberth_autocorr_orig(r)
     opt = Options()
     opt.tol = 1e-14
     zs, niter, found = aberth_autocorr(r, z0s, opt)

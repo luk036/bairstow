@@ -79,6 +79,31 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     return z0s
 
 
+def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
+    """[summary]
+
+    Args:
+        pa (List): [description]
+
+    Returns:
+        List: [description]
+
+    Examples:
+        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
+        >>> z0s = initial_aberth_orig(h)
+    """
+    N: int = len(pa) - 1
+    c: FoC = -pa[1] / (N * pa[0])
+    Pc: FoC = horner_eval(pa.copy(), N, c)
+    re: FoC = (-Pc) ** (1.0 / N)
+    k = 2 * PI / N
+    z0s: List[complex] = []
+    for i in range(N):
+        theta = k * (0.25 + i)
+        z0s += [c + re * exp(theta * 1j)]
+    return z0s
+
+
 def aberth(
     pa: List[FoC], zs: List[complex], options=Options()
 ) -> Tuple[List[complex], int, bool]:
@@ -149,6 +174,35 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     for i in range(N):
         vdc = 2 * PI * vgen.pop()
         z0s += [re * exp(vdc * 1j)]
+    return z0s
+
+
+def initial_aberth_autocorr_orig(pa: List[float]) -> List[complex]:
+    """[summary]
+
+    Args:
+        pa (List): [description]
+
+    Returns:
+        List: [description]
+
+    Examples:
+        >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
+        >>> z0s = initial_aberth_autocorr_orig(h)
+    """
+    N: int = len(pa) - 1
+    re: float = abs(pa[-1]) ** (1.0 / N)
+    # c = -pa[1] / (N * pa[0])
+    # Pc = horner_eval(pa.copy(), N, c)
+    # re = (-Pc) ** (1.0 / N)
+    if abs(re) > 1:
+        re = 1 / re
+    N //= 2
+    k = 2 * PI / N
+    z0s = []
+    for i in range(N):
+        theta = k * (0.25 + i)
+        z0s += [re * exp(theta * 1j)]
     return z0s
 
 
