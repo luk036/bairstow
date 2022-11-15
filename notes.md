@@ -1,32 +1,21 @@
-# Python, Rust, C++
+# Polynomial root-finding
 
-Python: no function overloading
-        has default function arguments
+- Mathematic
+  - Newton's method based
+  - Convert to eigenvalue problem
+  - Local convergence
 
-```python
-def solve(x, tol=1e-8):
-    ...
+- Numerical algorithm and analysis
+  - Stability
+  - Round-off error
+  - Sensibility
 
-class Partitioner:
-    def __init__(G, k = 2):
-        ...
+- Leja ordering
 
-def bad_idea(x, lst=[]):  # Don't!
-    ...
-```
+- Programming
+  - Multi-threading
 
-Rust: 
+# To-do
 
-- no default function arguments
-- limited function overloading
-  through trait
-  allow different types but must have same number of arguments
-
-```rust
-pub fn cut(beta: f64)
-
-pub fn cut(beta: (f64, Option<f64>))
-```
-
-
+Round-robin
 

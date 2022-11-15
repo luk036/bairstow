@@ -1,7 +1,9 @@
 from math import acos, cos, sqrt
 from typing import List, Tuple
 
+from .lds import Vdcorput
 from .matrix2 import Matrix2
+from .robin import Robin
 from .vector2 import Vector2
 
 PI = acos(-1.0)
@@ -193,7 +195,7 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     return Vector2(coeffs[degree - 1], coeffs[degree])
 
 
-def initial_guess(coeffs: List[float]) -> List[Vector2]:
+def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
@@ -226,6 +228,41 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     return vr0s
 
 
+def initial_guess(coeffs: List[float]) -> List[Vector2]:
+    """[summary]
+
+    Args:
+        pa (List[float]): [description]
+
+    Returns:
+        List[Vector2]: [description]
+
+    Examples:
+        >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
+        >>> vr0s = initial_guess(h)
+        >>> print(vr0s[0])
+        <1.4537520283010816, -0.7559947795353074>
+    """
+    degree = len(coeffs) - 1
+    center = -coeffs[1] / (degree * coeffs[0])
+    # P = np.poly1d(pa)
+    Pc = horner_eval(coeffs.copy(), degree, center)
+    reff = abs(Pc) ** (1.0 / degree)
+    m = center * center + reff * reff
+    vr0s = []
+    degree //= 2
+    degree *= 2  # make even
+    # k = PI / degree
+    vgen = Vdcorput(2)
+    vgen.reseed(1)
+    for i in range(1, degree, 2):
+        temp = reff * cos(PI * vgen.pop())
+        r0 = 2 * (center + temp)
+        t0 = m + 2 * center * temp  # ???
+        vr0s += [Vector2(r0, -t0)]
+    return vr0s
+
+
 def pbairstow_even(
     pa: List[float], vrs: List[Vector2], options=Options()
 ) -> Tuple[List[Vector2], int, bool]:
@@ -249,6 +286,7 @@ def pbairstow_even(
     M = len(vrs)
     N = len(pa) - 1
     converged = [False] * M
+    robin = Robin(M)
     for niter in range(1, options.max_iter):
         tol = 0.0
         # exclude converged
@@ -262,7 +300,8 @@ def pbairstow_even(
                 continue
             vA1 = horner(pb, N - 2, vrs[i])
             tol = max(tol_i, tol)
-            for j in filter(lambda j: j != i, range(M)):  # exclude i
+            # for j in filter(lambda j: j != i, range(M)):  # exclude i
+            for j in robin.exclude(i):
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:

@@ -3,6 +3,7 @@ from math import pi
 from typing import List, Tuple, Union
 
 from .lds import Vdcorput
+from .robin import Robin
 
 # from pytest import approx
 from .rootfinding import Options, horner_eval
@@ -127,6 +128,7 @@ def aberth(
     M = len(zs)
     N = len(pa) - 1
     converged = [False] * M
+    robin = Robin(M)
     for niter in range(1, options.max_iter):
         tol = 0.0
         for i in filter(lambda i: not converged[i], range(M)):
@@ -138,7 +140,8 @@ def aberth(
                 continue
             P1 = horner_eval(pb, N - 1, zs[i])
             tol = max(tol_i, tol)
-            for j in filter(lambda j: j != i, range(M)):  # exclude i
+            # for j in filter(lambda j: j != i, range(M)):  # exclude i
+            for j in robin.exclude(i):
                 P1 -= P / (zs[i] - zs[j])
             zs[i] -= P / P1
         if tol < options.tol:
@@ -230,6 +233,7 @@ def aberth_autocorr(
     M: int = len(zs)
     N: int = len(pa) - 1
     converged: List[bool] = [False] * M
+    robin = Robin(M)
     for niter in range(1, options.max_iter):
         tol: float = 0.0
         # exclude converged
@@ -242,7 +246,8 @@ def aberth_autocorr(
                 continue
             P1 = horner_eval(pb, N - 1, zs[i])
             tol = max(tol_i, tol)
-            for j in filter(lambda j: j != i, range(M)):  # exclude i
+            # for j in filter(lambda j: j != i, range(M)):  # exclude i
+            for j in robin.exclude(i):
                 P1 -= P / (zs[i] - zs[j])
                 # for j in range(M):  # exclude i
                 zsn = 1.0 / zs[j]

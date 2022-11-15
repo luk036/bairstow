@@ -2,13 +2,14 @@ from math import acos, cos, sqrt
 from typing import List
 
 from .lds import Vdcorput
+from .robin import Robin
 from .rootfinding import Options, delta, horner
 from .vector2 import Vector2
 
 PI = acos(-1.0)
 
 
-def initial_autocorr(pa: List[float]) -> List[Vector2]:
+def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
@@ -35,7 +36,7 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
     return vr0s
 
 
-def initial_autocorr_bad(pa: List[float]) -> List[Vector2]:
+def initial_autocorr(pa: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
@@ -76,6 +77,7 @@ def pbairstow_autocorr(
     M = len(vrs)  # assume polynomial of h is even
     N = len(pa) - 1
     converged = [False] * M
+    # robin = Robin(M)
     for niter in range(1, options.max_iter):
         tol = 0.0
         # found = True  # initial
@@ -88,6 +90,7 @@ def pbairstow_autocorr(
                 continue
             tol = max(tol, tol_i)
             vA1 = horner(pb, N - 2, vrs[i])
+            # for j in robin.exclude(i):
             for j in filter(lambda j: j != i, range(M)):  # exclude i
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
                 # for j in range(M):
