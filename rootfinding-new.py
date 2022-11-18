@@ -19,64 +19,11 @@ class Options:
 # def horner_eval(pb: List[float], z):
 
 
-def delta1(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
-    """for ri - rj
-                          -1
-        ⎛r ⋅ p - s     p ⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        -s⎠     ⎝B⎠
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
-
-    Examples:
-        >>> d = delta1(Vector2(1, 2), Vector2(-2, 0), Vector2(4, -5))
-        >>> print(d)
-        <0.2, 0.4>
-    """
-    r, q = vr.x, vr.y
-    p, s = vp.x, vp.y
-    mp = Matrix2(Vector2(-s, -p), Vector2(p * q, p * r - s))
-    return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-
-
-def delta2(vA: Vector2, vr: Vector2, vA1: Vector2) -> Vector2:
-    """for A1
-                          -1
-        ⎛r ⋅ p + s     -p⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        -s⎠     ⎝B⎠
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
-
-    Examples:
-        >>> d = delta2(Vector2(1, 2), Vector2(-2, 0), Vector2(4, 5))
-        >>> print(d)
-        <0.2, -0.4>
-    """
-    r, q = vr.x, vr.y
-    p, s = vA1.x, vA1.y
-    mp = Matrix2(Vector2(-s, p), Vector2(p * q, p * r + s))
-    return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-
-
 def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
-    """for -vA1
-                          -1
-        ⎛r ⋅ p - s     -p⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        s ⎠     ⎝B⎠
+    """[summary]
+
+    r * p + s   -p
+    -q * p      -s
 
     Args:
         vA (Vector2): [description]
@@ -87,13 +34,13 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
         Vector2: [description]
 
     Examples:
-        >>> d = delta(Vector2(1, 2), Vector2(-2, 0), Vector2(4, -5))
+        >>> d = delta(Vector2(1, 2), Vector2(-2, 0), Vector2(4, 5))
         >>> print(d)
         <0.2, -0.4>
     """
     r, q = vr.x, vr.y
     p, s = vp.x, vp.y
-    mp = Matrix2(Vector2(s, p), Vector2(p * q, p * r - s))
+    mp = Matrix2(Vector2(-s, p), Vector2(p * q, p * r + s))
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
@@ -115,25 +62,25 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vecto
         >>> vrj = Vector2(4, -5)
         >>> dr = suppress_old(vA, vA1, vri, vrj)
         >>> print(dr)
-        <-16.78082191780822, -1.4383561643835616>
+        <-16.78082191780822, 1.4383561643835616>
     """
     A, B = vA.x, vA.y
     A1, B1 = vA1.x, vA1.y
     vp = vri - vrj
-    r, q = vri.x, -vri.y
-    p, s = vp.x, -vp.y
-    f = r * p + s
+    r, q = vri.x, vri.y
+    p, s = vp.x, vp.y
+    f = r * p - s
     qp = q * p
-    e = f * s - qp * p
-    a = A * s - B * p
-    b = B * f - A * qp
+    e = -f * s + qp * p
+    a = -A * s - B * p
+    b = B * f + A * qp
     c = A1 * e - a
     d = B1 * e - b - a * p
     A = a * e
     B = b * e
-    A1 = c * s - d * p
-    B1 = d * f - c * qp
-    return delta(Vector2(A, B), vri, Vector2(A1, -B1))
+    A1 = -c * s - d * p
+    B1 = d * f + c * qp
+    return delta(Vector2(A, B), vri, Vector2(A1, B1))
 
 
 def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
@@ -157,9 +104,8 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
         <-16.780821917808282, -1.4383561643835616>
     """
     vp = vri - vrj
-    # vA1._y = -vA1._y  # confirm the delta convention
-    vA1 -= delta1(vA, vrj, vp)
-    return delta2(vA, vri, vA1)
+    vA1 -= delta(vA, vrj, vp)
+    return delta(vA, vri, vA1)
 
 
 def horner_eval(coeffs: List, degree: int, val):
@@ -344,8 +290,8 @@ def pbairstow_even(
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
-            vrs[i] -= delta2(vA, vrs[i], vA1)
+                vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
+            vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
             return vrs, niter, True
     return vrs, options.max_iter, False

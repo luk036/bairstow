@@ -70,7 +70,7 @@ def test_fir_auto():
     vr0s = initial_autocorr(r)
     print("vrs: {}".format(len(vr0s)))
     opts = Options()
-    opts.tol = 1e-2
+    opts.tol = 1e-3
     vrs, niter, found = pbairstow_autocorr(r, vr0s, opts)
     print([niter, found])
     for vr in vrs:

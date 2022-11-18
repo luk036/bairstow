@@ -108,7 +108,21 @@ def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
 def aberth(
     pa: List[FoC], zs: List[complex], options=Options()
 ) -> Tuple[List[complex], int, bool]:
-    """[summary]
+    """Aberth's method for polynomial root-finding
+
+                            P ⎛z ⎞
+                              ⎝ i⎠
+        z' = z  - ────────────────────────      forall i in 0..N
+         i    i                N
+                              _____
+                              ╲
+                               ╲    P ⎛z ⎞
+                                ╲     ⎝ i⎠
+                   P' ⎛z ⎞ -    ╱   ───────
+                      ⎝ i⎠     ╱    z  - z
+                              ╱      i    j
+                              ‾‾‾‾‾
+                              j ≠ i
 
     Args:
         pa (List): [description]
