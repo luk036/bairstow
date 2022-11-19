@@ -162,8 +162,15 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
     return delta2(vA, vri, vA1)
 
 
-def horner_eval(coeffs: List, degree: int, val):
+def horner_eval(coeffs: List, degree: int, zval):
     """Polynomial evaluation using Horner's scheme
+
+                     n         n - 1
+        P(z) = c  ⋅ z  + c  ⋅ z      + ... + c
+                0         1                   n
+
+        P(z) = P (z) ⋅ ⎛z - z   ⎞ + A
+                1      ⎝     val⎠
 
     Note: coeffs becomes the quotient after calling this function
 
@@ -182,7 +189,7 @@ def horner_eval(coeffs: List, degree: int, val):
         [1, -5, -87, 121, 1090, 960]
     """
     for i in range(degree):
-        coeffs[i + 1] += coeffs[i] * val
+        coeffs[i + 1] += coeffs[i] * zval
     return coeffs[degree]
 
 
@@ -216,6 +223,10 @@ def horner_backward(coeffs: List, degree: int, val):
 
 def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     """[summary]
+
+                       ⎛ 2            ⎞
+        P(x) = P (x) ⋅ ⎝x  - r ⋅ x + q⎠ + A ⋅ x + B
+                1
 
     Note: pb becomes the quotient after calling this function
 
@@ -310,7 +321,32 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
 def pbairstow_even(
     pa: List[float], vrs: List[Vector2], options=Options()
 ) -> Tuple[List[Vector2], int, bool]:
-    """[summary]
+    """Parallel Bairstow's method
+
+            new                               -1
+        ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'   -A' ⎞
+        ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
+        ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
+        ⎜q ⎟      ⎜q ⎟   ⎜-A'  ⋅ q        -B' ⎟     ⎝B⎠
+        ⎝ i⎠      ⎝ i⎠   ⎝  1    i           1⎠
+
+    where
+                         m
+                       _____
+                       ╲                         -1
+        ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  - s     p   ⎞
+        ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij ⎟     ⎛A⎞
+        ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                    ⎟   ⋅ ⎜ ⎟
+        ⎜B' ⎟   ⎜B ⎟    ╱    ⎜-p  ⋅ q         -s  ⎟     ⎝B⎠
+        ⎝  1⎠   ⎝ 1⎠   ╱     ⎝  ij   i          ij⎠
+                       ‾‾‾‾‾
+                       j ≠ i
+
+        ⎛p  ⎞   ⎛r ⎞   ⎛r ⎞
+        ⎜ ij⎟   ⎜ i⎟   ⎜ j⎟
+        ⎜   ⎟ = ⎜  ⎟ - ⎜  ⎟
+        ⎜s  ⎟   ⎜q ⎟   ⎜q ⎟
+        ⎝ ij⎠   ⎝ i⎠   ⎝ j⎠
 
     Args:
         pa (List[float]): [description]

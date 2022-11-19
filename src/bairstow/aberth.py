@@ -110,19 +110,22 @@ def aberth(
 ) -> Tuple[List[complex], int, bool]:
     """Aberth's method for polynomial root-finding
 
-                            P ⎛z ⎞
-                              ⎝ i⎠
-        z' = z  - ────────────────────────      forall i in 0..N
-         i    i                N
-                              _____
-                              ╲
-                               ╲    P ⎛z ⎞
-                                ╲     ⎝ i⎠
-                   P' ⎛z ⎞ -    ╱   ───────
-                      ⎝ i⎠     ╱    z  - z
-                              ╱      i    j
-                              ‾‾‾‾‾
-                              j ≠ i
+                    P ⎛z ⎞
+         new          ⎝ i⎠
+        z    = z  - ───────
+         i      i   P' ⎛z ⎞
+                       ⎝ i⎠
+    where
+                              n
+                            _____
+                            ╲
+                             ╲    P ⎛z ⎞
+                              ╲     ⎝ i⎠
+        P' ⎛z ⎞ = P  ⎛z ⎞ -   ╱   ───────
+           ⎝ i⎠    1 ⎝ i⎠    ╱    z  - z
+                            ╱      i    j
+                            ‾‾‾‾‾
+                            j ≠ i
 
     Args:
         pa (List): [description]
