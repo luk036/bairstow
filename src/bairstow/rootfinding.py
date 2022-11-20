@@ -323,7 +323,7 @@ def pbairstow_even(
 ) -> Tuple[List[Vector2], int, bool]:
     """Parallel Bairstow's method
 
-            new                               -1
+            new                                -1
         ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'   -A' ⎞
         ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
         ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
@@ -333,7 +333,7 @@ def pbairstow_even(
     where
                          m
                        _____
-                       ╲                         -1
+                       ╲                           -1
         ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  - s     p   ⎞
         ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij ⎟     ⎛A⎞
         ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                    ⎟   ⋅ ⎜ ⎟
