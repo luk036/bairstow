@@ -97,7 +97,7 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
-def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
+def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     """[summary]
 
     Args:
@@ -113,9 +113,10 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vecto
         >>> vA1 = Vector2(1, 2)
         >>> vri = Vector2(-2, 0)
         >>> vrj = Vector2(4, -5)
-        >>> dr = suppress_old(vA, vA1, vri, vrj)
+        >>> suppress_old(vA, vA1, vri, vrj)
+        >>> dr = delta(vA, vri, Vector2(vA1._x, -vA1._y))
         >>> print(dr)
-        <-16.78082191780822, -1.4383561643835616>
+        <-16.780821917808325, -1.4383561643835612>
     """
     A, B = vA.x, vA.y
     A1, B1 = vA1.x, vA1.y
@@ -125,18 +126,18 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vecto
     f = r * p + s
     qp = q * p
     e = f * s - qp * p
-    a = A * s - B * p
-    b = B * f - A * qp
-    c = A1 * e - a
-    d = B1 * e - b - a * p
-    A = a * e
-    B = b * e
-    A1 = c * s - d * p
-    B1 = d * f - c * qp
-    return delta(Vector2(A, B), vri, Vector2(A1, -B1))
+    a = (A * s - B * p) / e
+    b = (B * f - A * qp) / e
+    c = A1 - a
+    d = B1 - b - a * p
+    vA._x = a
+    vA._y = b
+    vA1._x = (c * s - d * p) / e
+    vA1._y = (d * f - c * qp) / e
+    # return delta(vA, vri, Vector2(vA1._x, -vA1._y))
 
 
-def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
+def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     """[summary]
 
     Args:
@@ -152,14 +153,23 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2) -> Vector2:
         >>> vA1 = Vector2(1, 2)
         >>> vri = Vector2(-2, 0)
         >>> vrj = Vector2(4, -5)
-        >>> dr = suppress(vA, vA1, vri, vrj)
+        >>> suppress(vA, vA1, vri, vrj)
+        >>> dr = delta2(vA, vri, vA1)
         >>> print(dr)
-        <-16.780821917808282, -1.4383561643835616>
+        <-16.780821917808325, -1.4383561643835612>
     """
     vp = vri - vrj
+    vAnew = delta1(vA, vri, vp)
+    vA._x = vAnew._x
+    vA._y = vAnew._y
+    vA1._x -= vA._x
+    vA1._y -= vA._x * vp._x + vA._y
+    vA1new = delta1(vA1, vri, vp)
+    vA1._x = vA1new._x
+    vA1._y = vA1new._y
     # vA1._y = -vA1._y  # confirm the delta convention
-    vA1 -= delta1(vA, vrj, vp)
-    return delta2(vA, vri, vA1)
+    # vA1 -= delta1(vA, vrj, vp)
+    # return delta2(vA, vri, vA1)
 
 
 def horner_eval(coeffs: List, degree: int, zval):
@@ -271,7 +281,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     center = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(coeffs.copy(), degree, center)
-    reff = abs(Pc) ** (1.0 / degree)
+    reff = abs(Pc) ** (1 / degree)
     m = center * center + reff * reff
     vr0s = []
     degree //= 2
@@ -302,7 +312,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     center = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(coeffs.copy(), degree, center)
-    reff = abs(Pc) ** (1.0 / degree)
+    reff = abs(Pc) ** (1 / degree)
     m = center * center + reff * reff
     vr0s = []
     degree //= 2
@@ -323,7 +333,7 @@ def pbairstow_even(
 ) -> Tuple[List[Vector2], int, bool]:
     """Parallel Bairstow's method
 
-            new                                -1
+            new                               -1
         ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'   -A' ⎞
         ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
         ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
@@ -333,7 +343,7 @@ def pbairstow_even(
     where
                          m
                        _____
-                       ╲                           -1
+                       ╲                         -1
         ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  - s     p   ⎞
         ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij ⎟     ⎛A⎞
         ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                    ⎟   ⋅ ⎜ ⎟
@@ -380,7 +390,8 @@ def pbairstow_even(
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
+                suppress_old(vA, vA1, vrs[i], vrs[j])
+                # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta2(vA, vrs[i], vA1)
         if tol < options.tol:
             return vrs, niter, True
@@ -404,11 +415,11 @@ def find_rootq(vr: Vector2) -> Tuple[float, float]:
         (3.0, 2.0)
     """
     # r, q = vr.x, vr.y
-    hr = vr.x / 2.0
+    hr = vr.x / 2
     d = hr * hr - vr.y
-    if d < 0.0:
+    if d < 0:
         x1 = hr + sqrt(-d) * 1j
     else:
-        x1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))
+        x1 = hr + (sqrt(d) if hr >= 0 else -sqrt(d))
     x2 = vr.y / x1
     return x1, x2

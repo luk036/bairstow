@@ -3,7 +3,7 @@ from typing import List
 
 from .lds import Vdcorput
 from .robin import Robin
-from .rootfinding import Options, delta1, delta2, horner
+from .rootfinding import Options, delta1, delta2, horner, suppress_old
 from .vector2 import Vector2
 
 PI = acos(-1.0)
@@ -91,11 +91,15 @@ def pbairstow_autocorr(
             tol = max(tol, tol_i)
             vA1 = horner(pb, N - 2, vrs[i])
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
+            # for j in robin.exclude(i):
+            #     suppress_old(vA, vA1, vrs[i], vrs[j])
+            #     # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
+            # vrs[i] -= delta2(vA, vrs[i], vA1)
             for j in robin.exclude(i):
-                vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
+                suppress_old(vA, vA1, vrs[i], vrs[j])
                 # for j in range(M):
                 vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
-                vA1 -= delta1(vA, vrn, vrs[i] - vrn)
+                suppress_old(vA, vA1, vrs[i], vrn)
             vrs[i] -= delta2(vA, vrs[i], vA1)
             # vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:

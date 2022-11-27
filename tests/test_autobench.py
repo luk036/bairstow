@@ -36,7 +36,7 @@ def test_autocorr(benchmark):
         benchmark ([type]): [description]
     """
     result = benchmark(run_autocorr)
-    assert result <= 8
+    assert result <= 13
 
 
 def test_pbairstow(benchmark):
