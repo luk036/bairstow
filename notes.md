@@ -1,44 +1,36 @@
-# Polynomial root-finding for Filter design
-用于 FIR 滤波器设计的多项式寻根法
+## FIR Filter Design
+FIR 滤波器设计
 
+input: specification
+output: filter coefficients (or a Verilog file)
+method: Convex optimization via Spectral factorization
 
-## Motivation (test)
+Convex optimization:
+    Ellipsoid method + parallel cuts
+Spectral factorization: 
+    FFT
+    Polynomial root-finding 
+        Auto-correlation function
+        Parallel Bairstow's method
+        Aberth's method
+        [ ] Leja ordering
 
-Auto-correlation polynomial
-Spectral factorization
+---
 
-1. FFT
-2. Polynomial root-finding
-   1. Convert to eigenvalue problem
-      Matrix: O(n^2) storage
-      Stable
-   2. Based on Newton's method 
-      1. Aberth's method
-      2. Bairstow's method
+## Multiplier-less FIR Filter Design
 
-Stability
-Sensitivity: Round-off error
-Concurrency
+low-cost low-power
+Discrete version of Ellipsoid method
+Canonical Signed Digit (CSD) 
+input: number of non-zeros (nnz)
+output: filter coefficients in CSD form
+        [ ] Common Sub-expression Extraction/Elimination
+        [ ] a Verilog file
 
-LSP:
+---
 
-## Newton's method based algorithms
+## Possible contributions
 
-Single vs. Pacipicate
-
-- Mathematic
-  - Newton's method based
-  - Local convergence
-
-- Numerical algorithm and analysis
-  - Stability
-  - Round-off error
-  - Sensibility
-
-- Leja ordering
-
-- Programming
-  - Multi-threading
-  - Round-robin
-
-
+Write more test cases
+C++ Porting
+Code Clean-up
