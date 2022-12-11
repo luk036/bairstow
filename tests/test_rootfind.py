@@ -6,7 +6,7 @@ def test_rootfind():
     vr0s = initial_guess(h)
     _, niter, found = pbairstow_even(h, vr0s)
     print([niter, found])
-    assert niter <= 5
+    assert niter <= 4
 
 
 def test_rootfind2():
@@ -15,4 +15,4 @@ def test_rootfind2():
     vrs, niter, found = pbairstow_even(h, vr0s)
     print([niter, found])
     print(find_rootq(vr) for vr in vrs)
-    assert niter <= 12
+    assert niter <= 11

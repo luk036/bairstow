@@ -15,4 +15,4 @@ def test_odd2():
     vrs, niter, found = pbairstow_even(h, vr0s)
     print([niter, found])
     print([find_rootq(vr) for vr in vrs])
-    assert niter <= 114
+    assert niter <= 113

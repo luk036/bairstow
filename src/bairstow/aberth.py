@@ -106,7 +106,7 @@ def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
 
 
 def aberth(
-    pa: List[FoC], zs: List[complex], options=Options()
+    pa: List[FoC], zs: List[complex], options: Options = Options()
 ) -> Tuple[List[complex], int, bool]:
     """Aberth's method for polynomial root-finding
 
@@ -146,7 +146,7 @@ def aberth(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(1, options.max_iter):
+    for niter in range(options.max_iter):
         tol = 0.0
         for i in filter(lambda i: not converged[i], range(M)):
             pb = pa.copy()
@@ -251,7 +251,7 @@ def aberth_autocorr(
     N: int = len(pa) - 1
     converged: List[bool] = [False] * M
     robin = Robin(M)
-    for niter in range(1, options.max_iter):
+    for niter in range(options.max_iter):
         tol: float = 0.0
         # exclude converged
         for i in filter(lambda i: not converged[i], range(M)):

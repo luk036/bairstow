@@ -375,7 +375,7 @@ def pbairstow_even(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(1, options.max_iter):
+    for niter in range(options.max_iter):
         tol = 0.0
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):

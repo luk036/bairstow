@@ -63,7 +63,7 @@ def test_fir_even():
     print([niter, found])
     for vr in vrs:
         print(find_rootq(vr))
-    assert niter <= 119
+    assert niter <= 118
 
 
 def test_fir_auto():
@@ -77,4 +77,4 @@ def test_fir_auto():
         vr = extract_autocorr(vr)
         print(find_rootq(vr))
 
-    assert niter <= 16
+    assert niter <= 15

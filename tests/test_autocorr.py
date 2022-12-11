@@ -14,4 +14,4 @@ def test_autocorr():
         vr = extract_autocorr(vr)
         print(find_rootq(vr))
 
-    assert niter <= 13
+    assert niter <= 12

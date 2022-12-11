@@ -14,7 +14,7 @@ def test_aberth1():
     z0s = initial_aberth(h)
     _, niter, found = aberth(h, z0s)
     print([niter, found])
-    assert niter <= 8
+    assert niter <= 7
 
 
 def test_aberth2():
@@ -23,7 +23,7 @@ def test_aberth2():
     zs, niter, found = aberth(h, z0s)
     print([niter, found])
     print([z for z in zs])
-    assert niter <= 8
+    assert niter <= 7
 
 
 r = [
@@ -87,7 +87,7 @@ def test_aberth_fir():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 11
+    assert niter <= 10
 
 
 def test_aberth_autocorr_fir():
@@ -98,7 +98,7 @@ def test_aberth_autocorr_fir():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 12
+    assert niter <= 11
 
 
 def test_aberth_fir_orig():
@@ -109,7 +109,7 @@ def test_aberth_fir_orig():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 13
+    assert niter <= 12
 
 
 def test_aberth_autocorr_fir_orig():
@@ -120,7 +120,7 @@ def test_aberth_autocorr_fir_orig():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 12
+    assert niter <= 11
 
 
 # def test_aberth_fir_lds():
@@ -181,4 +181,4 @@ def test_aberth_autocorr_fir_orig():
 #     zs, niter, found = aberth(r, z0s, opt)
 #     print([niter, found])
 #     print([z for z in zs])
-#     assert niter <= 13
+#     assert niter <= 12
