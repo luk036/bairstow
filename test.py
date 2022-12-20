@@ -1,5 +1,7 @@
 import math  # Optionally
+
 import latexify
+
 
 @latexify.function
 def sinc(x):
@@ -8,6 +10,6 @@ def sinc(x):
     else:
         return math.sin(x) / x
 
+
 if __name__ == "__main__":
     print(sinc)
-
