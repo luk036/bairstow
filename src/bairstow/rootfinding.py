@@ -153,6 +153,39 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> vA1 = Vector2(1, 2)
         >>> vri = Vector2(-2, 0)
         >>> vrj = Vector2(4, -5)
+        >>> vA, vA1 = suppress(vA, vA1, vri, vrj)
+        >>> dr = delta(vA, vri, Vector2(vA1._x, -vA1._y))
+        >>> print(dr)
+        <-16.780821917808325, -1.4383561643835612>
+    """
+    vp = vri - vrj
+    r, q = vri.x, vri.y
+    p, s = vp.x, vp.y
+    M = Matrix2(Vector2(-s, -p), Vector2(p * q, p * r - s))
+    e = M.det()
+    va = M.mdot(vA) / e
+    vc = vA1 - va
+    vc._y -= va._x * p
+    va1 = M.mdot(vc) / e
+    return va, va1
+
+
+def suppress2(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
+    """[summary]
+
+    Args:
+        vA (Vector2): [description]
+        vr (Vector2): [description]
+        vp (Vector2): [description]
+
+    Returns:
+        Vector2: [description]
+
+    Examples:
+        >>> vA = Vector2(3, 3)
+        >>> vA1 = Vector2(1, 2)
+        >>> vri = Vector2(-2, 0)
+        >>> vrj = Vector2(4, -5)
         >>> suppress(vA, vA1, vri, vrj)
         >>> dr = delta2(vA, vri, vA1)
         >>> print(dr)
@@ -390,7 +423,7 @@ def pbairstow_even(
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                suppress_old(vA, vA1, vrs[i], vrs[j])
+                vA, vA1 = suppress(vA, vA1, vrs[i], vrs[j])
                 # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta2(vA, vrs[i], vA1)
         if tol < options.tol:

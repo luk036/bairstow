@@ -15,7 +15,7 @@ def test_suppress1():
 
     vA = Vector2(3, 3)
     vA1 = Vector2(1, 2)
-    suppress(vA, vA1, vri, vrj)
+    vA, vA1 = suppress(vA, vA1, vri, vrj)
     dr_new = delta2(vA, vri, vA1)
 
     assert dr_new._x == approx(dr_old._x)
@@ -44,14 +44,14 @@ def test_suppress2():
 
     vA = Vector2(3, 3)
     vA1 = Vector2(1, 2)
-    suppress(vA, vA1, vr0, vr1)
-    suppress(vA, vA1, vr0, vr2)
+    vA, vA1 = suppress(vA, vA1, vr0, vr1)
+    vA, vA1 = suppress(vA, vA1, vr0, vr2)
     dr_new = delta2(vA, vr0, vA1)
 
     vA = Vector2(3, 3)
     vA1 = Vector2(1, 2)
-    suppress(vA, vA1, vr0, vr2)
-    suppress(vA, vA1, vr0, vr1)
+    vA, vA1 = suppress(vA, vA1, vr0, vr2)
+    vA, vA1 = suppress(vA, vA1, vr0, vr1)
     dr_new2 = delta2(vA, vr0, vA1)
 
     assert dr_new._x == approx(dr_new2._x)
