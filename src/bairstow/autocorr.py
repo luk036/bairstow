@@ -1,7 +1,7 @@
 from math import acos, cos, sqrt
 from typing import List
 
-from .lds import Vdcorput
+from lds_py.lds import Vdcorput
 from .robin import Robin
 from .rootfinding import Options, delta1, delta2, horner, suppress_old
 from .vector2 import Vector2

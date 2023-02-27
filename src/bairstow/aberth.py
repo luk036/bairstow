@@ -2,7 +2,7 @@ from cmath import exp
 from math import pi
 from typing import List, Tuple, Union
 
-from .lds import Vdcorput
+from lds_py.lds import Vdcorput
 from .robin import Robin
 
 # from pytest import approx
