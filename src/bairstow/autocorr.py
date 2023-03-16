@@ -3,7 +3,7 @@ from typing import List
 
 from lds_py.lds import Vdcorput
 from .robin import Robin
-from .rootfinding import Options, delta1, delta2, horner, suppress_old
+from .rootfinding import Options, delta, horner, suppress_old
 from .vector2 import Vector2
 
 PI = acos(-1.0)
@@ -32,7 +32,7 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
     # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), m) for _ in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, N, 2)]
     return vr0s
 
 
@@ -52,7 +52,7 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
     N //= 2
     k = PI / N
     m = re * re
-    vr0s = [Vector2(2 * re * cos(k * i), m) for i in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
     return vr0s
 
 
@@ -98,9 +98,9 @@ def pbairstow_autocorr(
             for j in robin.exclude(i):
                 suppress_old(vA, vA1, vrs[i], vrs[j])
                 # for j in range(M):
-                vrn = Vector2(vrs[j].x, 1.0) / vrs[j].y
+                vrn = Vector2(-vrs[j].x, 1.0) / vrs[j].y
                 suppress_old(vA, vA1, vrs[i], vrn)
-            vrs[i] -= delta2(vA, vrs[i], vA1)
+            vrs[i] -= delta(vA, vrs[i], vA1)
             # vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:
         #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
@@ -113,7 +113,7 @@ def pbairstow_autocorr(
 def extract_autocorr(vr: Vector2) -> Vector2:
     """Extract the quadratic function where its roots are within a unit circle
 
-    x^2 - r*x + q  or (1/q) - (r/q) * x + x^2
+    x^2 - r*x - q  or (-1/q) + (r/q) * x + x^2
     (x - a1)(x - a2) = x^2 - (a1 + a2) x + a1 * a2
 
     Args:
@@ -123,26 +123,26 @@ def extract_autocorr(vr: Vector2) -> Vector2:
         Vector2: [description]
 
     Examples:
-        >>> vr = extract_autocorr(Vector2(1, 4))
+        >>> vr = extract_autocorr(Vector2(1, -4))
         >>> print(vr)
-        <0.25, 0.25>
+        <0.25, -0.25>
     """
     r, q = vr.x, vr.y
     hr = r / 2.0
-    d = hr * hr - q
+    d = hr * hr + q
     if d < 0.0:  # complex conjugate root
-        if q > 1.0:
-            vr = Vector2(r, 1.0) / q
+        if q < -1.0:
+            vr = Vector2(-r, 1.0) / q
     else:
         # two real roots
         a1 = hr + (sqrt(d) if hr >= 0.0 else -sqrt(d))
-        a2 = q / a1
+        a2 = -q / a1
         if abs(a1) > 1.0:
             if abs(a2) > 1.0:
                 a2 = 1.0 / a2
             a1 = 1.0 / a1
-            vr = Vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, -a1 * a2)
         elif abs(a2) > 1.0:
             a2 = 1.0 / a2
-            vr = Vector2(a1 + a2, a1 * a2)
+            vr = Vector2(a1 + a2, -a1 * a2)
     return vr

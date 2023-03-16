@@ -16,15 +16,64 @@ class Options:
     # tol_suppress: float = 1e-1
 
 
-# def horner_eval(pb: List[float], z):
+# def delta1(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
+#     """for ri - rj
+#                           -1
+#         ⎛r ⋅ p + s     p ⎞     ⎛A⎞
+#         ⎜                ⎟   ⋅ ⎜ ⎟
+#         ⎝q ⋅ p         s⎠     ⎝B⎠
+#
+#     Args:
+#         vA (Vector2): [description]
+#         vr (Vector2): [description]
+#         vp (Vector2): [description]
+#
+#     Returns:
+#         Vector2: [description]
+#
+#     Examples:
+#         >>> d = delta1(Vector2(1, 2), Vector2(-2, 0), Vector2(4, -5))
+#         >>> print(d)
+#         <0.2, 0.4>
+#     """
+#     r, q = vr.x, vr.y
+#     p, s = vp.x, vp.y
+#     mp = Matrix2(Vector2(-s, -p), Vector2(p * q, p * r - s))
+#     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
+#
+#
+# def delta2(vA: Vector2, vr: Vector2, vA1: Vector2) -> Vector2:
+#     """for A1
+#                           -1
+#         ⎛r ⋅ p + s     -p⎞     ⎛A⎞
+#         ⎜                ⎟   ⋅ ⎜ ⎟
+#         ⎝-q ⋅ p        -s⎠     ⎝B⎠
+#
+#     Args:
+#         vA (Vector2): [description]
+#         vr (Vector2): [description]
+#         vp (Vector2): [description]
+#
+#     Returns:
+#         Vector2: [description]
+#
+#     Examples:
+#         >>> d = delta2(Vector2(1, 2), Vector2(-2, 0), Vector2(4, 5))
+#         >>> print(d)
+#         <0.2, -0.4>
+#     """
+#     r, q = vr.x, vr.y
+#     p, s = vA1.x, vA1.y
+#     mp = Matrix2(Vector2(-s, p), Vector2(p * q, p * r + s))
+#     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
-def delta1(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
-    """for ri - rj
-                          -1
-        ⎛r ⋅ p - s     p ⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        -s⎠     ⎝B⎠
+def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
+    """for -vA1
+                         -1
+        ⎛r ⋅ p + s     p⎞     ⎛A⎞
+        ⎜               ⎟   ⋅ ⎜ ⎟
+        ⎝q ⋅ p         s⎠     ⎝B⎠
 
     Args:
         vA (Vector2): [description]
@@ -35,65 +84,13 @@ def delta1(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
         Vector2: [description]
 
     Examples:
-        >>> d = delta1(Vector2(1, 2), Vector2(-2, 0), Vector2(4, -5))
+        >>> d = delta(Vector2(1, 2), Vector2(-2, 0), Vector2(4, 5))
         >>> print(d)
         <0.2, 0.4>
     """
     r, q = vr.x, vr.y
     p, s = vp.x, vp.y
-    mp = Matrix2(Vector2(-s, -p), Vector2(p * q, p * r - s))
-    return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-
-
-def delta2(vA: Vector2, vr: Vector2, vA1: Vector2) -> Vector2:
-    """for A1
-                          -1
-        ⎛r ⋅ p + s     -p⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        -s⎠     ⎝B⎠
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
-
-    Examples:
-        >>> d = delta2(Vector2(1, 2), Vector2(-2, 0), Vector2(4, 5))
-        >>> print(d)
-        <0.2, -0.4>
-    """
-    r, q = vr.x, vr.y
-    p, s = vA1.x, vA1.y
-    mp = Matrix2(Vector2(-s, p), Vector2(p * q, p * r + s))
-    return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
-
-
-def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
-    """for -vA1
-                          -1
-        ⎛r ⋅ p - s     -p⎞     ⎛A⎞
-        ⎜                ⎟   ⋅ ⎜ ⎟
-        ⎝-q ⋅ p        s ⎠     ⎝B⎠
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
-
-    Examples:
-        >>> d = delta(Vector2(1, 2), Vector2(-2, 0), Vector2(4, -5))
-        >>> print(d)
-        <0.2, -0.4>
-    """
-    r, q = vr.x, vr.y
-    p, s = vp.x, vp.y
-    mp = Matrix2(Vector2(s, p), Vector2(p * q, p * r - s))
+    mp = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
     return mp.mdot(vA) / mp.det()  # 6 mul's + 2 div's
 
 
@@ -112,17 +109,17 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> vA = Vector2(3, 3)
         >>> vA1 = Vector2(1, 2)
         >>> vri = Vector2(-2, 0)
-        >>> vrj = Vector2(4, -5)
+        >>> vrj = Vector2(4, 5)
         >>> suppress_old(vA, vA1, vri, vrj)
-        >>> dr = delta(vA, vri, Vector2(vA1._x, -vA1._y))
+        >>> dr = delta(vA, vri, Vector2(vA1._x, vA1._y))
         >>> print(dr)
-        <-16.780821917808325, -1.4383561643835612>
+        <-16.780821917808325, 1.4383561643835612>
     """
     A, B = vA.x, vA.y
     A1, B1 = vA1.x, vA1.y
     vp = vri - vrj
-    r, q = vri.x, -vri.y
-    p, s = vp.x, -vp.y
+    r, q = vri.x, vri.y
+    p, s = vp.x, vp.y
     f = r * p + s
     qp = q * p
     e = f * s - qp * p
@@ -152,16 +149,16 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> vA = Vector2(3, 3)
         >>> vA1 = Vector2(1, 2)
         >>> vri = Vector2(-2, 0)
-        >>> vrj = Vector2(4, -5)
+        >>> vrj = Vector2(4, 5)
         >>> vA, vA1 = suppress(vA, vA1, vri, vrj)
-        >>> dr = delta(vA, vri, Vector2(vA1._x, -vA1._y))
+        >>> dr = delta(vA, vri, Vector2(vA1._x, vA1._y))
         >>> print(dr)
-        <-16.780821917808325, -1.4383561643835612>
+        <-16.780821917808325, 1.4383561643835612>
     """
     vp = vri - vrj
     r, q = vri.x, vri.y
     p, s = vp.x, vp.y
-    M = Matrix2(Vector2(-s, -p), Vector2(p * q, p * r - s))
+    M = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
     e = M.det()
     va = M.mdot(vA) / e
     vc = vA1 - va
@@ -170,39 +167,39 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     return va, va1
 
 
-def suppress2(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
-    """[summary]
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
-
-    Examples:
-        >>> vA = Vector2(3, 3)
-        >>> vA1 = Vector2(1, 2)
-        >>> vri = Vector2(-2, 0)
-        >>> vrj = Vector2(4, -5)
-        >>> suppress(vA, vA1, vri, vrj)
-        >>> dr = delta2(vA, vri, vA1)
-        >>> print(dr)
-        <-16.780821917808325, -1.4383561643835612>
-    """
-    vp = vri - vrj
-    vAnew = delta1(vA, vri, vp)
-    vA._x = vAnew._x
-    vA._y = vAnew._y
-    vA1._x -= vA._x
-    vA1._y -= vA._x * vp._x + vA._y
-    vA1new = delta1(vA1, vri, vp)
-    vA1._x = vA1new._x
-    vA1._y = vA1new._y
-    # vA1._y = -vA1._y  # confirm the delta convention
-    # vA1 -= delta1(vA, vrj, vp)
-    # return delta2(vA, vri, vA1)
+# def suppress2(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
+#     """[summary]
+#
+#     Args:
+#         vA (Vector2): [description]
+#         vr (Vector2): [description]
+#         vp (Vector2): [description]
+#
+#     Returns:
+#         Vector2: [description]
+#
+#     Examples:
+#         >>> vA = Vector2(3, -3)
+#         >>> vA1 = Vector2(1, -2)
+#         >>> vri = Vector2(-2, 0)
+#         >>> vrj = Vector2(4, 5)
+#         >>> suppress(vA, vA1, vri, vrj)
+#         >>> dr = delta2(vA, vri, vA1)
+#         >>> print(dr)
+#         <-16.780821917808325, -1.4383561643835612>
+#     """
+#     vp = vri - vrj
+#     vAnew = delta1(vA, vri, vp)
+#     vA._x = vAnew._x
+#     vA._y = vAnew._y
+#     vA1._x -= vA._x
+#     vA1._y -= vA._x * vp._x + vA._y
+#     vA1new = delta1(vA1, vri, vp)
+#     vA1._x = vA1new._x
+#     vA1._y = vA1new._y
+#     # vA1._y = -vA1._y  # confirm the delta convention
+#     # vA1 -= delta1(vA, vrj, vp)
+#     # return delta2(vA, vri, vA1)
 
 
 def horner_eval(coeffs: List, degree: int, zval):
@@ -268,7 +265,7 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     """[summary]
 
                        ⎛ 2            ⎞
-        P(x) = P (x) ⋅ ⎝x  - r ⋅ x + q⎠ + A ⋅ x + B
+        P(x) = P (x) ⋅ ⎝x  - r ⋅ x - q⎠ + A ⋅ x + B
                 1
 
     Note: pb becomes the quotient after calling this function
@@ -282,18 +279,17 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
 
     Examples:
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
-        >>> vp = horner(coeffs, 5, Vector2(-1, -6))  # x^2 + x - 6
+        >>> vp = horner(coeffs, 5, Vector2(-1, 6))  # x^2 + x - 6
         >>> coeffs
         [1, -9, -57, 385, 0, 0]
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
-        >>> vp = horner(coeffs, 5, Vector2(2, -3))  # x^2 - 2x - 3
+        >>> vp = horner(coeffs, 5, Vector2(2, 3))  # x^2 - 2x - 3
         >>> coeffs
         [1, -6, -81, 202, 888, -1704]
     """
-    coeffs[1] += coeffs[0] * vr.x
-    for i in range(2, degree):
-        coeffs[i] += coeffs[i - 1] * vr.x - coeffs[i - 2] * vr.y
-    coeffs[degree] -= coeffs[degree - 2] * vr.y
+    for i in range(0, degree - 1):
+        coeffs[i + 1] += coeffs[i] * vr.x 
+        coeffs[i + 2] += coeffs[i] * vr.y
     return Vector2(coeffs[degree - 1], coeffs[degree])
 
 
@@ -324,7 +320,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
         temp = reff * cos(k * i)
         r0 = 2 * (center + temp)
         t0 = m + 2 * center * temp  # ???
-        vr0s += [Vector2(r0, t0)]
+        vr0s += [Vector2(r0, -t0)]
     return vr0s
 
 
@@ -357,7 +353,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
         temp = reff * cos(PI * vgen.pop())
         r0 = 2 * (center + temp)
         t0 = m + 2 * center * temp  # ???
-        vr0s += [Vector2(r0, t0)]
+        vr0s += [Vector2(r0, -t0)]
     return vr0s
 
 
@@ -367,21 +363,21 @@ def pbairstow_even(
     """Parallel Bairstow's method
 
             new                               -1
-        ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'   -A' ⎞
+        ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'    A' ⎞
         ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
         ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
-        ⎜q ⎟      ⎜q ⎟   ⎜-A'  ⋅ q        -B' ⎟     ⎝B⎠
+        ⎜q ⎟      ⎜q ⎟   ⎜ A'  ⋅ q         B' ⎟     ⎝B⎠
         ⎝ i⎠      ⎝ i⎠   ⎝  1    i           1⎠
 
     where
                          m
                        _____
                        ╲                         -1
-        ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  - s     p   ⎞
-        ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij ⎟     ⎛A⎞
-        ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                    ⎟   ⋅ ⎜ ⎟
-        ⎜B' ⎟   ⎜B ⎟    ╱    ⎜-p  ⋅ q         -s  ⎟     ⎝B⎠
-        ⎝  1⎠   ⎝ 1⎠   ╱     ⎝  ij   i          ij⎠
+        ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  + s     p  ⎞
+        ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij⎟     ⎛A⎞
+        ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                   ⎟   ⋅ ⎜ ⎟
+        ⎜B' ⎟   ⎜B ⎟    ╱    ⎜p  ⋅ q          s  ⎟     ⎝B⎠
+        ⎝  1⎠   ⎝ 1⎠   ╱     ⎝ ij   i          ij⎠
                        ‾‾‾‾‾
                        j ≠ i
 
@@ -425,14 +421,14 @@ def pbairstow_even(
             for j in robin.exclude(i):
                 vA, vA1 = suppress(vA, vA1, vrs[i], vrs[j])
                 # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
-            vrs[i] -= delta2(vA, vrs[i], vA1)
+            vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
             return vrs, niter, True
     return vrs, options.max_iter, False
 
 
 def find_rootq(vr: Vector2) -> Tuple[float, float]:
-    """Solve x^2 - r*x + q = 0
+    """Solve x^2 - r*x - q = 0
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
 
@@ -443,16 +439,16 @@ def find_rootq(vr: Vector2) -> Tuple[float, float]:
         Tuple[float, float]: [description]
 
     Examples:
-        >>> vr = find_rootq(Vector2(5, 6))
+        >>> vr = find_rootq(Vector2(5, -6))
         >>> print(vr)
         (3.0, 2.0)
     """
     # r, q = vr.x, vr.y
     hr = vr.x / 2
-    d = hr * hr - vr.y
+    d = hr * hr + vr.y
     if d < 0:
         x1 = hr + sqrt(-d) * 1j
     else:
         x1 = hr + (sqrt(d) if hr >= 0 else -sqrt(d))
-    x2 = vr.y / x1
+    x2 = -vr.y / x1
     return x1, x2
