@@ -95,7 +95,7 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
 
 
 def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
-    """[summary]
+    """Zero suppresion (original)
 
     Args:
         vA (Vector2): [description]
@@ -111,7 +111,7 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> vri = Vector2(-2, 0)
         >>> vrj = Vector2(4, 5)
         >>> suppress_old(vA, vA1, vri, vrj)
-        >>> dr = delta(vA, vri, Vector2(vA1._x, vA1._y))
+        >>> dr = delta(vA, vri, vA1)
         >>> print(dr)
         <-16.780821917808325, 1.4383561643835612>
     """
@@ -158,48 +158,13 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     vp = vri - vrj
     r, q = vri.x, vri.y
     p, s = vp.x, vp.y
-    M = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
-    e = M.det()
-    va = M.mdot(vA) / e
+    m_adjoint = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
+    e = m_adjoint.det();
+    va = m_adjoint.mdot(vA) / e
     vc = vA1 - va
     vc._y -= va._x * p
-    va1 = M.mdot(vc) / e
+    va1 = m_adjoint.mdot(vc) / e
     return va, va1
-
-
-# def suppress2(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
-#     """[summary]
-#
-#     Args:
-#         vA (Vector2): [description]
-#         vr (Vector2): [description]
-#         vp (Vector2): [description]
-#
-#     Returns:
-#         Vector2: [description]
-#
-#     Examples:
-#         >>> vA = Vector2(3, -3)
-#         >>> vA1 = Vector2(1, -2)
-#         >>> vri = Vector2(-2, 0)
-#         >>> vrj = Vector2(4, 5)
-#         >>> suppress(vA, vA1, vri, vrj)
-#         >>> dr = delta2(vA, vri, vA1)
-#         >>> print(dr)
-#         <-16.780821917808325, -1.4383561643835612>
-#     """
-#     vp = vri - vrj
-#     vAnew = delta1(vA, vri, vp)
-#     vA._x = vAnew._x
-#     vA._y = vAnew._y
-#     vA1._x -= vA._x
-#     vA1._y -= vA._x * vp._x + vA._y
-#     vA1new = delta1(vA1, vri, vp)
-#     vA1._x = vA1new._x
-#     vA1._y = vA1new._y
-#     # vA1._y = -vA1._y  # confirm the delta convention
-#     # vA1 -= delta1(vA, vrj, vp)
-#     # return delta2(vA, vri, vA1)
 
 
 def horner_eval(coeffs: List, degree: int, zval):
@@ -307,19 +272,19 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
         >>> vr0s = initial_guess(h)
     """
     degree = len(coeffs) - 1
-    center = -coeffs[1] / (degree * coeffs[0])
+    centroid = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
-    Pc = horner_eval(coeffs.copy(), degree, center)
+    Pc = horner_eval(coeffs.copy(), degree, centroid)
     reff = abs(Pc) ** (1 / degree)
-    m = center * center + reff * reff
+    m = centroid * centroid + reff * reff
     vr0s = []
     degree //= 2
     degree *= 2  # make even
     k = PI / degree
     for i in range(1, degree, 2):
         temp = reff * cos(k * i)
-        r0 = 2 * (center + temp)
-        t0 = m + 2 * center * temp  # ???
+        r0 = 2 * (centroid + temp)
+        t0 = m + 2 * centroid * temp  # ???
         vr0s += [Vector2(r0, -t0)]
     return vr0s
 
@@ -338,11 +303,11 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
         >>> vr0s = initial_guess(h)
     """
     degree = len(coeffs) - 1
-    center = -coeffs[1] / (degree * coeffs[0])
+    centroid = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
-    Pc = horner_eval(coeffs.copy(), degree, center)
+    Pc = horner_eval(coeffs.copy(), degree, centroid)
     reff = abs(Pc) ** (1 / degree)
-    m = center * center + reff * reff
+    m = centroid * centroid + reff * reff
     vr0s = []
     degree //= 2
     degree *= 2  # make even
@@ -351,8 +316,8 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     vgen.reseed(1)
     for i in range(1, degree, 2):
         temp = reff * cos(PI * vgen.pop())
-        r0 = 2 * (center + temp)
-        t0 = m + 2 * center * temp  # ???
+        r0 = 2 * (centroid + temp)
+        t0 = m + 2 * centroid * temp  # ???
         vr0s += [Vector2(r0, -t0)]
     return vr0s
 

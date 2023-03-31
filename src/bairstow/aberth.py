@@ -263,8 +263,10 @@ def aberth_autocorr(
                 continue
             P1 = horner_eval(pb, N - 1, zs[i])
             tol = max(tol_i, tol)
+            # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
                 P1 -= P / (zs[i] - zs[j])
+                # for j in range(M):  # exclude i
                 zsn = 1.0 / zs[j]
                 P1 -= P / (zs[i] - zsn)
             zs[i] -= P / P1
