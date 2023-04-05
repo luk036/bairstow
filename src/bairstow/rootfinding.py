@@ -123,14 +123,14 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     f = r * p + s
     qp = q * p
     e = f * s - qp * p
-    a = (A * s - B * p) / e
-    b = (B * f - A * qp) / e
-    c = A1 - a
-    d = B1 - b - a * p
-    vA._x = a
-    vA._y = b
-    vA1._x = (c * s - d * p) / e
-    vA1._y = (d * f - c * qp) / e
+    a = A * s - B * p
+    b = B * f - A * qp
+    c = A1 * e - a
+    d = B1 * e - b - a * p
+    vA._x = a * e
+    vA._y = b * e
+    vA1._x = c * s - d * p
+    vA1._y = d * f - c * qp
     # return delta(vA, vri, Vector2(vA1._x, -vA1._y))
 
 
@@ -159,11 +159,12 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     r, q = vri.x, vri.y
     p, s = vp.x, vp.y
     m_adjoint = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
-    e = m_adjoint.det();
-    va = m_adjoint.mdot(vA) / e
-    vc = vA1 - va
+    e = m_adjoint.det()
+    va = m_adjoint.mdot(vA)
+    vc = vA1 * e - va
     vc._y -= va._x * p
-    va1 = m_adjoint.mdot(vc) / e
+    va *= e
+    va1 = m_adjoint.mdot(vc)
     return va, va1
 
 
@@ -253,7 +254,7 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
         [1, -6, -81, 202, 888, -1704]
     """
     for i in range(0, degree - 1):
-        coeffs[i + 1] += coeffs[i] * vr.x 
+        coeffs[i + 1] += coeffs[i] * vr.x
         coeffs[i + 2] += coeffs[i] * vr.y
     return Vector2(coeffs[degree - 1], coeffs[degree])
 

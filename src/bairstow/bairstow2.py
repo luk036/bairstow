@@ -1,6 +1,7 @@
 from .vector2 import Vector2
 from .matrix2 import Matrix2
 from .rootfinding import Options
+from .robin import Robin
 from typing import List, Tuple
 
 
@@ -25,7 +26,7 @@ def horner2(coeffs: List, degree: int, vr: Vector2) -> Vector2:
         >>> vp = horner2(coeffs, 5, Vector2(2, 3))  # x^2 - 2 x - 3
         >>> coeffs
         [1, -6, -81, 202, 888, 72]
-        >>> vp = horner2(coeffs, 3, Vector2(2, 3))  
+        >>> vp = horner2(coeffs, 3, Vector2(2, 3))
         >>> coeffs[:4]
         [1, -4, -86, 18]
     """
@@ -81,6 +82,79 @@ def bairstow2(
         vc = horner2(pb, n - 2, vr)
         cb = vb.x + vr.x * vc.y + vr.y * vc.x
         mat_c = Matrix2(Vector2(vc.y, -vc.x),
-                     Vector2(-cb, vc.y))
+                        Vector2(-cb, vc.y))
         vr -= mat_c.mdot(vb) / mat_c.det()
     return vr, options.max_iter, False
+
+
+def suppress(vb: Vector2, vc: Vector2, vri: Vector2, vrj: Vector2):
+    """[summary]
+
+    Args:
+        vA (Vector2): [description]
+        vr (Vector2): [description]
+        vp (Vector2): [description]
+
+    Returns:
+        Vector2: [description]
+
+    Examples:
+        >>> vb = Vector2(3, 3)
+        >>> vc = Vector2(1, 2)
+        >>> vri = Vector2(-2, 0)
+        >>> vrj = Vector2(4, 5)
+        >>> vb, vc = suppress(vb, vc, vri, vrj)
+    """
+    vp = vri - vrj
+    r, q = vri.x, vri.y
+    p, s = vp.x, vp.y
+    m_adjoint = Matrix2(Vector2(r * p + s, -p), Vector2(-q * p, s))
+    e = m_adjoint.det()
+    vbb = m_adjoint.mdot(vb)
+    vt = vc * e - vbb
+    vt._y -= vbb._x * p
+    vbb *= e
+    vcc = m_adjoint.mdot(vt)
+    return vbb, vcc
+
+
+def pbairstow2_even(
+    pa: List[float], vrs: List[Vector2], options=Options()
+) -> Tuple[List[Vector2], int, bool]:
+    """Parallel Bairstow's method
+
+    Args:
+        pa (List[float]): [description]
+        vrs (List[Vector2]): [description]
+        options (Options, optional): [description]. Defaults to Options().
+
+    Returns:
+        [type]: [description]
+    """
+    M = len(vrs)
+    N = len(pa) - 1
+    converged = [False] * M
+    robin = Robin(M)
+    for niter in range(options.max_iter):
+        tol = 0.0
+        # exclude converged
+        for i in filter(lambda i: converged[i] is False, range(M)):
+            # for i in range(M):
+            pb = pa.copy()
+            vb = horner2(pb, N, vrs[i])
+            tol_i = max(abs(vb.x), abs(vb.y))
+            if tol_i < options.tol_ind:
+                converged[i] = True
+                continue
+            vc = horner2(pb, N - 2, vrs[i])
+            tol = max(tol_i, tol)
+            for j in robin.exclude(i):
+                vb, vc = suppress(vb, vc, vrs[i], vrs[j])
+
+            cb = vb.x + vrs[i].x * vc.y + vrs[i].y * vc.x
+            mat_c = Matrix2(Vector2(vc.y, -vc.x),
+                            Vector2(-cb, vc.y))
+            vrs[i] -= mat_c.mdot(vb) / mat_c.det()
+        if tol < options.tol:
+            return vrs, niter, True
+    return vrs, options.max_iter, False
