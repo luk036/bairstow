@@ -97,6 +97,10 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
 def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     """Zero suppresion (original)
 
+    Reference:
+        D. C. Handscomb, Computation of the latent roots of a Hessenberg matrix
+        by Bairsow's method, Computer Journal, 5 (1962), pp. 139-141.
+
     Args:
         vA (Vector2): [description]
         vr (Vector2): [description]
@@ -135,7 +139,11 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
 
 
 def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
-    """[summary]
+    """Zero suppresion
+
+    Reference:
+        D. C. Handscomb, Computation of the latent roots of a Hessenberg matrix
+        by Bairsow's method, Computer Journal, 5 (1962), pp. 139-141.
 
     Args:
         vA (Vector2): [description]
