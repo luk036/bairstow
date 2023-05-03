@@ -1,5 +1,7 @@
 class Vector2:
     __slots__ = ("_x", "_y")
+    _x: float
+    _y: float
 
     def __init__(self, x, y):
         """[summary]
@@ -142,4 +144,11 @@ class Vector2:
         Returns:
             [type]: [description]
         """
-        return "<{self.x}, {self.y}>".format(self=self)
+        # return "<{self.x}, {self.y}>".format(self=self)
+        return f"<{self.x}, {self.y}>"
+
+
+if __name__ == "__main__":
+    v = Vector2(3.0, 4.0)
+    w = Vector2(5.0, 6.0)
+    print(v.dot(w))

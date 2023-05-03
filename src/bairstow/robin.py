@@ -1,8 +1,11 @@
-# -*- coding: utf-8 -*-
+from typing import List
 
 
 class SlNode:
-    def __init__(self, data):
+    next: "SlNode"
+    data: int
+
+    def __init__(self, data: int):
         """initialization
 
         Keyword Arguments:
@@ -12,50 +15,24 @@ class SlNode:
         self.data = data
 
 
-class Robin:
-    """Round Robin
-
-    Raises:
-        StopIteration:  description
-
-    Returns:
-        dtype:  description
-    """
-
-    __slots__ = "cycle"
-
-    def __init__(self, num_parts: int):
-        self.cycle = list(SlNode(k) for k in range(num_parts))
-        sl2 = self.cycle[-1]
-        for sl1 in self.cycle:
-            sl2.next = sl1
-            sl2 = sl1
-
-    def exclude(self, from_part: int):
-        """iterator
-
-        Returns:
-            robin_iterator
-        """
-        return robin_iterator(self, from_part)
-
-
-class robin_iterator:
+class RobinIterator:
     __slots__ = ("cur", "stop")
+    cur: SlNode
+    stop: SlNode
 
-    def __init__(self, Robin, from_part: int):
+    def __init__(self, node: SlNode) -> None:
         """[summary]
 
         Arguments:
             Robin (type):  description
         """
-        self.cur = self.stop = Robin.cycle[from_part]
+        self.cur = self.stop = node
 
-    def __iter__(self):
+    def __iter__(self) -> "RobinIterator":
         """iterable
 
         Returns:
-            robin_iterator:  itself
+            RobinIterator:  itself
         """
         return self
 
@@ -72,7 +49,7 @@ class robin_iterator:
         if self.cur != self.stop:
             return self.cur.data
         else:
-            raise StopIteration
+            raise StopIteration()
 
     def __next__(self):
         """[summary]
@@ -81,6 +58,35 @@ class robin_iterator:
             dtype:  description
         """
         return self.next()
+
+
+class Robin:
+    """Round Robin
+
+    Raises:
+        StopIteration:  description
+
+    Returns:
+        dtype:  description
+    """
+
+    __slots__ = "cycle"
+    cycle: List[SlNode]
+
+    def __init__(self, num_parts: int):
+        self.cycle = list(SlNode(k) for k in range(num_parts))
+        sl2 = self.cycle[-1]
+        for sl1 in self.cycle:
+            sl2.next = sl1
+            sl2 = sl1
+
+    def exclude(self, from_part: int):
+        """iterator
+
+        Returns:
+            RobinIterator
+        """
+        return RobinIterator(self.cycle[from_part])
 
 
 if __name__ == "__main__":
