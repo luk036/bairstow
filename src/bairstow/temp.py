@@ -401,7 +401,7 @@ def pbairstow_even(
     return vrs, options.max_iter, False
 
 
-def find_rootq(vr: Vector2):
+def find_rootq(vr: Vector2) -> Tuple[complex, complex]:
     """Solve x^2 - r*x - q = 0
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
@@ -423,7 +423,7 @@ def find_rootq(vr: Vector2):
     if d < 0:
         x1 = hr + sqrt(-d) * 1j
     else:
-        x1 = hr + (sqrt(d) if hr >= 0 else -sqrt(d))
+        x1 = hr + (sqrt(d) if hr >= 0 else -sqrt(d)) + 0j
     x2 = -vr.y / x1
     return x1, x2
 
@@ -434,4 +434,5 @@ if __name__ == "__main__":
     vrs, niter, found = pbairstow_even(h, vr0s)
     print(niter)
     print(found)
-    # print(find_rootq(vr) for vr in vrs)
+    x1, x2 = find_rootq(vrs[0])
+    print(x1)
