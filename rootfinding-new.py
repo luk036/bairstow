@@ -10,7 +10,7 @@ PI = acos(-1.0)
 
 
 class Options:
-    max_iter: int = 2000
+    max_iters: int = 2000
     tol: float = 1e-12
     tol_ind: float = 1e-15
     # tol_suppress: float = 1e-1
@@ -275,7 +275,7 @@ def pbairstow_even(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(1, options.max_iter):
+    for niter in range(1, options.max_iters):
         tol = 0.0
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
@@ -294,7 +294,7 @@ def pbairstow_even(
             vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
             return vrs, niter, True
-    return vrs, options.max_iter, False
+    return vrs, options.max_iters, False
 
 
 def find_rootq(vr: Vector2) -> Tuple[float, float]:

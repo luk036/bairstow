@@ -73,7 +73,7 @@ def bairstow2(
         <4.0, 77.0>
     """
     n = len(pa) - 1
-    for niter in range(options.max_iter):
+    for niter in range(options.max_iters):
         pb = pa.copy()
         vb = horner2(pb, n, vr)
         tol = max(abs(vb.x), abs(vb.y))
@@ -84,7 +84,7 @@ def bairstow2(
         mat_c = Matrix2(Vector2(vc.y, -vc.x),
                         Vector2(-cb, vc.y))
         vr -= mat_c.mdot(vb) / mat_c.det()
-    return vr, options.max_iter, False
+    return vr, options.max_iters, False
 
 
 def suppress(vb: Vector2, vc: Vector2, vri: Vector2, vrj: Vector2):
@@ -135,7 +135,7 @@ def pbairstow2_even(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(options.max_iter):
+    for niter in range(options.max_iters):
         tol = 0.0
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
@@ -157,4 +157,4 @@ def pbairstow2_even(
             vrs[i] -= mat_c.mdot(vb) / mat_c.det()
         if tol < options.tol:
             return vrs, niter, True
-    return vrs, options.max_iter, False
+    return vrs, options.max_iters, False

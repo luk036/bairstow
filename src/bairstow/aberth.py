@@ -146,7 +146,7 @@ def aberth(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(options.max_iter):
+    for niter in range(options.max_iters):
         tol = 0.0
         for i in filter(lambda i: not converged[i], range(M)):
             pb = pa.copy()
@@ -163,7 +163,7 @@ def aberth(
             zs[i] -= P / P1
         if tol < options.tol:
             return zs, niter, True
-    return zs, options.max_iter, False
+    return zs, options.max_iters, False
 
 
 def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
@@ -251,7 +251,7 @@ def aberth_autocorr(
     N: int = len(pa) - 1
     converged: List[bool] = [False] * M
     robin = Robin(M)
-    for niter in range(options.max_iter):
+    for niter in range(options.max_iters):
         tol: float = 0.0
         # exclude converged
         for i in filter(lambda i: not converged[i], range(M)):
@@ -274,4 +274,4 @@ def aberth_autocorr(
             #     zs[i] = 1.0 / zs[i]
         if tol < options.tol:
             return zs, niter, True
-    return zs, options.max_iter, False
+    return zs, options.max_iters, False

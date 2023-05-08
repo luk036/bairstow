@@ -78,7 +78,7 @@ def pbairstow_autocorr(
     N = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
-    for niter in range(options.max_iter):
+    for niter in range(options.max_iters):
         tol = 0.0
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):
@@ -107,7 +107,7 @@ def pbairstow_autocorr(
         # for i in range(M):  # exclude converged
         if tol < options.tol:
             return vrs, niter, True
-    return vrs, options.max_iter, False
+    return vrs, options.max_iters, False
 
 
 def extract_autocorr(vr: Vector2) -> Vector2:
