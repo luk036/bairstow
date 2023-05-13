@@ -2,40 +2,26 @@ from cmath import exp
 from math import pi
 from typing import List, Tuple, Union
 
-from lds_py.lds import Vdcorput
+from .lds import Vdcorput
 from .robin import Robin
 
 # from pytest import approx
 from .rootfinding import Options, horner_eval
 
 FoC = Union[float, complex]
-# PI = acos(-1.0)
 PI = pi
-
-#     """[summary]
-#
-#     Args:
-#         pa (List[float]): [description]
-#         r (float): [description]
-#
-#     Returns:
-#         float: [description]
-#     """
-#     ans = pb[0]
-#     for i in range(1, len(pb)):
-#         ans = ans * z + pb[i]
-#     return ans
 
 
 def horner_backward(pb: List, n: int, alpha: FoC) -> FoC:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
-        r (float): [description]
+        pb (List): _description_
+        n (int): _description_
+        alpha (FoC): _description_
 
     Returns:
-        float: [description]
+        FoC: _description_
 
     Examples:
         >>> p = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]

@@ -1,12 +1,12 @@
-from math import acos, cos, sqrt
+from math import acos, cos, sqrt, pi
 from typing import List
 
-from lds_py.lds import Vdcorput
+from .lds import Vdcorput
 from .robin import Robin
 from .rootfinding import Options, delta, horner, suppress_old
 from .vector2 import Vector2
 
-PI = acos(-1.0)
+PI = pi
 
 
 def initial_autocorr_new(pa: List[float]) -> List[Vector2]:

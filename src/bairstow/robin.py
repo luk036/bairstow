@@ -6,10 +6,10 @@ class SlNode:
     data: int
 
     def __init__(self, data: int):
-        """initialization
+        """_summary_
 
-        Keyword Arguments:
-            data (type):  description
+        Args:
+            data (int): _description_
         """
         self.next = self
         self.data = data
@@ -21,29 +21,29 @@ class RobinIterator:
     stop: SlNode
 
     def __init__(self, node: SlNode) -> None:
-        """[summary]
+        """_summary_
 
-        Arguments:
-            Robin (type):  description
+        Args:
+            node (SlNode): _description_
         """
         self.cur = self.stop = node
 
     def __iter__(self) -> "RobinIterator":
-        """iterable
+        """_summary_
 
         Returns:
-            RobinIterator:  itself
+            RobinIterator: _description_
         """
         return self
 
-    def next(self):
-        """next
+    def next(self) -> int:
+        """_summary_
 
         Raises:
-            StopIteration:  description
+            StopIteration: _description_
 
         Returns:
-            robinink:  description
+            int: _description_
         """
         self.cur = self.cur.next
         if self.cur != self.stop:
@@ -52,39 +52,38 @@ class RobinIterator:
             raise StopIteration()
 
     def __next__(self):
-        """[summary]
+        """_summary_
 
         Returns:
-            dtype:  description
+            _type_: _description_
         """
         return self.next()
 
 
 class Robin:
-    """Round Robin
-
-    Raises:
-        StopIteration:  description
-
-    Returns:
-        dtype:  description
-    """
-
     __slots__ = "cycle"
     cycle: List[SlNode]
 
     def __init__(self, num_parts: int):
+        """_summary_
+
+        Args:
+            num_parts (int): _description_
+        """
         self.cycle = list(SlNode(k) for k in range(num_parts))
         sl2 = self.cycle[-1]
         for sl1 in self.cycle:
             sl2.next = sl1
             sl2 = sl1
 
-    def exclude(self, from_part: int):
-        """iterator
+    def exclude(self, from_part: int) -> RobinIterator:
+        """_summary_
+
+        Args:
+            from_part (int): _description_
 
         Returns:
-            RobinIterator
+            RobinIterator: _description_
         """
         return RobinIterator(self.cycle[from_part])
 

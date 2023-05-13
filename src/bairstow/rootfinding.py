@@ -1,12 +1,12 @@
-from math import acos, cos, sqrt
+from math import acos, cos, sqrt, pi
 from typing import List, Tuple
 
-from lds_py.lds import Vdcorput
+from .lds import Vdcorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
 
-PI = acos(-1.0)
+PI = pi
 
 
 class Options:
