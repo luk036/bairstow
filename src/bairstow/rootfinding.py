@@ -1,4 +1,4 @@
-from math import acos, cos, sqrt, pi
+from math import cos, sqrt, pi
 from typing import List, Tuple
 
 from .lds import Vdcorput
@@ -21,7 +21,7 @@ class Options:
 #                           -1
 #         ⎛r ⋅ p + s     p ⎞     ⎛A⎞
 #         ⎜                ⎟   ⋅ ⎜ ⎟
-#         ⎝q ⋅ p         s⎠     ⎝B⎠
+#         ⎝q ⋅ p         s ⎠     ⎝B⎠
 #
 #     Args:
 #         vA (Vector2): [description]
@@ -323,7 +323,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     # k = PI / degree
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    for i in range(1, degree, 2):
+    for _ in range(1, degree, 2):
         temp = reff * cos(PI * vgen.pop())
         r0 = 2 * (centroid + temp)
         t0 = m + 2 * centroid * temp  # ???
@@ -401,7 +401,7 @@ def pbairstow_even(
     return vrs, options.max_iters, False
 
 
-def find_rootq(vr: Vector2) -> Tuple[float, float]:
+def find_rootq(vr: Vector2) -> Tuple[float | complex, float | complex]:
     """Solve x^2 - r*x - q = 0
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
