@@ -81,8 +81,7 @@ def bairstow2(
             return vr, niter, True
         vc = horner2(pb, n - 2, vr)
         cb = vb.x + vr.x * vc.y + vr.y * vc.x
-        mat_c = Matrix2(Vector2(vc.y, -vc.x),
-                        Vector2(-cb, vc.y))
+        mat_c = Matrix2(Vector2(vc.y, -vc.x), Vector2(-cb, vc.y))
         vr -= mat_c.mdot(vb) / mat_c.det()
     return vr, options.max_iters, False
 
@@ -152,8 +151,7 @@ def pbairstow2_even(
                 vb, vc = suppress(vb, vc, vrs[i], vrs[j])
 
             cb = vb.x + vrs[i].x * vc.y + vrs[i].y * vc.x
-            mat_c = Matrix2(Vector2(vc.y, -vc.x),
-                            Vector2(-cb, vc.y))
+            mat_c = Matrix2(Vector2(vc.y, -vc.x), Vector2(-cb, vc.y))
             vrs[i] -= mat_c.mdot(vb) / mat_c.det()
         if tol < options.tol:
             return vrs, niter, True
