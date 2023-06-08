@@ -60,7 +60,7 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     z0s: List[complex] = []
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    for i in range(N):
+    for _ in range(N):
         vdc = 2 * PI * vgen.pop()
         z0s += [c + re * exp(vdc * 1j)]
     return z0s
