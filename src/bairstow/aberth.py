@@ -28,7 +28,7 @@ def horner_backward(pb: List, n: int, alpha: FoC) -> FoC:
         >>> n = len(p) - 1
         >>> alpha = 6.3256
         >>> P = horner_backward(p, n, alpha)
-        >>> -P * (alpha ** 5)
+        >>> -P * pow(alpha, 5)
         -0.013355264987140483
         >>> p[3]
         0.006920331351966613
@@ -55,7 +55,7 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     N: int = len(pa) - 1
     c: FoC = -pa[1] / (N * pa[0])
     Pc: FoC = horner_eval(pa.copy(), N, c)
-    re: FoC = (-Pc) ** (1.0 / N)
+    re: FoC = pow(-Pc, 1.0 / N)
     # k = 2 * PI / N
     z0s: List[complex] = []
     vgen = Vdcorput(2)
@@ -82,7 +82,7 @@ def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
     N: int = len(pa) - 1
     c: FoC = -pa[1] / (N * pa[0])
     Pc: FoC = horner_eval(pa.copy(), N, c)
-    re: FoC = (-Pc) ** (1.0 / N)
+    re: FoC = pow(-Pc, 1.0 / N)
     k = 2 * PI / N
     z0s: List[complex] = []
     for i in range(N):
@@ -166,7 +166,7 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
         >>> z0s = initial_aberth_autocorr(h)
     """
     N: int = len(pa) - 1
-    re: float = abs(pa[-1]) ** (1.0 / N)
+    re: float = pow(abs(pa[-1]), 1.0 / N)
     # c = -pa[1] / (N * pa[0])
     # Pc = horner_eval(pa.copy(), N, c)
     # re = (-Pc) ** (1.0 / N)
@@ -177,7 +177,7 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     z0s = []
     vgen = Vdcorput(2)
     vgen.reseed(1)
-    for i in range(N):
+    for _ in range(N):
         vdc = 2 * PI * vgen.pop()
         z0s += [re * exp(vdc * 1j)]
     return z0s
@@ -197,7 +197,7 @@ def initial_aberth_autocorr_orig(pa: List[float]) -> List[complex]:
         >>> z0s = initial_aberth_autocorr_orig(h)
     """
     N: int = len(pa) - 1
-    re: float = abs(pa[-1]) ** (1.0 / N)
+    re: float = pow(abs(pa[-1]), 1.0 / N)
     # c = -pa[1] / (N * pa[0])
     # Pc = horner_eval(pa.copy(), N, c)
     # re = (-Pc) ** (1.0 / N)

@@ -23,7 +23,7 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
         >>> vr0s = initial_autocorr(h)
     """
     N = len(pa) - 1
-    re = abs(pa[-1]) ** (1.0 / N)
+    re = pow(abs(pa[-1]), 1.0 / N)
     if re > 1:
         re = 1 / re
     N //= 2
@@ -46,7 +46,7 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
         List[Vector2]: [description]
     """
     N = len(pa) - 1
-    re = abs(pa[-1]) ** (1.0 / N)
+    re = pow(abs(pa[-1]), 1.0 / N)
     if re < 1:  # use those outside the unit circle
         re = 1 / re
     N //= 2

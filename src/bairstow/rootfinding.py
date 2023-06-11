@@ -224,7 +224,7 @@ def horner_backward(coeffs: List, degree: int, val):
         >>> n = len(coeffs) - 1
         >>> alpha = 6.3256
         >>> P = horner_backward(coeffs, 4, alpha)
-        >>> -P * (alpha ** 5)
+        >>> -P * pow(alpha, 5)
         -0.013355264987140483
         >>> coeffs[3]
         0.006920331351966613
@@ -284,7 +284,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     centroid = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(coeffs.copy(), degree, centroid)
-    reff = abs(Pc) ** (1 / degree)
+    reff = pow(abs(Pc), 1 / degree)
     m = centroid * centroid + reff * reff
     vr0s = []
     degree //= 2
@@ -315,7 +315,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     centroid = -coeffs[1] / (degree * coeffs[0])
     # P = np.poly1d(pa)
     Pc = horner_eval(coeffs.copy(), degree, centroid)
-    reff = abs(Pc) ** (1 / degree)
+    reff = pow(abs(Pc), 1 / degree)
     m = centroid * centroid + reff * reff
     vr0s = []
     degree //= 2
