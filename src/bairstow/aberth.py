@@ -2,7 +2,7 @@ from cmath import exp
 from math import pi
 from typing import List, Tuple, Union
 
-from .lds import Vdcorput
+from .lds import VdCorput
 from .robin import Robin
 
 # from pytest import approx
@@ -58,7 +58,7 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     re: FoC = pow(-Pc, 1.0 / N)
     # k = 2 * PI / N
     z0s: List[complex] = []
-    vgen = Vdcorput(2)
+    vgen = VdCorput(2)
     vgen.reseed(1)
     for _ in range(N):
         vdc = 2 * PI * vgen.pop()
@@ -175,7 +175,7 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     N //= 2
     # k = 2 * PI / N
     z0s = []
-    vgen = Vdcorput(2)
+    vgen = VdCorput(2)
     vgen.reseed(1)
     for _ in range(N):
         vdc = 2 * PI * vgen.pop()

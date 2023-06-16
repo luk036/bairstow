@@ -1,7 +1,7 @@
 from math import acos, cos, sqrt, pi
 from typing import List
 
-from .lds import Vdcorput
+from .lds import VdCorput
 from .robin import Robin
 from .rootfinding import Options, delta, horner, suppress_old
 from .vector2 import Vector2
@@ -30,7 +30,7 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
     # k = PI / N
     m = re * re
     # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
-    vgen = Vdcorput(2)
+    vgen = VdCorput(2)
     vgen.reseed(1)
     vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, N, 2)]
     return vr0s

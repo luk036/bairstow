@@ -1,7 +1,7 @@
 from math import cos, sqrt, pi
 from typing import List, Tuple
 
-from .lds import Vdcorput
+from .lds import VdCorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
@@ -321,7 +321,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     degree //= 2
     degree *= 2  # make even
     # k = PI / degree
-    vgen = Vdcorput(2)
+    vgen = VdCorput(2)
     vgen.reseed(1)
     for _ in range(1, degree, 2):
         temp = reff * cos(PI * vgen.pop())

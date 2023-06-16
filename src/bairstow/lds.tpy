@@ -24,11 +24,11 @@ def vdc(k: int, base: int) -> float:
     return vdc
 
 
-class Vdcorput:
+class VdCorput:
     """Van der Corput sequence generator
 
     Examples:
-        >>> vgen = Vdcorput(2)
+        >>> vgen = VdCorput(2)
         >>> vgen.reseed(0)
         >>> for _ in range(10):
         ...     print(vgen.pop())
@@ -97,7 +97,7 @@ class Circle:
         [0.9238795325112867, -0.3826834323650897]
     """
 
-    vdc: Vdcorput
+    vdc: VdCorput
 
     def __init__(self, base: int):
         """_summary_
@@ -105,7 +105,7 @@ class Circle:
         Args:
             base (int): _description_
         """
-        self.vdc = Vdcorput(base)
+        self.vdc = VdCorput(base)
 
     def pop(self) -> List[float]:
         """_summary_
@@ -129,7 +129,7 @@ class Circle:
 if __name__ == "__main__":
     base = [2, 3, 5, 7]
 
-    vgen = Vdcorput(2)
+    vgen = VdCorput(2)
     for _ in range(10):
         print(vgen.pop())
 
