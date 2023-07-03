@@ -146,10 +146,10 @@ def horner_backward(coeffs: List, degree: int, val):
 
     Examples:
         >>> coeffs = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
-        >>> n = len(coeffs) - 1
+        >>> degree = len(coeffs) - 1
         >>> alpha = 6.3256
-        >>> P = horner_backward(coeffs, 4, alpha)
-        >>> -P * (alpha ** 5)
+        >>> p_eval = horner_backward(coeffs, 4, alpha)
+        >>> -p_eval * (alpha ** 5)
         -0.013355264987140483
         >>> coeffs[3]
         0.006920331351966613
@@ -204,16 +204,16 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # P = np.poly1d(pa)
-    Pc = horner_eval(coeffs.copy(), degree, center)
-    reff = abs(Pc) ** (1.0 / degree)
-    m = center * center + reff * reff
+    # p_eval = np.poly1d(pa)
+    p_center = horner_eval(coeffs.copy(), degree, center)
+    radius = abs(p_center) ** (1.0 / degree)
+    m = center * center + radius * radius
     vr0s = []
     degree //= 2
     degree *= 2  # make even
     k = PI / degree
     for i in range(1, degree, 2):
-        temp = reff * cos(k * i)
+        temp = radius * cos(k * i)
         r0 = 2 * (center + temp)
         t0 = m + 2 * center * temp  # ???
         vr0s += [Vector2(r0, t0)]
@@ -235,10 +235,10 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # P = np.poly1d(pa)
-    Pc = horner_eval(coeffs.copy(), degree, center)
-    reff = abs(Pc) ** (1.0 / degree)
-    m = center * center + reff * reff
+    # p_eval = np.poly1d(pa)
+    p_center = horner_eval(coeffs.copy(), degree, center)
+    radius = abs(p_center) ** (1.0 / degree)
+    m = center * center + radius * radius
     vr0s = []
     degree //= 2
     degree *= 2  # make even
@@ -246,7 +246,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     vgen = VdCorput(2)
     vgen.reseed(1)
     for i in range(1, degree, 2):
-        temp = reff * cos(PI * vgen.pop())
+        temp = radius * cos(PI * vgen.pop())
         r0 = 2 * (center + temp)
         t0 = m + 2 * center * temp  # ???
         vr0s += [Vector2(r0, t0)]
@@ -272,7 +272,7 @@ def pbairstow_even(
         >>> vrs, niter, found = pbairstow_even(h, vr0s)
     """
     M = len(vrs)
-    N = len(pa) - 1
+    degree = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(1, options.max_iters):
@@ -281,12 +281,12 @@ def pbairstow_even(
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
             pb = pa.copy()
-            vA = horner(pb, N, vrs[i])
+            vA = horner(pb, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vA1 = horner(pb, N - 2, vrs[i])
+            vA1 = horner(pb, degree - 2, vrs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):

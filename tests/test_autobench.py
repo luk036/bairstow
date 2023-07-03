@@ -11,9 +11,9 @@ def run_autocorr():
     Returns:
         [type]: [description]
     """
-    p = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
-    vr0s = initial_autocorr(p)
-    _, niter, _ = pbairstow_autocorr(p, vr0s)
+    coeffs = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
+    vr0s = initial_autocorr(coeffs)
+    _, niter, _ = pbairstow_autocorr(coeffs, vr0s)
     return niter
 
 
@@ -23,9 +23,9 @@ def run_pbairstow():
     Returns:
         [type]: [description]
     """
-    p = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
-    vr0s = initial_guess(p)
-    _, niter, _ = pbairstow_even(p, vr0s)
+    coeffs = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
+    vr0s = initial_guess(coeffs)
+    _, niter, _ = pbairstow_even(coeffs, vr0s)
     return niter
 
 

@@ -22,17 +22,17 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> vr0s = initial_autocorr(h)
     """
-    N = len(pa) - 1
-    re = pow(abs(pa[-1]), 1.0 / N)
+    degree = len(pa) - 1
+    re = pow(abs(pa[-1]), 1.0 / degree)
     if re > 1:
         re = 1 / re
-    N //= 2
-    # k = PI / N
+    degree //= 2
+    # k = PI / degree
     m = re * re
-    # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
+    # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, degree, 2)]
     vgen = VdCorput(2)
     vgen.reseed(1)
-    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, degree, 2)]
     return vr0s
 
 
@@ -45,14 +45,14 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
     Returns:
         List[Vector2]: [description]
     """
-    N = len(pa) - 1
-    re = pow(abs(pa[-1]), 1.0 / N)
+    degree = len(pa) - 1
+    re = pow(abs(pa[-1]), 1.0 / degree)
     if re < 1:  # use those outside the unit circle
         re = 1 / re
-    N //= 2
-    k = PI / N
+    degree //= 2
+    k = PI / degree
     m = re * re
-    vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, N, 2)]
+    vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, degree, 2)]
     return vr0s
 
 
@@ -75,7 +75,7 @@ def pbairstow_autocorr(
         >>> vrs, niter, found = pbairstow_autocorr(h, vr0s)
     """
     M = len(vrs)  # assume polynomial of h is even
-    N = len(pa) - 1
+    degree = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
@@ -83,13 +83,13 @@ def pbairstow_autocorr(
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):
             pb = pa.copy()
-            vA = horner(pb, N, vrs[i])
+            vA = horner(pb, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
-            vA1 = horner(pb, N - 2, vrs[i])
+            vA1 = horner(pb, degree - 2, vrs[i])
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             # for j in robin.exclude(i):
             #     suppress_old(vA, vA1, vrs[i], vrs[j])

@@ -72,14 +72,14 @@ def bairstow2(
         >>> print(vr)
         <4.0, 77.0>
     """
-    n = len(pa) - 1
+    degree = len(pa) - 1
     for niter in range(options.max_iters):
         pb = pa.copy()
-        vb = horner2(pb, n, vr)
+        vb = horner2(pb, degree, vr)
         tol = max(abs(vb.x), abs(vb.y))
         if tol < options.tol:
             return vr, niter, True
-        vc = horner2(pb, n - 2, vr)
+        vc = horner2(pb, degree - 2, vr)
         cb = vb.x + vr.x * vc.y + vr.y * vc.x
         mat_c = Matrix2(Vector2(vc.y, -vc.x), Vector2(-cb, vc.y))
         vr -= mat_c.mdot(vb) / mat_c.det()
@@ -131,7 +131,7 @@ def pbairstow2_even(
         [type]: [description]
     """
     M = len(vrs)
-    N = len(pa) - 1
+    degree = len(pa) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
@@ -140,12 +140,12 @@ def pbairstow2_even(
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
             pb = pa.copy()
-            vb = horner2(pb, N, vrs[i])
+            vb = horner2(pb, degree, vrs[i])
             tol_i = max(abs(vb.x), abs(vb.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vc = horner2(pb, N - 2, vrs[i])
+            vc = horner2(pb, degree - 2, vrs[i])
             tol = max(tol_i, tol)
             for j in robin.exclude(i):
                 vb, vc = suppress(vb, vc, vrs[i], vrs[j])
