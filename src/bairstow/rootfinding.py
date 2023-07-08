@@ -23,11 +23,13 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
         ⎜               ⎟   ⋅ ⎜ ⎟
         ⎝q ⋅ p         s⎠     ⎝B⎠
 
-    The `delta` function calculates the delta value using the given vectors `vA`, `vr`, and `vp`.
-    
+    The `delta` function calculates the delta value using the given vectors
+    `vA`, `vr`, and `vp`.
+
     :param vA: The parameter `vA` represents a 2D vector
     :type vA: Vector2
-    :param vr: The parameter `vr` represents a 2D vector with components `r` and `q`
+    :param vr: The parameter `vr` represents a 2D vector with components
+    `r` and `q`
     :type vr: Vector2
     :param vp: vp is a Vector2 representing the vector p
     :type vp: Vector2
