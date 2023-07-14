@@ -40,12 +40,12 @@ def horner2(coeffs: List, degree: int, vr: Vector2) -> Vector2:
 
 
 def bairstow2(
-    pa: List[float], vr: Vector2, options=Options()
+    coeffs: List[float], vr: Vector2, options=Options()
 ) -> Tuple[Vector2, int, bool]:
     """Original Bairstow's method
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
         vr (Vector2): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -72,9 +72,9 @@ def bairstow2(
         >>> print(vr)
         <4.0, 77.0>
     """
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     for niter in range(options.max_iters):
-        pb = pa.copy()
+        pb = coeffs.copy()
         vb = horner2(pb, degree, vr)
         tol = max(abs(vb.x), abs(vb.y))
         if tol < options.tol:
@@ -118,12 +118,12 @@ def suppress(vb: Vector2, vc: Vector2, vri: Vector2, vrj: Vector2):
 
 
 def pbairstow2_even(
-    pa: List[float], vrs: List[Vector2], options=Options()
+    coeffs: List[float], vrs: List[Vector2], options=Options()
 ) -> Tuple[List[Vector2], int, bool]:
     """Parallel Bairstow's method
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
         vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -131,7 +131,7 @@ def pbairstow2_even(
         [type]: [description]
     """
     M = len(vrs)
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
@@ -139,7 +139,7 @@ def pbairstow2_even(
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
-            pb = pa.copy()
+            pb = coeffs.copy()
             vb = horner2(pb, degree, vrs[i])
             tol_i = max(abs(vb.x), abs(vb.y))
             if tol_i < options.tol_ind:

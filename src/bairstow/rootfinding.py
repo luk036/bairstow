@@ -16,20 +16,18 @@ class Options:
     # tol_suppress: float = 1e-1
 
 
+#                         -1
+#    ⎛r ⋅ p + s     p⎞     ⎛A⎞
+#    ⎜               ⎟   ⋅ ⎜ ⎟
+#    ⎝q ⋅ p         s⎠     ⎝B⎠
 def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
     """for -vA1
-                             -1
-        ⎛r ⋅ p + s     p⎞     ⎛A⎞
-        ⎜               ⎟   ⋅ ⎜ ⎟
-        ⎝q ⋅ p         s⎠     ⎝B⎠
 
-    The `delta` function calculates the delta value using the given vectors
-    `vA`, `vr`, and `vp`.
+    The `delta` function calculates the delta value using the given vectors `vA`, `vr`, and `vp`.
 
     :param vA: The parameter `vA` represents a 2D vector
     :type vA: Vector2
-    :param vr: The parameter `vr` represents a 2D vector with components
-    `r` and `q`
+    :param vr: The parameter `vr` represents a 2D vector with components `r` and `q`
     :type vr: Vector2
     :param vp: vp is a Vector2 representing the vector p
     :type vp: Vector2
@@ -49,17 +47,24 @@ def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
 def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     """Zero suppresion (original)
 
+    The `suppress` function performs zero suppression on a given set of vectors using the Bairsow's
+    method.
+
+    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents
+    without further context
+    :type vA: Vector2
+    :param vA1: The parameter `vA1` represents a 2D vector
+    :type vA1: Vector2
+    :param vri: The parameter `vri` represents a vector with components `x` and `y`
+    :type vri: Vector2
+    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a
+    `Vector2` object that represents the vector `vrj` in a mathematical context
+    :type vrj: Vector2
+    :return: The function `suppress` returns two values: `va` and `va1`.
+
     Reference:
         D. C. Handscomb, Computation of the latent roots of a Hessenberg matrix
         by Bairsow's method, Computer Journal, 5 (1962), pp. 139-141.
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
 
     Examples:
         >>> vA = Vector2(3, 3)
@@ -93,17 +98,24 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
 def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     """Zero suppresion
 
+    The `suppress` function performs zero suppression on a given set of vectors using the Bairsow's
+    method.
+
+    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents
+    without further context
+    :type vA: Vector2
+    :param vA1: The parameter `vA1` represents a 2D vector
+    :type vA1: Vector2
+    :param vri: The parameter `vri` represents a vector with components `x` and `y`
+    :type vri: Vector2
+    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a
+    `Vector2` object that represents the vector `vrj` in a mathematical context
+    :type vrj: Vector2
+    :return: The function `suppress` returns two values: `va` and `va1`.
+
     Reference:
         D. C. Handscomb, Computation of the latent roots of a Hessenberg matrix
         by Bairsow's method, Computer Journal, 5 (1962), pp. 139-141.
-
-    Args:
-        vA (Vector2): [description]
-        vr (Vector2): [description]
-        vp (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
 
     Examples:
         >>> vA = Vector2(3, 3)
@@ -128,24 +140,26 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     return va, va1
 
 
+#                     n         n - 1
+#        P(z) = c  ⋅ z  + c  ⋅ z      + ... + c
+#                0         1                   n
+#
+#        P(z) = P (z) ⋅ ⎛z - z   ⎞ + A
+#                1      ⎝     val⎠
 def horner_eval(coeffs: List, degree: int, zval):
     """Polynomial evaluation using Horner's scheme
 
-                     n         n - 1
-        P(z) = c  ⋅ z  + c  ⋅ z      + ... + c
-                0         1                   n
+    The `horner_eval` function evaluates a polynomial using Horner's scheme and updates the coefficients
+    list in place.
 
-        P(z) = P (z) ⋅ ⎛z - z   ⎞ + A
-                1      ⎝     val⎠
-
-    Note: coeffs becomes the quotient after calling this function
-
-    Args:
-        coeffs (List): List of coefficients of polynomial
-        val (float or complex): value to be evaluated
-
-    Returns:
-        float or complex
+    :param coeffs: A list of coefficients of a polynomial. 
+    :type coeffs: List
+    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
+    that indicates the highest power of the variable in the polynomial
+    :type degree: int
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated.
+    It can be a float or a complex number
+    :return: the value of the polynomial evaluated at the given value `zval`.
 
     Examples:
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
@@ -162,14 +176,17 @@ def horner_eval(coeffs: List, degree: int, zval):
 def horner_backward(coeffs: List, degree: int, val):
     """Polynomial evaluation using Horner's scheme
 
-    Note: coeffs becomes the quotient after calling this function
+    The `horner_backward` function evaluates a polynomial using Horner's scheme and updates the coefficients
+    list in place.
 
-    Args:
-        coeffs (List): List of coefficients of polynomial
-        val (float or complex): value to be evaluated
-
-    Returns:
-        float or complex
+    :param coeffs: A list of coefficients of a polynomial. 
+    :type coeffs: List
+    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
+    that indicates the highest power of the variable in the polynomial
+    :type degree: int
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated.
+    It can be a float or a complex number
+    :return: the value of the polynomial evaluated at the given value `zval`.
 
     Examples:
         >>> coeffs = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
@@ -187,21 +204,28 @@ def horner_backward(coeffs: List, degree: int, val):
     return coeffs[-(degree + 1)]
 
 
+#
+#                       ⎛ 2            ⎞
+#        P(x) = P (x) ⋅ ⎝x  - r ⋅ x - q⎠ + A ⋅ x + B
+#                1
+#
+#    Note: P(x) becomes the quotient after calling this function
 def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
-    """[summary]
+    """Polynomial evaluation using Horner's scheme
 
-                       ⎛ 2            ⎞
-        P(x) = P (x) ⋅ ⎝x  - r ⋅ x - q⎠ + A ⋅ x + B
-                1
+    The `horner` function evaluates a polynomial using Horner's scheme and returns the result as a
+    `Vector2` object.
 
-    Note: pb becomes the quotient after calling this function
-
-    Args:
-        coeffs (List[float]): [description]
-        vr (Vector2): [description]
-
-    Returns:
-        Vector2: [description]
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the
+    list represents the coefficient of a term in the polynomial, starting from the highest degree term
+    and going down to the constant term
+    :type coeffs: List[float]
+    :param degree: The degree parameter represents the degree of the polynomial. It determines the
+    number of coefficients in the coeffs list
+    :type degree: int
+    :param vr: vr is a Vector2 object that represents the values of x and y in the polynomial expression
+    :type vr: Vector2
+    :return: The function `horner` returns a `Vector2` object.
 
     Examples:
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
@@ -220,21 +244,24 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
 
 
 def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
-    """[summary]
+    """ Initial guess
 
-    Args:
-        pa (List[float]): [description]
+    The `initial_guess` function calculates an initial guess for the roots of a polynomial equation
+    using a specific algorithm.
 
-    Returns:
-        List[Vector2]: [description]
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
+    coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1) +
+    ... + coeffs[n-1] * x + coeffs[n
+    :type coeffs: List[float]
+    :return: The function `initial_guess` returns a list of `Vector2` objects.
 
     Examples:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
-        >>> vr0s = initial_guess(h)
+        >>> vr0s = initial_guess_orig(h)
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # p_eval = np.poly1d(pa)
+    # p_eval = np.poly1d(coeffs)
     p_center = horner_eval(coeffs.copy(), degree, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
@@ -251,13 +278,16 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
 
 
 def initial_guess(coeffs: List[float]) -> List[Vector2]:
-    """[summary]
+    """Initial guess
 
-    Args:
-        pa (List[float]): [description]
+    The `initial_guess` function calculates an initial guess for the roots of a polynomial equation
+    using a specific algorithm.
 
-    Returns:
-        List[Vector2]: [description]
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
+    coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1)
+    + ... + coeffs[n-1] * x + coeffs[n]
+    :type coeffs: List[float]
+    :return: The function `initial_guess` returns a list of `Vector2` objects.
 
     Examples:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
@@ -265,7 +295,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # p_eval = np.poly1d(pa)
+    # p_eval = np.poly1d(coeffs)
     p_center = horner_eval(coeffs.copy(), degree, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
@@ -283,43 +313,48 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     return vr0s
 
 
+#            new                               -1
+#        ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'    A' ⎞
+#        ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
+#        ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
+#        ⎜q ⎟      ⎜q ⎟   ⎜ A'  ⋅ q         B' ⎟     ⎝B⎠
+#        ⎝ i⎠      ⎝ i⎠   ⎝  1    i           1⎠
+#
+#    where
+#                         m
+#                       _____
+#                       ╲                         -1
+#        ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  + s     p  ⎞
+#        ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij⎟     ⎛A⎞
+#        ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                   ⎟   ⋅ ⎜ ⎟
+#        ⎜B' ⎟   ⎜B ⎟    ╱    ⎜p  ⋅ q          s  ⎟     ⎝B⎠
+#        ⎝  1⎠   ⎝ 1⎠   ╱     ⎝ ij   i          ij⎠
+#                       ‾‾‾‾‾
+#                       j ≠ i
+#
+#        ⎛p  ⎞   ⎛r ⎞   ⎛r ⎞
+#        ⎜ ij⎟   ⎜ i⎟   ⎜ j⎟
+#        ⎜   ⎟ = ⎜  ⎟ - ⎜  ⎟
+#        ⎜s  ⎟   ⎜q ⎟   ⎜q ⎟
+#        ⎝ ij⎠   ⎝ i⎠   ⎝ j⎠
 def pbairstow_even(
-    pa: List[float], vrs: List[Vector2], options=Options()
+    coeffs: List[float], vrs: List[Vector2], options=Options()
 ) -> Tuple[List[Vector2], int, bool]:
     """Parallel Bairstow's method
 
-            new                               -1
-        ⎛r ⎞      ⎛r ⎞   ⎛A'  ⋅ r  + B'    A' ⎞
-        ⎜ i⎟      ⎜ i⎟   ⎜  1    i     1     1⎟     ⎛A⎞
-        ⎜  ⎟    = ⎜  ⎟ - ⎜                    ⎟   ⋅ ⎜ ⎟
-        ⎜q ⎟      ⎜q ⎟   ⎜ A'  ⋅ q         B' ⎟     ⎝B⎠
-        ⎝ i⎠      ⎝ i⎠   ⎝  1    i           1⎠
+    The `pbairstow_even` function implements a parallel version of Bairstow's method for finding the
+    roots of a polynomial.
 
-    where
-                         m
-                       _____
-                       ╲                         -1
-        ⎛A' ⎞   ⎛A ⎞    ╲    ⎛p  ⋅ r  + s     p  ⎞
-        ⎜  1⎟   ⎜ 1⎟     ╲   ⎜ ij   i    ij    ij⎟     ⎛A⎞
-        ⎜   ⎟ = ⎜  ⎟ -   ╱   ⎜                   ⎟   ⋅ ⎜ ⎟
-        ⎜B' ⎟   ⎜B ⎟    ╱    ⎜p  ⋅ q          s  ⎟     ⎝B⎠
-        ⎝  1⎠   ⎝ 1⎠   ╱     ⎝ ij   i          ij⎠
-                       ‾‾‾‾‾
-                       j ≠ i
-
-        ⎛p  ⎞   ⎛r ⎞   ⎛r ⎞
-        ⎜ ij⎟   ⎜ i⎟   ⎜ j⎟
-        ⎜   ⎟ = ⎜  ⎟ - ⎜  ⎟
-        ⎜s  ⎟   ⎜q ⎟   ⎜q ⎟
-        ⎝ ij⎠   ⎝ i⎠   ⎝ j⎠
-
-    Args:
-        pa (List[float]): [description]
-        vrs (List[Vector2]): [description]
-        options (Options, optional): [description]. Defaults to Options().
-
-    Returns:
-        [type]: [description]
+    :param coeffs: The parameter `coeffs` is a list of floats representing the coefficients of a polynomial. It
+    represents the polynomial whose roots we want to find using Bairstow's method
+    :type coeffs: List[float]
+    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a
+    complex number and is used as an initial guess for the roots of the polynomial equation. The length
+    of the `vrs` list determines the number of roots to be found
+    :type vrs: List[Vector2]
+    :param options: The `options` parameter is an instance of the `Options` class, which is used to
+    specify various options for the Bairstow's method algorithm. It has the following attributes:
+    :return: The function `pbairstow_even` returns a tuple containing the following elements:
 
     Examples:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
@@ -327,15 +362,13 @@ def pbairstow_even(
         >>> vrs, niter, found = pbairstow_even(h, vr0s)
     """
     M = len(vrs)
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
-        # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
-            # for i in range(M):
-            pb = pa.copy()
+            pb = coeffs.copy()
             vA = horner(pb, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
@@ -343,10 +376,8 @@ def pbairstow_even(
                 continue
             vA1 = horner(pb, degree - 2, vrs[i])
             tol = max(tol_i, tol)
-            # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
                 vA, vA1 = suppress(vA, vA1, vrs[i], vrs[j])
-                # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
         if tol < options.tol:
             return vrs, niter, True
@@ -354,15 +385,20 @@ def pbairstow_even(
 
 
 def find_rootq(vr: Vector2) -> Tuple[float | complex, float | complex]:
-    """Solve x^2 - r*x - q = 0
+    """find_rootq
+
+    The function `find_rootq` solves a quadratic equation of the form x^2 - r*x - q = 0 and returns the
+    two roots as a tuple.
+
+    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic
+    equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y`
+    component represents the constant term (`q`) in the equation `x^2 -
+    :type vr: Vector2
+    :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic
+    equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
+    values of the input parameters.
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
-
-    Args:
-        vr (Vector2): [description]
-
-    Returns:
-        Tuple[float, float]: [description]
 
     Examples:
         >>> vr = find_rootq(Vector2(5, -6))

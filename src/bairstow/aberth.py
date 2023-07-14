@@ -39,11 +39,11 @@ def horner_backward(pb: List, degree: int, alpha: FoC) -> FoC:
     return pb[-(degree + 1)]
 
 
-def initial_aberth(pa: List[FoC]) -> List[complex]:
+def initial_aberth(coeffs: List[FoC]) -> List[complex]:
     """[summary]
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
 
     Returns:
         List: [description]
@@ -52,9 +52,9 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth(h)
     """
-    degree: int = len(pa) - 1
-    center: FoC = -pa[1] / (degree * pa[0])
-    p_center: FoC = horner_eval(pa.copy(), degree, center)
+    degree: int = len(coeffs) - 1
+    center: FoC = -coeffs[1] / (degree * coeffs[0])
+    p_center: FoC = horner_eval(coeffs.copy(), degree, center)
     re: FoC = pow(-p_center, 1.0 / degree)
     # k = 2 * PI / degree
     z0s: List[complex] = []
@@ -66,11 +66,11 @@ def initial_aberth(pa: List[FoC]) -> List[complex]:
     return z0s
 
 
-def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
+def initial_aberth_orig(coeffs: List[FoC]) -> List[complex]:
     """[summary]
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
 
     Returns:
         List: [description]
@@ -79,9 +79,9 @@ def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth_orig(h)
     """
-    degree: int = len(pa) - 1
-    center: FoC = -pa[1] / (degree * pa[0])
-    p_center: FoC = horner_eval(pa.copy(), degree, center)
+    degree: int = len(coeffs) - 1
+    center: FoC = -coeffs[1] / (degree * coeffs[0])
+    p_center: FoC = horner_eval(coeffs.copy(), degree, center)
     re: FoC = pow(-p_center, 1.0 / degree)
     k = 2 * PI / degree
     z0s: List[complex] = []
@@ -92,7 +92,7 @@ def initial_aberth_orig(pa: List[FoC]) -> List[complex]:
 
 
 def aberth(
-    pa: List[FoC], zs: List[complex], options: Options = Options()
+    coeffs: List[FoC], zs: List[complex], options: Options = Options()
 ) -> Tuple[List[complex], int, bool]:
     """Aberth's method for polynomial root-finding
 
@@ -114,7 +114,7 @@ def aberth(
                             j ≠ i
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
         zs (List): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -129,34 +129,34 @@ def aberth(
         >>> zs, niter, found = aberth(h, z0s, opt)
     """
     M = len(zs)
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
         for i in filter(lambda i: not converged[i], range(M)):
-            pb = pa.copy()
+            pb = coeffs.copy()
             p_eval = horner_eval(pb, degree, zs[i])
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            P1 = horner_eval(pb, degree - 1, zs[i])
+            p1_eval = horner_eval(pb, degree - 1, zs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                P1 -= p_eval / (zs[i] - zs[j])
-            zs[i] -= p_eval / P1
+                p1_eval -= p_eval / (zs[i] - zs[j])
+            zs[i] -= p_eval / p1_eval
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iters, False
 
 
-def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
+def initial_aberth_autocorr(coeffs: List[float]) -> List[complex]:
     """[summary]
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
 
     Returns:
         List: [description]
@@ -165,10 +165,10 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth_autocorr(h)
     """
-    degree: int = len(pa) - 1
-    re: float = pow(abs(pa[-1]), 1.0 / degree)
-    # center = -pa[1] / (degree * pa[0])
-    # p_center = horner_eval(pa.copy(), degree, center)
+    degree: int = len(coeffs) - 1
+    re: float = pow(abs(coeffs[-1]), 1.0 / degree)
+    # center = -coeffs[1] / (degree * coeffs[0])
+    # p_center = horner_eval(coeffs.copy(), degree, center)
     # re = (-p_center) ** (1.0 / degree)
     if abs(re) > 1:
         re = 1 / re
@@ -183,11 +183,11 @@ def initial_aberth_autocorr(pa: List[float]) -> List[complex]:
     return z0s
 
 
-def initial_aberth_autocorr_orig(pa: List[float]) -> List[complex]:
+def initial_aberth_autocorr_orig(coeffs: List[float]) -> List[complex]:
     """[summary]
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
 
     Returns:
         List: [description]
@@ -196,10 +196,10 @@ def initial_aberth_autocorr_orig(pa: List[float]) -> List[complex]:
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth_autocorr_orig(h)
     """
-    degree: int = len(pa) - 1
-    re: float = pow(abs(pa[-1]), 1.0 / degree)
-    # center = -pa[1] / (degree * pa[0])
-    # p_center = horner_eval(pa.copy(), degree, center)
+    degree: int = len(coeffs) - 1
+    re: float = pow(abs(coeffs[-1]), 1.0 / degree)
+    # center = -coeffs[1] / (degree * coeffs[0])
+    # p_center = horner_eval(coeffs.copy(), degree, center)
     # re = (-p_center) ** (1.0 / degree)
     if abs(re) > 1:
         re = 1 / re
@@ -213,12 +213,12 @@ def initial_aberth_autocorr_orig(pa: List[float]) -> List[complex]:
 
 
 def aberth_autocorr(
-    pa: List[float], zs: List[complex], options=Options()
+    coeffs: List[float], zs: List[complex], options=Options()
 ) -> Tuple[List[complex], int, bool]:
     """[summary]
 
     Args:
-        pa (List): [description]
+        coeffs (List): [description]
         zs (List): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -234,28 +234,28 @@ def aberth_autocorr(
         >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
     """
     M: int = len(zs)
-    degree: int = len(pa) - 1
+    degree: int = len(coeffs) - 1
     converged: List[bool] = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol: float = 0.0
         # exclude converged
         for i in filter(lambda i: not converged[i], range(M)):
-            pb = pa.copy()
+            pb = coeffs.copy()
             p_eval = horner_eval(pb, degree, zs[i])
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            P1 = horner_eval(pb, degree - 1, zs[i])
+            p1_eval = horner_eval(pb, degree - 1, zs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                P1 -= p_eval / (zs[i] - zs[j])
+                p1_eval -= p_eval / (zs[i] - zs[j])
                 # for j in range(M):  # exclude i
                 zsn = 1.0 / zs[j]
-                P1 -= p_eval / (zs[i] - zsn)
-            zs[i] -= p_eval / P1
+                p1_eval -= p_eval / (zs[i] - zsn)
+            zs[i] -= p_eval / p1_eval
             # if abs(zs[i]) > 1.0:  # pick those inside the unit circle
             #     zs[i] = 1.0 / zs[i]
         if tol < options.tol:

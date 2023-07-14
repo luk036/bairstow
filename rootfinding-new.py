@@ -193,7 +193,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
 
     Returns:
         List[Vector2]: [description]
@@ -204,7 +204,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # p_eval = np.poly1d(pa)
+    # p_eval = np.poly1d(coeffs)
     p_center = horner_eval(coeffs.copy(), degree, center)
     radius = abs(p_center) ** (1.0 / degree)
     m = center * center + radius * radius
@@ -224,7 +224,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
 
     Returns:
         List[Vector2]: [description]
@@ -235,7 +235,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     """
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
-    # p_eval = np.poly1d(pa)
+    # p_eval = np.poly1d(coeffs)
     p_center = horner_eval(coeffs.copy(), degree, center)
     radius = abs(p_center) ** (1.0 / degree)
     m = center * center + radius * radius
@@ -254,12 +254,12 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
 
 
 def pbairstow_even(
-    pa: List[float], vrs: List[Vector2], options=Options()
+    coeffs: List[float], vrs: List[Vector2], options=Options()
 ) -> Tuple[List[Vector2], int, bool]:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
         vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -272,7 +272,7 @@ def pbairstow_even(
         >>> vrs, niter, found = pbairstow_even(h, vr0s)
     """
     M = len(vrs)
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(1, options.max_iters):
@@ -280,7 +280,7 @@ def pbairstow_even(
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
-            pb = pa.copy()
+            pb = coeffs.copy()
             vA = horner(pb, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:

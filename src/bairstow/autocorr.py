@@ -9,11 +9,11 @@ from .vector2 import Vector2
 PI = pi
 
 
-def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
+def initial_autocorr_new(coeffs: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
 
     Returns:
         List[Vector2]: [description]
@@ -22,8 +22,8 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> vr0s = initial_autocorr(h)
     """
-    degree = len(pa) - 1
-    re = pow(abs(pa[-1]), 1.0 / degree)
+    degree = len(coeffs) - 1
+    re = pow(abs(coeffs[-1]), 1.0 / degree)
     if re > 1:
         re = 1 / re
     degree //= 2
@@ -36,17 +36,17 @@ def initial_autocorr_new(pa: List[float]) -> List[Vector2]:
     return vr0s
 
 
-def initial_autocorr(pa: List[float]) -> List[Vector2]:
+def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
 
     Returns:
         List[Vector2]: [description]
     """
-    degree = len(pa) - 1
-    re = pow(abs(pa[-1]), 1.0 / degree)
+    degree = len(coeffs) - 1
+    re = pow(abs(coeffs[-1]), 1.0 / degree)
     if re < 1:  # use those outside the unit circle
         re = 1 / re
     degree //= 2
@@ -57,12 +57,12 @@ def initial_autocorr(pa: List[float]) -> List[Vector2]:
 
 
 def pbairstow_autocorr(
-    pa: List[float], vrs: List[Vector2], options: Options = Options()
+    coeffs: List[float], vrs: List[Vector2], options: Options = Options()
 ):
     """[summary]
 
     Args:
-        pa (List[float]): [description]
+        coeffs (List[float]): [description]
         vrs (List[Vector2]): [description]
         options (Options, optional): [description]. Defaults to Options().
 
@@ -75,14 +75,14 @@ def pbairstow_autocorr(
         >>> vrs, niter, found = pbairstow_autocorr(h, vr0s)
     """
     M = len(vrs)  # assume polynomial of h is even
-    degree = len(pa) - 1
+    degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):
-            pb = pa.copy()
+            pb = coeffs.copy()
             vA = horner(pb, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:

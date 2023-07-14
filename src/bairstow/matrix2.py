@@ -1,54 +1,56 @@
 from .vector2 import Vector2
 
 
+"""
+The Matrix2 class represents a 2x2 matrix with two Vector2 objects as its rows.
+"""
 class Matrix2:
     _x: Vector2
     _y: Vector2
 
     def __init__(self, x: Vector2, y: Vector2):
-        """[summary]
-
-        Args:
-            x (Vector2): [description]
-            y (Vector2): [description]
+        """
+        The function initializes an object with two Vector2 parameters.
+        
+        :param x: The parameter `x` is of type `Vector2`. It represents a vector in two-dimensional space
+        :type x: Vector2
+        :param y: The parameter `y` is of type `Vector2`. It represents a vector in two-dimensional space
+        :type y: Vector2
         """
         self._x = x
         self._y = y
 
     @property
     def x(self):
-        """[summary]
-
-        Returns:
-            [type]: [description]
+        """
+        The function returns the value of the private variable `_x`.
+        :return: The property `x` is returning the value of the private variable `_x`.
         """
         return self._x
 
     @property
     def y(self):
-        """[summary]
-
-        Returns:
-            [type]: [description]
+        """
+        The function returns the value of the private variable `_y`.
+        :return: The property `y` is returning the value of the private variable `_y`.
         """
         return self._y
 
     def mdot(self, rhs: Vector2) -> Vector2:
-        """matrix-vector product
-
-        Args:
-            rhs (Vector2): [description]
-
-        Returns:
-            Vector2: [description]
+        """
+        The `mdot` function performs a matrix-vector product.
+        
+        :param rhs: The parameter `rhs` is a Vector2 object that represents the right-hand side vector
+        in the matrix-vector product
+        :type rhs: Vector2
+        :return: The method `mdot` returns a `Vector2` object.
         """
         return Vector2(self._x.dot(rhs), self._y.dot(rhs))
 
     def det(self) -> float:
-        """determinant
-
-        Returns:
-            float: [description]
+        """
+        The `det` function calculates the determinant of a 2x2 matrix.
+        :return: The determinant of the matrix.
         """
         a11, a12 = self.x.x, self.x.y
         a21, a22 = self.y.x, self.y.y
