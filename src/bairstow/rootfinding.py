@@ -1,10 +1,11 @@
 from math import cos, sqrt, pi
-from typing import List, Tuple
-
 from .lds import VdCorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
+from typing import List, Tuple
+
+Num = Tuple[float, complex]
 
 PI = pi
 
@@ -16,7 +17,7 @@ class Options:
     # tol_suppress: float = 1e-1
 
 
-#                         -1
+#                      -1
 #    ⎛r ⋅ p + s     p⎞     ⎛A⎞
 #    ⎜               ⎟   ⋅ ⎜ ⎟
 #    ⎝q ⋅ p         s⎠     ⎝B⎠
@@ -384,7 +385,7 @@ def pbairstow_even(
     return vrs, options.max_iters, False
 
 
-def find_rootq(vr: Vector2) -> Tuple[float | complex, float | complex]:
+def find_rootq(vr: Vector2) -> Tuple[Num, Num]:
     """find_rootq
 
     The function `find_rootq` solves a quadratic equation of the form x^2 - r*x - q = 0 and returns the
