@@ -6,6 +6,7 @@ class SlNode:
     The `SlNode` class represents a node in a singly-linked list, with a `next` pointer and a `data`
     value.
     """
+
     next: "SlNode"
     data: int
 
@@ -22,8 +23,9 @@ class SlNode:
 
 class RobinIterator:
     """The `RobinIterator` class is an iterator that iterates over a singly linked list starting from a
-       given node.
+    given node.
     """
+
     __slots__ = ("cur", "stop")
     cur: SlNode
     stop: SlNode
@@ -93,7 +95,7 @@ class Robin:
     def exclude(self, from_part: int) -> RobinIterator:
         """
         The `exclude` function returns a `RobinIterator` object that excludes a specified part of a cycle.
-        
+
         :param from_part: The `from_part` parameter is an integer that represents the starting index of the
         cycle that should be excluded
         :type from_part: int

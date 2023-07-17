@@ -4,6 +4,8 @@ from .vector2 import Vector2
 """
 The Matrix2 class represents a 2x2 matrix with two Vector2 objects as its rows.
 """
+
+
 class Matrix2:
     _x: Vector2
     _y: Vector2
@@ -11,7 +13,7 @@ class Matrix2:
     def __init__(self, x: Vector2, y: Vector2):
         """
         The function initializes an object with two Vector2 parameters.
-        
+
         :param x: The parameter `x` is of type `Vector2`. It represents a vector in two-dimensional space
         :type x: Vector2
         :param y: The parameter `y` is of type `Vector2`. It represents a vector in two-dimensional space
@@ -39,7 +41,7 @@ class Matrix2:
     def mdot(self, rhs: Vector2) -> Vector2:
         """
         The `mdot` function performs a matrix-vector product.
-        
+
         :param rhs: The parameter `rhs` is a Vector2 object that represents the right-hand side vector
         in the matrix-vector product
         :type rhs: Vector2

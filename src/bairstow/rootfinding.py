@@ -152,7 +152,7 @@ def horner_eval(coeffs: List, degree: int, zval):
     The `horner_eval` function evaluates a polynomial using Horner's scheme and updates the coefficients
     list in place.
 
-    :param coeffs: A list of coefficients of a polynomial. 
+    :param coeffs: A list of coefficients of a polynomial.
     :type coeffs: List
     :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
     that indicates the highest power of the variable in the polynomial
@@ -179,7 +179,7 @@ def horner_backward(coeffs: List, degree: int, val):
     The `horner_backward` function evaluates a polynomial using Horner's scheme and updates the coefficients
     list in place.
 
-    :param coeffs: A list of coefficients of a polynomial. 
+    :param coeffs: A list of coefficients of a polynomial.
     :type coeffs: List
     :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
     that indicates the highest power of the variable in the polynomial
@@ -244,7 +244,7 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
 
 
 def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
-    """ Initial guess
+    """Initial guess
 
     The `initial_guess` function calculates an initial guess for the roots of a polynomial equation
     using a specific algorithm.
