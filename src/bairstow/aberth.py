@@ -261,3 +261,22 @@ def aberth_autocorr(
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iters, False
+
+
+# def test_aberth():
+#     h = [5.0, 2.0, 9.0, 6.0, 2.0]
+#     z0s = initial_aberth(h)
+#     zs, niter, found = aberth(h, z0s)
+#     assert (niter == 2)
+#     assert (found)
+#     zs, niter, found = aberth(h, z0s, Options(tol=1e-10))
+#     assert (niter == 2)
+#     assert (found)
+#     zs, niter, found = aberth(h, z0s, Options(max_iters=1))
+#     assert (niter == 1)
+#     assert (found)
+#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tol=1e-10))
+#     assert (niter == 1)
+#     assert (found)
+#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tol=1e-11))
+#     assert (niter == 0)

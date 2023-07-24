@@ -39,8 +39,14 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v2 = Vector2(3, 4)
+            >>> v1.dot(v2)
+            11
         """
-        return self._x * rhs._x + rhs._y * self._y
+        return self._x * rhs._x + self._y * rhs._y
 
     def __iadd__(self, rhs):
         """[summary]
@@ -50,6 +56,13 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v2 = Vector2(3, 4)
+            >>> v1 += v2
+            >>> print(v1)
+            <4, 6>
         """
         self._x += rhs.x
         self._y += rhs.y
@@ -63,6 +76,14 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v2 = Vector2(3, 4)
+            >>> print(v1 + v2)
+            <4, 6>
+            >>> print(v1)
+            <1, 2>
         """
         return Vector2(self.x + rhs.x, self.y + rhs.y)
 
