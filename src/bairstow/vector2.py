@@ -95,6 +95,15 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v2 = Vector2(3, 4)
+            >>> v1 -= v2
+            >>> print(v1)
+            <-2, -2>
+            >>> print(v2)
+            <3, 4>
         """
         self._x -= rhs.x
         self._y -= rhs.y
@@ -108,6 +117,16 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v2 = Vector2(3, 4)
+            >>> print(v1 - v2)
+            <-2, -2>
+            >>> print(v1)
+            <1, 2>
+            >>> print(v2)
+            <3, 4>
         """
         return Vector2(self.x - rhs.x, self.y - rhs.y)
 
@@ -119,6 +138,12 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v1 *= 2
+            >>> print(v1)
+            <2, 4>
         """
         self._x *= alpha
         self._y *= alpha
@@ -132,6 +157,13 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> print(v1 * 2)
+            <2, 4>
+            >>> print(v1)
+            <1, 2>
         """
         return Vector2(self.x * alpha, self.y * alpha)
 
@@ -143,6 +175,35 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> v1 /= 2
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> v1 /= 0
+            Traceback (most recent call last):
+                ...
+            ZeroDivisionError: float division by zero
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> v1 /= 1
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> v1 /= 2
+            >>> print(v1)
+            <0.25, 0.5>
+            >>> print(v1)
+            <0.25, 0.5>
+            >>> v1 /= 2
+            >>> print(v1)
+            <0.125, 0.25>
         """
         self._x /= alpha
         self._y /= alpha
@@ -156,6 +217,24 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> print(v1 / 2)
+            <0.5, 1.0>
+            >>> print(v1)
+            <1, 2>
+            >>> v1 /= 1
+            >>> print(v1)
+            <1.0, 2.0>
+            >>> v1 /= 2
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> print(v1)
+            <0.5, 1.0>
+            >>> v1 /= 2
+            >>> print(v1)
+            <0.25, 0.5>
         """
         return Vector2(self.x / alpha, self.y / alpha)
 
@@ -164,6 +243,17 @@ class Vector2:
 
         Returns:
             [type]: [description]
+
+        Examples:
+            >>> v1 = Vector2(1, 2)
+            >>> print(v1)
+            <1, 2>
+            >>> v2 = Vector2(3, 4)
+            >>> print(v2)
+            <3, 4>
+            >>> v3 = Vector2(5, 6)
+            >>> print(v3)
+            <5, 6>
         """
         # return "<{self.x}, {self.y}>".format(self=self)
         return f"<{self.x}, {self.y}>"

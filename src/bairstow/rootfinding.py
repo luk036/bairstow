@@ -361,6 +361,8 @@ def pbairstow_even(
         >>> h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
         >>> vr0s = initial_guess(h)
         >>> vrs, niter, found = pbairstow_even(h, vr0s)
+        >>> print(found)
+        True
     """
     M = len(vrs)
     degree = len(coeffs) - 1

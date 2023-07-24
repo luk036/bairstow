@@ -87,7 +87,7 @@ def test_aberth_fir():
     print([niter, found])
     for z in zs:
         print(z)
-    assert niter <= 10
+    assert niter <= 12
 
 
 def test_aberth_autocorr_fir():

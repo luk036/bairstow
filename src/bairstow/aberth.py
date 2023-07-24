@@ -56,13 +56,11 @@ def initial_aberth(coeffs: List[FoC]) -> List[complex]:
     center: FoC = -coeffs[1] / (degree * coeffs[0])
     p_center: FoC = horner_eval(coeffs.copy(), degree, center)
     re: FoC = pow(-p_center, 1.0 / degree)
-    # k = 2 * PI / degree
+    k = 2 * PI / degree
     z0s: List[complex] = []
-    vgen = VdCorput(2)
-    vgen.reseed(1)
-    for _ in range(degree):
-        vdc = 2 * PI * vgen.pop()
-        z0s += [center + re * exp(vdc * 1j)]
+    for i in range(degree):
+        theta = k * (0.25 + i)
+        z0s += [center + re * exp(theta * 1j)]
     return z0s
 
 
@@ -127,6 +125,8 @@ def aberth(
         >>> opt = Options()
         >>> opt.tol = 1e-8
         >>> zs, niter, found = aberth(h, z0s, opt)
+        >>> found
+        True
     """
     M = len(zs)
     degree = len(coeffs) - 1

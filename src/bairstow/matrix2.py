@@ -18,6 +18,17 @@ class Matrix2:
         :type x: Vector2
         :param y: The parameter `y` is of type `Vector2`. It represents a vector in two-dimensional space
         :type y: Vector2
+
+        Example:
+        >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+        >>> print(m.x)
+        <1.0, 2.0>
+        >>> print(m.y)
+        <3.0, 4.0>
+        >>> print(m.mdot(Vector2(5.0, 6.0)))
+        <17.0, 22.0>
+        >>> print(m.det())
+        -2.0
         """
         self._x = x
         self._y = y
@@ -27,6 +38,11 @@ class Matrix2:
         """
         The function returns the value of the private variable `_x`.
         :return: The property `x` is returning the value of the private variable `_x`.
+
+        Examples:
+            >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+            >>> print(m.x)
+            <1.0, 2.0>
         """
         return self._x
 
@@ -35,6 +51,11 @@ class Matrix2:
         """
         The function returns the value of the private variable `_y`.
         :return: The property `y` is returning the value of the private variable `_y`.
+
+        Examples:
+            >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+            >>> print(m.y)
+            <3.0, 4.0>
         """
         return self._y
 
@@ -46,6 +67,11 @@ class Matrix2:
         in the matrix-vector product
         :type rhs: Vector2
         :return: The method `mdot` returns a `Vector2` object.
+
+        Examples:
+            >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+            >>> print(m.mdot(Vector2(5.0, 6.0)))
+            <17.0, 22.0>
         """
         return Vector2(self._x.dot(rhs), self._y.dot(rhs))
 
@@ -53,6 +79,11 @@ class Matrix2:
         """
         The `det` function calculates the determinant of a 2x2 matrix.
         :return: The determinant of the matrix.
+
+        Examples:
+            >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+            >>> print(m.det())
+            -2.0
         """
         a11, a12 = self.x.x, self.x.y
         a21, a22 = self.y.x, self.y.y
