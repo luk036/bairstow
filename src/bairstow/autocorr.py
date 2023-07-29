@@ -1,4 +1,4 @@
-from math import acos, cos, sqrt, pi
+from math import cos, sqrt, pi
 from typing import List
 
 from .lds import VdCorput
@@ -14,9 +14,7 @@ def initial_autocorr_new(coeffs: List[float]) -> List[Vector2]:
     The function `initial_autocorr_new` calculates the initial autocorrelation values for a given set of
     coefficients.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For
-    example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be
     :type coeffs: List[float]
     :return: The function `initial_autocorr_new` returns a list of `Vector2` objects.
 
@@ -43,9 +41,7 @@ def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
     The function initial_autocorr calculates and returns a list of Vector2 objects based on the given
     list of coefficients.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For
-    example, if the polynomial is `3x^2 + 2x + 1`, the `coeffs` list would be `[
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, the `coeffs` list would be `[
     :type coeffs: List[float]
     :return: The function `initial_autocorr` returns a list of `Vector2` objects.
     """
@@ -67,15 +63,11 @@ def pbairstow_autocorr(
     The function `pbairstow_autocorr` performs the Bairstow's method for polynomial root finding using
     the autocorrelation method.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The polynomial is assumed to be of even degree
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The polynomial is assumed to be of even degree
     :type coeffs: List[float]
-    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a
-    complex number and is used as an initial guess for the roots of the polynomial. The
-    `pbairstow_autocorr` function uses these initial guesses to iteratively refine the
+    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a complex number and is used as an initial guess for the roots of the polynomial. The `pbairstow_autocorr` function uses these initial guesses to iteratively refine the
     :type vrs: List[Vector2]
-    :param options: The `options` parameter is an instance of the `Options` class, which contains
-    various options for the algorithm. It has the following attributes:
+    :param options: The `options` parameter is an instance of the `Options` class, which contains various options for the algorithm. It has the following attributes:
     :type options: Options
     :return: The function `pbairstow_autocorr` returns three values: `vrs`, `niter`, and `found`.
 
@@ -128,9 +120,7 @@ def extract_autocorr(vr: Vector2) -> Vector2:
     x^2 - r*x - q  or (-1/q) + (r/q) * x + x^2
     (x - a1)(x - a2) = x^2 - (a1 + a2) x + a1 * a2
 
-    :param vr: The parameter `vr` is a Vector2 object, which represents a 2D vector. The `x` component
-    of the vector (`vr.x`) represents the value of `r`, and the `y` component of the vector (`vr.y`)
-    represents the value of `q`
+    :param vr: The parameter `vr` is a Vector2 object, which represents a 2D vector. The `x` component of the vector (`vr.x`) represents the value of `r`, and the `y` component of the vector (`vr.y`) represents the value of `q`
     :type vr: Vector2
     :return: The function `extract_autocorr` returns a `Vector2` object.
 
