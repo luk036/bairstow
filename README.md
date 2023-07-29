@@ -3,7 +3,7 @@
 
 # bairstow
 
-Bairstow's Rootfinding Algorithm Python Code
+> Bairstow's Rootfinding Algorithm Python Code
 
 ## ✨ Features
 
