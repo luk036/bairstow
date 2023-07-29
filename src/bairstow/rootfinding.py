@@ -10,6 +10,8 @@ Num = Tuple[float, complex]
 PI = pi
 
 
+# The class "Options" defines default values for maximum iterations, tolerance, and individual
+# tolerance.
 class Options:
     max_iters: int = 2000
     tol: float = 1e-12
@@ -250,9 +252,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     The `initial_guess` function calculates an initial guess for the roots of a polynomial equation
     using a specific algorithm.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1) +
-    ... + coeffs[n-1] * x + coeffs[n
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1) + ... + coeffs[n-1] * x + coeffs[n]
     :type coeffs: List[float]
     :return: The function `initial_guess` returns a list of `Vector2` objects.
 
@@ -284,9 +284,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     The `initial_guess` function calculates an initial guess for the roots of a polynomial equation
     using a specific algorithm.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1)
-    + ... + coeffs[n-1] * x + coeffs[n]
+    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The polynomial is of the form `coeffs[0] * x^n + coeffs[1] * x^(n-1) + ... + coeffs[n-1] * x + coeffs[n]
     :type coeffs: List[float]
     :return: The function `initial_guess` returns a list of `Vector2` objects.
 
