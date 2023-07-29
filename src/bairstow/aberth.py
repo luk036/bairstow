@@ -13,15 +13,26 @@ PI = pi
 
 
 def horner_backward(pb: List, degree: int, alpha: FoC) -> FoC:
-    """[summary]
+    """
+    The `horner_backward` function evaluates a polynomial using the Horner's method in backward form.
 
-    Args:
-        pb (List): _description_
-        degree (int): _description_
-        alpha (FoC): _description_
+    :param pb: The parameter `pb` is a list of coefficients of a polynomial in descending order of
+    degree. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `pb` would be `[3, -2, 5,
 
-    Returns:
-        FoC: _description_
+    :type pb: List
+
+    :param degree: The degree of the polynomial, which is the highest power of the variable in the
+    polynomial. For example, if the polynomial is 3x^2 + 2x + 1, then the degree is 2
+
+    :type degree: int
+
+    :param alpha: The value of alpha is a constant that is used in the Horner's method for backward
+    polynomial evaluation. It is typically a scalar value
+
+    :type alpha: FoC
+
+    :return: The function `horner_backward` returns the value of the polynomial evaluated at the given
+    alpha value.
 
     Examples:
         >>> coeffs = [1.0, -6.7980, 2.9948, -0.043686, 0.000089248]
