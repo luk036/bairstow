@@ -6,7 +6,7 @@ class Vector2:
     def __init__(self, x, y):
         """
         The function initializes the values of x and y as private variables.
-        
+
         :param x: The parameter `x` is used to initialize the `_x` attribute of the object. It
         represents the value of the x-coordinate
         :param y: The parameter `y` is a variable that represents the y-coordinate of a point
@@ -33,7 +33,7 @@ class Vector2:
     def dot(self, rhs):
         """
         The dot function calculates the dot product of two vectors.
-        
+
         :param rhs: rhs is the right-hand side vector that we want to calculate the dot product with
         :return: The dot product of the two vectors.
 
@@ -49,7 +49,7 @@ class Vector2:
         """
         The `__iadd__` method adds the x and y components of the right-hand side vector to the x and y
         components of the left-hand side vector and returns the modified left-hand side vector.
-        
+
         :param rhs: The parameter `rhs` stands for "right-hand side" and represents the object that is
         being added to the current object. In this case, it is assumed that `rhs` is an instance of the
         `Vector2` class, which has attributes `x` and `y`. The `__
@@ -70,7 +70,7 @@ class Vector2:
     def __add__(self, rhs):
         """
         The function overloads the "+" operator for the Vector2 class to perform vector addition.
-        
+
         :param rhs: The parameter `rhs` stands for "right-hand side" and represents the vector that is
         being added to the current vector (`self`)
         :return: The `__add__` method returns a new `Vector2` object that is the result of adding the
@@ -91,7 +91,7 @@ class Vector2:
         """
         The `__isub__` method subtracts the x and y components of the given vector from the current
         vector and returns the updated vector.
-        
+
         :param rhs: rhs is the right-hand side operand of the subtraction operation. In this case, it is
         an instance of the Vector2 class
         :return: The `__isub__` method returns `self` after performing the subtraction operation.
@@ -113,7 +113,7 @@ class Vector2:
         """
         The function subtracts the x and y components of two Vector2 objects and returns a new Vector2
         object with the result.
-        
+
         :param rhs: rhs is an instance of the Vector2 class
         :return: The `__sub__` method returns a new `Vector2` object that represents the subtraction of
         the `rhs` vector from the current vector.
@@ -133,7 +133,7 @@ class Vector2:
     def __imul__(self, alpha: float):
         """
         The function multiplies the x and y components of a Vector2 object by a scalar value.
-        
+
         :param alpha: The parameter "alpha" is a scalar value that is used to multiply the x and y
         components of the vector
         :type alpha: float
@@ -153,7 +153,7 @@ class Vector2:
     def __mul__(self, alpha: float):
         """
         The function multiplies a Vector2 object by a scalar value.
-        
+
         :param alpha: The parameter `alpha` is a scalar value that is used to multiply each component of
         the vector
         :type alpha: float
@@ -173,7 +173,7 @@ class Vector2:
         """
         The `__itruediv__` function divides the x and y components of a Vector2 object by a scalar
         value.
-        
+
         :param alpha: The parameter `alpha` is a scalar value that is used to divide the `x` and `y`
         components of the vector. It is used to scale down the vector by dividing each component by
         `alpha`
@@ -217,7 +217,7 @@ class Vector2:
     def __truediv__(self, alpha: float):
         """
         The `__truediv__` function divides the x and y components of a Vector2 object by a scalar value.
-        
+
         :param alpha: The parameter `alpha` is a scalar value that is used to divide the x and y
         components of the vector. It is used to scale down the vector by dividing each component by the
         scalar value
