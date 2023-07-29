@@ -53,15 +53,13 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     The `suppress` function performs zero suppression on a given set of vectors using the Bairsow's
     method.
 
-    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents
-    without further context
+    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents without further context
     :type vA: Vector2
     :param vA1: The parameter `vA1` represents a 2D vector
     :type vA1: Vector2
     :param vri: The parameter `vri` represents a vector with components `x` and `y`
     :type vri: Vector2
-    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a
-    `Vector2` object that represents the vector `vrj` in a mathematical context
+    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a `Vector2` object that represents the vector `vrj` in a mathematical context
     :type vrj: Vector2
     :return: The function `suppress` returns two values: `va` and `va1`.
 
@@ -104,15 +102,13 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     The `suppress` function performs zero suppression on a given set of vectors using the Bairsow's
     method.
 
-    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents
-    without further context
+    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents without further context
     :type vA: Vector2
     :param vA1: The parameter `vA1` represents a 2D vector
     :type vA1: Vector2
     :param vri: The parameter `vri` represents a vector with components `x` and `y`
     :type vri: Vector2
-    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a
-    `Vector2` object that represents the vector `vrj` in a mathematical context
+    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a `Vector2` object that represents the vector `vrj` in a mathematical context
     :type vrj: Vector2
     :return: The function `suppress` returns two values: `va` and `va1`.
 
@@ -157,11 +153,9 @@ def horner_eval(coeffs: List, degree: int, zval):
 
     :param coeffs: A list of coefficients of a polynomial.
     :type coeffs: List
-    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
-    that indicates the highest power of the variable in the polynomial
+    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value that indicates the highest power of the variable in the polynomial
     :type degree: int
-    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated.
-    It can be a float or a complex number
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
     :return: the value of the polynomial evaluated at the given value `zval`.
 
     Examples:
@@ -184,11 +178,9 @@ def horner_backward(coeffs: List, degree: int, val):
 
     :param coeffs: A list of coefficients of a polynomial.
     :type coeffs: List
-    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value
-    that indicates the highest power of the variable in the polynomial
+    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value that indicates the highest power of the variable in the polynomial
     :type degree: int
-    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated.
-    It can be a float or a complex number
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
     :return: the value of the polynomial evaluated at the given value `zval`.
 
     Examples:
@@ -219,12 +211,9 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     The `horner` function evaluates a polynomial using Horner's scheme and returns the result as a
     `Vector2` object.
 
-    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the
-    list represents the coefficient of a term in the polynomial, starting from the highest degree term
-    and going down to the constant term
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the list represents the coefficient of a term in the polynomial, starting from the highest degree term and going down to the constant term
     :type coeffs: List[float]
-    :param degree: The degree parameter represents the degree of the polynomial. It determines the
-    number of coefficients in the coeffs list
+    :param degree: The degree parameter represents the degree of the polynomial. It determines the number of coefficients in the coeffs list
     :type degree: int
     :param vr: vr is a Vector2 object that represents the values of x and y in the polynomial expression
     :type vr: Vector2
@@ -344,15 +333,11 @@ def pbairstow_even(
     The `pbairstow_even` function implements a parallel version of Bairstow's method for finding the
     roots of a polynomial.
 
-    :param coeffs: The parameter `coeffs` is a list of floats representing the coefficients of a polynomial. It
-    represents the polynomial whose roots we want to find using Bairstow's method
+    :param coeffs: The parameter `coeffs` is a list of floats representing the coefficients of a polynomial. It represents the polynomial whose roots we want to find using Bairstow's method
     :type coeffs: List[float]
-    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a
-    complex number and is used as an initial guess for the roots of the polynomial equation. The length
-    of the `vrs` list determines the number of roots to be found
+    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a complex number and is used as an initial guess for the roots of the polynomial equation. The length of the `vrs` list determines the number of roots to be found
     :type vrs: List[Vector2]
-    :param options: The `options` parameter is an instance of the `Options` class, which is used to
-    specify various options for the Bairstow's method algorithm. It has the following attributes:
+    :param options: The `options` parameter is an instance of the `Options` class, which is used to specify various options for the Bairstow's method algorithm. It has the following attributes:
     :return: The function `pbairstow_even` returns a tuple containing the following elements:
 
     Examples:
@@ -391,12 +376,9 @@ def find_rootq(vr: Vector2) -> Tuple[Num, Num]:
     The function `find_rootq` solves a quadratic equation of the form x^2 - r*x - q = 0 and returns the
     two roots as a tuple.
 
-    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic
-    equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y`
-    component represents the constant term (`q`) in the equation `x^2 -
+    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y` component represents the constant term (`q`) in the equation `x^2 - r*x - q = 0. 
     :type vr: Vector2
-    :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic
-    equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
+    :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
     values of the input parameters.
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2

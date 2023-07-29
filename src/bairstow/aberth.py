@@ -45,9 +45,7 @@ def initial_aberth(coeffs: List[FoC]) -> List[complex]:
     The `initial_aberth` function calculates the initial guesses for the roots of a polynomial using the
     Aberth method.
 
-    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the
-    list represents the coefficient of a term in the polynomial, starting from the highest degree term
-    down to the constant term. For example, if the polynomial is `5x^4 + 2x^3
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the list represents the coefficient of a term in the polynomial, starting from the highest degree term down to the constant term. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[FoC]
     :return: The function `initial_aberth` returns a list of complex numbers.
 
@@ -72,9 +70,7 @@ def initial_aberth_orig(coeffs: List[FoC]) -> List[complex]:
     The function `initial_aberth_orig` calculates the initial approximations for the roots of a
     polynomial using the Aberth method.
 
-    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the
-    list represents the coefficient of a term in the polynomial, starting from the highest degree term
-    down to the constant term. For example, if the polynomial is `3x^2 + 2x +
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the list represents the coefficient of a term in the polynomial, starting from the highest degree term down to the constant term. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[FoC]
     :return: The function `initial_aberth_orig` returns a list of complex numbers.
 
@@ -117,17 +113,11 @@ def aberth(
     """
     The `aberth` function implements Aberth's method for polynomial root-finding.
 
-    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. The coefficients
-    are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`,
-    then the `coeffs` list would be `[3, 2, 1]`
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be `[3, 2, 1]`
     :type coeffs: List[FoC]
-    :param zs: The `zs` parameter in the `aberth` function represents the initial guesses for the roots
-    of the polynomial. It is a list of complex numbers. Each complex number represents an initial guess
-    for a root of the polynomial
+    :param zs: The `zs` parameter in the `aberth` function represents the initial guesses for the roots of the polynomial. It is a list of complex numbers. Each complex number represents an initial guess for a root of the polynomial
     :type zs: List[complex]
-    :param options: The `options` parameter is an instance of the `Options` class, which contains
-    various options for the Aberth's method algorithm. It is an optional parameter, and if not provided,
-    it will default to an instance of the `Options` class with default values
+    :param options: The `options` parameter is an instance of the `Options` class, which contains various options for the Aberth's method algorithm. It is an optional parameter, and if not provided, it will default to an instance of the `Options` class with default values
     :type options: Options
     :return: The function `aberth` returns a tuple containing three elements:
     1. `zs`: a list of complex numbers representing the approximate roots of the polynomial.
@@ -172,9 +162,7 @@ def initial_aberth_autocorr(coeffs: List[float]) -> List[complex]:
     The function `initial_aberth_autocorr` calculates the initial values for the Aberth method for
     finding the roots of a polynomial.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For
-    example, if the polynomial is `5x^4 + 2x^3 + 9x^2 + 6x +
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be `[3, 2, 1]`
     :type coeffs: List[float]
     :return: The function `initial_aberth_autocorr` returns a list of complex numbers.
 
@@ -205,9 +193,7 @@ def initial_aberth_autocorr_orig(coeffs: List[float]) -> List[complex]:
     The function `initial_aberth_autocorr_orig` calculates the initial guesses for the roots of a
     polynomial using the Aberth method.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For
-    example, if the polynomial is `5x^4 + 2x^3 + 9x^2 + 6x +
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be `[3, 2, 1]`
     :type coeffs: List[float]
     :return: The function `initial_aberth_autocorr_orig` returns a list of complex numbers.
 
@@ -238,16 +224,11 @@ def aberth_autocorr(
     The `aberth_autocorr` function implements the Aberth method for finding the roots of a polynomial
     using autocorrelation.
 
-    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. It represents the
-    coefficients of a polynomial equation in descending order of degree. For example, if the polynomial
-    is `5x^4 + 2x^3 + 9x^2 + 6x + 2
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be `[3, 2, 1]`
     :type coeffs: List[float]
-    :param zs: The `zs` parameter is a list of complex numbers. It represents the initial guesses for
-    the roots of a polynomial
+    :param zs: The `zs` parameter is a list of complex numbers. It represents the initial guesses for the roots of a polynomial
     :type zs: List[complex]
-    :param options: The `options` parameter is an instance of the `Options` class, which contains
-    various options for the algorithm. It is an optional parameter and if not provided, it will default
-    to an instance of the `Options` class with default values
+    :param options: The `options` parameter is an instance of the `Options` class, which contains various options for the algorithm. It is an optional parameter and if not provided, it will default to an instance of the `Options` class with default values
     :return: The function `aberth_autocorr` returns a tuple containing the following elements:
 
     Examples:

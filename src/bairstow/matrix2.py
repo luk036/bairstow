@@ -20,15 +20,15 @@ class Matrix2:
         :type y: Vector2
 
         Example:
-        >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
-        >>> print(m.x)
-        <1.0, 2.0>
-        >>> print(m.y)
-        <3.0, 4.0>
-        >>> print(m.mdot(Vector2(5.0, 6.0)))
-        <17.0, 22.0>
-        >>> print(m.det())
-        -2.0
+            >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
+            >>> print(m.x)
+            <1.0, 2.0>
+            >>> print(m.y)
+            <3.0, 4.0>
+            >>> print(m.mdot(Vector2(5.0, 6.0)))
+            <17.0, 39.0>
+            >>> print(m.det())
+            -2.0
         """
         self._x = x
         self._y = y
@@ -63,15 +63,14 @@ class Matrix2:
         """
         The `mdot` function performs a matrix-vector product.
 
-        :param rhs: The parameter `rhs` is a Vector2 object that represents the right-hand side vector
-        in the matrix-vector product
+        :param rhs: The parameter `rhs` is a Vector2 object that represents the right-hand side vector in the matrix-vector product
         :type rhs: Vector2
         :return: The method `mdot` returns a `Vector2` object.
 
         Examples:
             >>> m = Matrix2(Vector2(1.0, 2.0), Vector2(3.0, 4.0))
             >>> print(m.mdot(Vector2(5.0, 6.0)))
-            <17.0, 22.0>
+            <17.0, 39.0>
         """
         return Vector2(self._x.dot(rhs), self._y.dot(rhs))
 

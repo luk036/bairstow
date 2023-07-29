@@ -14,7 +14,7 @@ def initial_autocorr_new(coeffs: List[float]) -> List[Vector2]:
     The function `initial_autocorr_new` calculates the initial autocorrelation values for a given set of
     coefficients.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, then the `coeffs` list would be
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the list represents the coefficient of a term in the polynomial, starting from the highest degree term down to the constant term. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[float]
     :return: The function `initial_autocorr_new` returns a list of `Vector2` objects.
 
@@ -41,7 +41,7 @@ def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
     The function initial_autocorr calculates and returns a list of Vector2 objects based on the given
     list of coefficients.
 
-    :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the coefficients of a polynomial. The coefficients are ordered from highest degree to lowest degree. For example, if the polynomial is `3x^2 + 2x + 1`, the `coeffs` list would be `[
+    :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each element in the list represents the coefficient of a term in the polynomial, starting from the highest degree term down to the constant term. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[float]
     :return: The function `initial_autocorr` returns a list of `Vector2` objects.
     """
