@@ -1,9 +1,10 @@
-from math import cos, sqrt, pi
+from math import cos, pi, sqrt
+from typing import List, Tuple
+
 from .lds import VdCorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
-from typing import List, Tuple
 
 Num = Tuple[float, complex]
 
@@ -376,7 +377,7 @@ def find_rootq(vr: Vector2) -> Tuple[Num, Num]:
     The function `find_rootq` solves a quadratic equation of the form x^2 - r*x - q = 0 and returns the
     two roots as a tuple.
 
-    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y` component represents the constant term (`q`) in the equation `x^2 - r*x - q = 0. 
+    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y` component represents the constant term (`q`) in the equation `x^2 - r*x - q = 0.
     :type vr: Vector2
     :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
     values of the input parameters.

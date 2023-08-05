@@ -1,4 +1,4 @@
-from math import cos, sqrt, pi
+from math import cos, pi, sqrt
 from typing import List
 
 from .lds import VdCorput

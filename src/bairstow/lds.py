@@ -1,5 +1,5 @@
 from math import cos, pi, sin, sqrt
-from typing import Sequence, List
+from typing import List, Sequence
 
 TWO_PI = 2.0 * pi
 

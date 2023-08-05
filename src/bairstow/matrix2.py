@@ -1,6 +1,5 @@
 from .vector2 import Vector2
 
-
 """
 The Matrix2 class represents a 2x2 matrix with two Vector2 objects as its rows.
 """
