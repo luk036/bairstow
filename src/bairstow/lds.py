@@ -64,7 +64,10 @@ class VdCorput:
         """
         The function initializes an object with a base and scale value, and sets the count to 0.
 
-        :param base: The `base` parameter is an optional integer argument that specifies the base of the number system. By default, it is set to 2, which means the number system is binary (base 2). However, you can change the value of `base` to any other prime number to use a different, defaults to 2
+        :param base: The `base` parameter is an optional integer argument that specifies the
+        base of the number system. By default, it is set to 2, which means the number system is
+        binary (base 2). However, you can change the value of `base` to any other prime number
+        to use a different, defaults to 2
         :type base: int (optional)
         """
         self.count = 0
@@ -142,7 +145,10 @@ class Halton:
         The `__init__()` function is a constructor for the `Halton` class that initializes two `VdCorput`
         objects with the given bases.
 
-        :param base: The `base` parameter is a list of two integers. These integers are used as the bases for generating the Halton sequence. The first integer in the list is used as the base for generating the first component of the sequence, and the second integer is used as the base for generating the second component
+        :param base: The `base` parameter is a list of two integers. These integers are used as the bases
+        for generating the Halton sequence. The first integer in the list is used as the base for generating
+        the first component of the sequence, and the second integer is used as the base for generating the
+        second component.
         :type base: Sequence[int]
         """
         self.vdc0 = VdCorput(base[0])

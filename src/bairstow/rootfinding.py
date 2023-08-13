@@ -334,11 +334,15 @@ def pbairstow_even(
     The `pbairstow_even` function implements a parallel version of Bairstow's method for finding the
     roots of a polynomial.
 
-    :param coeffs: The parameter `coeffs` is a list of floats representing the coefficients of a polynomial. It represents the polynomial whose roots we want to find using Bairstow's method
+    :param coeffs: The parameter `coeffs` is a list of floats representing the coefficients of a
+    polynomial. It represents the polynomial whose roots we want to find using Bairstow's method
     :type coeffs: List[float]
-    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents a complex number and is used as an initial guess for the roots of the polynomial equation. The length of the `vrs` list determines the number of roots to be found
+    :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents
+    a complex number and is used as an initial guess for the roots of the polynomial equation. The
+    length of the `vrs` list determines the number of roots to be found
     :type vrs: List[Vector2]
-    :param options: The `options` parameter is an instance of the `Options` class, which is used to specify various options for the Bairstow's method algorithm. It has the following attributes:
+    :param options: The `options` parameter is an instance of the `Options` class, which is used to
+    specify various options for the Bairstow's method algorithm.
     :return: The function `pbairstow_even` returns a tuple containing the following elements:
 
     Examples:
@@ -377,9 +381,12 @@ def find_rootq(vr: Vector2) -> Tuple[Num, Num]:
     The function `find_rootq` solves a quadratic equation of the form x^2 - r*x - q = 0 and returns the
     two roots as a tuple.
 
-    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and the `y` component represents the constant term (`q`) in the equation `x^2 - r*x - q = 0.
+    :param vr: The parameter `vr` is a Vector2 object that represents the coefficients of a quadratic
+    equation. The `x` component of `vr` represents the coefficient of the linear term (`r`), and
+    the `y` component represents the constant term (`q`) in the equation `x^2 - r*x - q = 0.
     :type vr: Vector2
-    :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
+    :return: The function `find_rootq` returns a tuple containing the two roots of the quadratic
+    equation x^2 - r*x - q = 0. The roots can be either floats or complex numbers, depending on the
     values of the input parameters.
 
     (x - x1)(x - x2) = x^2 - (x1 + x2) x + x1 * x2
