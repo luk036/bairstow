@@ -16,7 +16,7 @@ class Options:
     # tol_suppress: float = 1e-1
 
 
-# def horner_eval(pb: List[float], z):
+# def horner_eval(coeffs1: List[float], z):
 
 
 def delta(vA: Vector2, vr: Vector2, vp: Vector2) -> Vector2:
@@ -163,7 +163,7 @@ def horner_backward(coeffs: List, degree: int, val):
 def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     """[summary]
 
-    Note: pb becomes the quotient after calling this function
+    Note: coeffs1 becomes the quotient after calling this function
 
     Args:
         coeffs (List[float]): [description]
@@ -280,13 +280,13 @@ def pbairstow_even(
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
-            pb = coeffs.copy()
-            vA = horner(pb, degree, vrs[i])
+            coeffs1 = coeffs.copy()
+            vA = horner(coeffs1, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vA1 = horner(pb, degree - 2, vrs[i])
+            vA1 = horner(coeffs1, degree - 2, vrs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):

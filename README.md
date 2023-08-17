@@ -11,6 +11,6 @@
 - O(N) storage requirement, where N = degree of polynomial.
 - Preserve structure, e.g. auto correlation function
 
-## Used In
+## Used by
 
 - [multiplierless](https://github.com/luk036/multiplierless)

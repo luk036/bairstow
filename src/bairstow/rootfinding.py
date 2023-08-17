@@ -359,13 +359,13 @@ def pbairstow_even(
     for niter in range(options.max_iters):
         tol = 0.0
         for i in filter(lambda i: converged[i] is False, range(M)):
-            pb = coeffs.copy()
-            vA = horner(pb, degree, vrs[i])
+            coeffs1 = coeffs.copy()
+            vA = horner(coeffs1, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vA1 = horner(pb, degree - 2, vrs[i])
+            vA1 = horner(coeffs1, degree - 2, vrs[i])
             tol = max(tol_i, tol)
             for j in robin.exclude(i):
                 vA, vA1 = suppress(vA, vA1, vrs[i], vrs[j])

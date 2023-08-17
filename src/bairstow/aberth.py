@@ -12,12 +12,12 @@ FoC = Union[float, complex]
 PI = pi
 
 
-def horner_backward(pb: List, degree: int, alpha: FoC) -> FoC:
+def horner_backward(coeffs1: List, degree: int, alpha: FoC) -> FoC:
     """
     The `horner_backward` function evaluates a polynomial using the Horner's method in backward form.
 
-    :param pb: The parameter `pb` is a list of coefficients of a polynomial in descending order of degree. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `pb` would be `[3, -2, 5, -1]`
-    :type pb: List
+    :param coeffs1: The parameter `coeffs1` is a list of coefficients of a polynomial in descending order of degree. For example, if the polynomial is `3x^3 - 2x^2 + 5x - 1`, then `coeffs1` would be `[3, -2, 5, -1]`
+    :type coeffs1: List
     :param degree: The degree of the polynomial, which is the highest power of the variable in the polynomial. For example, if the polynomial is 3x^2 + 2x + 1, then the degree is 2
     :type degree: int
     :param alpha: The value of alpha is a constant that is used in the Horner's method for backward polynomial evaluation. It is typically a scalar value
@@ -35,9 +35,9 @@ def horner_backward(pb: List, degree: int, alpha: FoC) -> FoC:
         0.006920331351966613
     """
     for i in range(2, degree + 2):
-        pb[-i] -= pb[-(i - 1)]
-        pb[-i] /= -alpha
-    return pb[-(degree + 1)]
+        coeffs1[-i] -= coeffs1[-(i - 1)]
+        coeffs1[-i] /= -alpha
+    return coeffs1[-(degree + 1)]
 
 
 def initial_aberth(coeffs: List[FoC]) -> List[complex]:
@@ -152,13 +152,13 @@ def aberth(
     for niter in range(options.max_iters):
         tol = 0.0
         for i in filter(lambda i: not converged[i], range(M)):
-            pb = coeffs.copy()
-            p_eval = horner_eval(pb, degree, zs[i])
+            coeffs1 = coeffs.copy()
+            p_eval = horner_eval(coeffs1, degree, zs[i])
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            p1_eval = horner_eval(pb, degree - 1, zs[i])
+            p1_eval = horner_eval(coeffs1, degree - 1, zs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
@@ -268,13 +268,13 @@ def aberth_autocorr(
         tol: float = 0.0
         # exclude converged
         for i in filter(lambda i: not converged[i], range(M)):
-            pb = coeffs.copy()
-            p_eval = horner_eval(pb, degree, zs[i])
+            coeffs1 = coeffs.copy()
+            p_eval = horner_eval(coeffs1, degree, zs[i])
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            p1_eval = horner_eval(pb, degree - 1, zs[i])
+            p1_eval = horner_eval(coeffs1, degree - 1, zs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):

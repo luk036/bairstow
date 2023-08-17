@@ -12,7 +12,7 @@ def horner2(coeffs: List, degree: int, vr: Vector2) -> Vector2:
         P(x) = P (x) ⋅ ⎝x  - r ⋅ x - q⎠ + A ⋅ x + B
                 1
 
-    Note: pb becomes the quotient after calling this function
+    Note: coeffs1 becomes the quotient after calling this function
 
     Args:
         coeffs (List[float]): [description]
@@ -74,12 +74,12 @@ def bairstow2(
     """
     degree = len(coeffs) - 1
     for niter in range(options.max_iters):
-        pb = coeffs.copy()
-        vb = horner2(pb, degree, vr)
+        coeffs1 = coeffs.copy()
+        vb = horner2(coeffs1, degree, vr)
         tol = max(abs(vb.x), abs(vb.y))
         if tol < options.tol:
             return vr, niter, True
-        vc = horner2(pb, degree - 2, vr)
+        vc = horner2(coeffs1, degree - 2, vr)
         cb = vb.x + vr.x * vc.y + vr.y * vc.x
         mat_c = Matrix2(Vector2(vc.y, -vc.x), Vector2(-cb, vc.y))
         vr -= mat_c.mdot(vb) / mat_c.det()
@@ -139,13 +139,13 @@ def pbairstow2_even(
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
-            pb = coeffs.copy()
-            vb = horner2(pb, degree, vrs[i])
+            coeffs1 = coeffs.copy()
+            vb = horner2(coeffs1, degree, vrs[i])
             tol_i = max(abs(vb.x), abs(vb.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vc = horner2(pb, degree - 2, vrs[i])
+            vc = horner2(coeffs1, degree - 2, vrs[i])
             tol = max(tol_i, tol)
             for j in robin.exclude(i):
                 vb, vc = suppress(vb, vc, vrs[i], vrs[j])

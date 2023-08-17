@@ -94,14 +94,14 @@ def pbairstow_autocorr(
         tol = 0.0
         # found = True  # initial
         for i in filter(lambda i: converged[i] is False, range(M)):
-            pb = coeffs.copy()
-            vA = horner(pb, degree, vrs[i])
+            coeffs1 = coeffs.copy()
+            vA = horner(coeffs1, degree, vrs[i])
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
-            vA1 = horner(pb, degree - 2, vrs[i])
+            vA1 = horner(coeffs1, degree - 2, vrs[i])
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             # for j in robin.exclude(i):
             #     suppress_old(vA, vA1, vrs[i], vrs[j])
