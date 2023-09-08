@@ -1,7 +1,7 @@
 from math import cos, pi, sqrt
 from typing import List, Tuple
 
-from .lds import VdCorput
+from lds_gen.lds import VdCorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
