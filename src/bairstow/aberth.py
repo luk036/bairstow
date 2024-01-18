@@ -6,7 +6,7 @@ from lds_gen.lds import VdCorput
 from .robin import Robin
 
 # from pytest import approx
-from .rootfinding import Options, horner_eval
+from .rootfinding import Options, horner_eval, horner_eval_f
 
 FoC = Union[float, complex]
 PI = pi
@@ -58,14 +58,15 @@ def initial_aberth(coeffs: List[FoC]) -> List[complex]:
     """
     degree: int = len(coeffs) - 1
     center: FoC = -coeffs[1] / (degree * coeffs[0])
-    p_center: FoC = horner_eval(coeffs.copy(), degree, center)
+    p_center: FoC = horner_eval_f(coeffs, center)
     re: FoC = pow(-p_center, 1.0 / degree)
     k = 2 * PI / degree
-    z0s: List[complex] = []
-    for i in range(degree):
-        theta = k * (0.25 + i)
-        z0s += [center + re * exp(theta * 1j)]
-    return z0s
+    return [center + re * exp(k * (0.25 + i) * 1j) for i in range(degree)]
+    # z0s: List[complex] = []
+    # for i in range(degree):
+    #     theta = k * (0.25 + i)
+    #     z0s += [center + re * exp(theta * 1j)]
+    # return z0s
 
 
 def initial_aberth_orig(coeffs: List[FoC]) -> List[complex]:
@@ -86,14 +87,15 @@ def initial_aberth_orig(coeffs: List[FoC]) -> List[complex]:
     """
     degree: int = len(coeffs) - 1
     center: FoC = -coeffs[1] / (degree * coeffs[0])
-    p_center: FoC = horner_eval(coeffs.copy(), degree, center)
+    p_center: FoC = horner_eval_f(coeffs, center)
     re: FoC = pow(-p_center, 1.0 / degree)
     k = 2 * PI / degree
-    z0s: List[complex] = []
-    for i in range(degree):
-        theta = k * (0.25 + i)
-        z0s += [center + re * exp(theta * 1j)]
-    return z0s
+    return [center + re * exp(k * (0.25 + i) * 1j) for i in range(degree)]
+    # z0s: List[complex] = []
+    # for i in range(degree):
+    #     theta = k * (0.25 + i)
+    #     z0s += [center + re * exp(theta * 1j)]
+    # return z0s
 
 
 #
@@ -196,10 +198,11 @@ def initial_aberth_autocorr(coeffs: List[float]) -> List[complex]:
     z0s = []
     vgen = VdCorput(2)
     vgen.reseed(1)
-    for _ in range(degree):
-        vdc = 2 * PI * vgen.pop()
-        z0s += [re * exp(vdc * 1j)]
-    return z0s
+    return [re * exp(2 * PI * vgen.pop() * 1j) for _ in range(degree)]
+    # for _ in range(degree):
+    #     vdc = 2 * PI * vgen.pop()
+    #     z0s += [re * exp(vdc * 1j)]
+    # return z0s
 
 
 def initial_aberth_autocorr_orig(coeffs: List[float]) -> List[complex]:

@@ -1,12 +1,14 @@
 from math import cos, pi, sqrt
-from typing import List, Tuple
+from functools import reduce
+
+from typing import List, Tuple, Union
 
 from lds_gen.lds import VdCorput
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2
 
-Num = Tuple[float, complex]
+Num = Union[float, complex]
 
 PI = pi
 
@@ -140,6 +142,24 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     return va, va1
 
 
+def horner_eval_f(coeffs: List, zval):
+    """Polynomial evaluation using Horner's scheme
+
+    The `horner_eval_f` function evaluates a polynomial using Horner's scheme.
+
+    :param coeffs: A list of coefficients of a polynomial.
+    :type coeffs: List
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
+    :return: the value of the polynomial evaluated at the given value `zval`.
+
+    Examples:
+        >>> coeffs = [1, -8, -72, 382, 727, -2310]
+        >>> horner_eval_f(coeffs, 5, 3)
+        960
+    """
+    return reduce(lambda res, coeff: res * zval + coeff, coeffs)
+
+
 #                     n         n - 1
 #        P(z) = c  ⋅ z  + c  ⋅ z      + ... + c
 #                0         1                   n
@@ -253,7 +273,7 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
     # p_eval = np.poly1d(coeffs)
-    p_center = horner_eval(coeffs.copy(), degree, center)
+    p_center = horner_eval_f(coeffs, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
     vr0s = []
@@ -285,7 +305,7 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     degree = len(coeffs) - 1
     center = -coeffs[1] / (degree * coeffs[0])
     # p_eval = np.poly1d(coeffs)
-    p_center = horner_eval(coeffs.copy(), degree, center)
+    p_center = horner_eval_f(coeffs, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
     vr0s = []
