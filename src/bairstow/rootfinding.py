@@ -1,9 +1,10 @@
-from math import cos, pi, sqrt
 from functools import reduce
-from itertools import accumulate, tee
-from typing import List, Tuple, Union, Any
+from itertools import accumulate
+from math import cos, pi, sqrt
+from typing import Any, List, Tuple, Union
 
 from lds_gen.lds import VdCorput
+
 from .matrix2 import Matrix2
 from .robin import Robin
 from .vector2 import Vector2

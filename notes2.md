@@ -113,4 +113,3 @@ int main() {
 }
 ```
 In this example, we have a global array `data` that we want to calculate the sum of its elements in parallel. We divide the workload among multiple threads and each thread computes a partialSum by iterating over a portion of the array. Then, we synchronize the threads using a mutex (`mtx`) to combine the PartialSums and calculate the global sum. The updated sums are stored back in the correct positions in the `data` array. Finally, we wait for all threads to finish and calculate the total sum of all elements.
-
