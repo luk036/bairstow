@@ -1,7 +1,7 @@
 from math import cos, pi, sqrt
 from functools import reduce
-
-from typing import List, Tuple, Union
+from itertools import accumulate, tee
+from typing import List, Tuple, Union, Any
 
 from lds_gen.lds import VdCorput
 from .matrix2 import Matrix2
@@ -154,7 +154,7 @@ def horner_eval_f(coeffs: List, zval):
 
     Examples:
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
-        >>> horner_eval_f(coeffs, 5, 3)
+        >>> horner_eval_f(coeffs, 3)
         960
     """
     return reduce(lambda res, coeff: res * zval + coeff, coeffs)
@@ -166,7 +166,7 @@ def horner_eval_f(coeffs: List, zval):
 #
 #        P(z) = P (z) ⋅ ⎛z - z   ⎞ + A
 #                1      ⎝     val⎠
-def horner_eval(coeffs: List, degree: int, zval):
+def horner_eval(coeffs: List, zval) -> Tuple[Any, List]:
     """Polynomial evaluation using Horner's scheme
 
     The `horner_eval` function evaluates a polynomial using Horner's scheme and updates the coefficients
@@ -174,21 +174,18 @@ def horner_eval(coeffs: List, degree: int, zval):
 
     :param coeffs: A list of coefficients of a polynomial.
     :type coeffs: List
-    :param degree: The degree parameter represents the degree of the polynomial. It is an integer value that indicates the highest power of the variable in the polynomial
-    :type degree: int
     :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
     :return: the value of the polynomial evaluated at the given value `zval`.
 
     Examples:
         >>> coeffs = [1, -8, -72, 382, 727, -2310]
-        >>> horner_eval(coeffs, 5, 3)
-        960
-        >>> coeffs
-        [1, -5, -87, 121, 1090, 960]
+        >>> horner_eval(coeffs, 3)
+        (960, [1, -5, -87, 121, 1090, 960])
     """
-    for i in range(degree):
-        coeffs[i + 1] += coeffs[i] * zval
-    return coeffs[degree]
+    coeffs = list(accumulate(coeffs, lambda res, coeff: res * zval + coeff))
+    return coeffs[-1], coeffs
+    # for i in range(degree):
+    #    coeffs[i + 1] += coeffs[i] * zval
 
 
 def horner_backward(coeffs: List, degree: int, val):
@@ -256,6 +253,27 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     return Vector2(coeffs[degree - 1], coeffs[degree])
 
 
+def horner2(vcoeffs: List[Vector2], vr: Vector2) -> Tuple[Vector2, List[Vector2]]:
+    """Polynomial evaluation using Horner's scheme
+
+    The `horner_eval` function evaluates a polynomial using Horner's scheme and updates the coefficients
+    list in place.
+
+    :param coeffs: A list of coefficients of a polynomial.
+    :type coeffs: List
+    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
+    :return: the value of the polynomial evaluated at the given value `zval`.
+
+    Examples:
+        >>> coeffs = [1, -8, -72, 382, 727, -2310]
+        >>> horner_eval(coeffs, 3)
+        (960, [1, -5, -87, 121, 1090, 960])
+    """
+    # vcoeffs = iter(Vector2(x, y) for x, y in zip(coeffs[:-1], coeffs[1:]))
+    vcoeffs2 = list(accumulate(vcoeffs, lambda res, coeff: vr * res.x + coeff))
+    return vcoeffs2[-1], vcoeffs2
+
+
 def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """Initial guess
 
@@ -276,16 +294,18 @@ def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     p_center = horner_eval_f(coeffs, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
-    vr0s = []
     degree //= 2
     degree *= 2  # make even
     k = PI / degree
-    for i in range(1, degree, 2):
-        temp = radius * cos(k * i)
-        r0 = 2 * (center + temp)
-        t0 = m + 2 * center * temp  # ???
-        vr0s += [Vector2(r0, -t0)]
-    return vr0s
+    temp = iter(radius * cos(k * i) for i in range(1, degree, 2))
+    return [Vector2(2 * (center + t), -(m + 2 * center * t)) for t in temp]
+    # vr0s = []
+    # for i in range(1, degree, 2):
+    #     temp = radius * cos(k * i)
+    #     r0 = 2 * (center + temp)
+    #     t0 = m + 2 * center * temp  # ???
+    #     vr0s += [Vector2(r0, -t0)]
+    # return vr0s
 
 
 def initial_guess(coeffs: List[float]) -> List[Vector2]:
@@ -308,18 +328,20 @@ def initial_guess(coeffs: List[float]) -> List[Vector2]:
     p_center = horner_eval_f(coeffs, center)
     radius = pow(abs(p_center), 1 / degree)
     m = center * center + radius * radius
-    vr0s = []
     degree //= 2
     degree *= 2  # make even
     # k = PI / degree
     vgen = VdCorput(2)
     vgen.reseed(1)
-    for _ in range(1, degree, 2):
-        temp = radius * cos(PI * vgen.pop())
-        r0 = 2 * (center + temp)
-        t0 = m + 2 * center * temp  # ???
-        vr0s += [Vector2(r0, -t0)]
-    return vr0s
+    temp = iter(radius * cos(PI * vgen.pop()) for _ in range(1, degree, 2))
+    return [Vector2(2 * (center + t), -(m + 2 * center * t)) for t in temp]
+    # vr0s = []
+    # for _ in range(1, degree, 2):
+    #     temp = radius * cos(PI * vgen.pop())
+    #     r0 = 2 * (center + temp)
+    #     t0 = m + 2 * center * temp  # ???
+    #     vr0s += [Vector2(r0, -t0)]
+    # return vr0s
 
 
 #            new                               -1
@@ -378,18 +400,20 @@ def pbairstow_even(
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
-        for i in filter(lambda i: converged[i] is False, range(M)):
+        for i, (vri, ci) in enumerate(zip(vrs, converged)):
+            if ci:
+                continue
             coeffs1 = coeffs.copy()
-            vA = horner(coeffs1, degree, vrs[i])
+            vA = horner(coeffs1, degree, vri)
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            vA1 = horner(coeffs1, degree - 2, vrs[i])
+            vA1 = horner(coeffs1, degree - 2, vri)
             tol = max(tol_i, tol)
             for j in robin.exclude(i):
-                vA, vA1 = suppress(vA, vA1, vrs[i], vrs[j])
-            vrs[i] -= delta(vA, vrs[i], vA1)
+                vA, vA1 = suppress(vA, vA1, vri, vrs[j])
+            vrs[i] -= delta(vA, vri, vA1)
         if tol < options.tol:
             return vrs, niter, True
     return vrs, options.max_iters, False

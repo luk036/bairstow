@@ -148,23 +148,24 @@ def aberth(
         True
     """
     M = len(zs)
-    degree = len(coeffs) - 1
+    # degree = len(coeffs) - 1
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
-        for i in filter(lambda i: not converged[i], range(M)):
-            coeffs1 = coeffs.copy()
-            p_eval = horner_eval(coeffs1, degree, zs[i])
+        for i, (zi, ci) in enumerate(zip(zs, converged)):
+            if ci:
+                continue
+            p_eval, coeffs1 = horner_eval(coeffs, zi)
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            p1_eval = horner_eval(coeffs1, degree - 1, zs[i])
+            p1_eval, _ = horner_eval(coeffs1[:-1], zi)
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                p1_eval -= p_eval / (zs[i] - zs[j])
+                p1_eval -= p_eval / (zi - zs[j])
             zs[i] -= p_eval / p1_eval
         if tol < options.tol:
             return zs, niter, True
@@ -195,7 +196,7 @@ def initial_aberth_autocorr(coeffs: List[float]) -> List[complex]:
         re = 1 / re
     degree //= 2
     # k = 2 * PI / degree
-    z0s = []
+    # z0s = []
     vgen = VdCorput(2)
     vgen.reseed(1)
     return [re * exp(2 * PI * vgen.pop() * 1j) for _ in range(degree)]
@@ -264,20 +265,19 @@ def aberth_autocorr(
         >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
     """
     M: int = len(zs)
-    degree: int = len(coeffs) - 1
+    # degree: int = len(coeffs) - 1
     converged: List[bool] = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol: float = 0.0
         # exclude converged
         for i in filter(lambda i: not converged[i], range(M)):
-            coeffs1 = coeffs.copy()
-            p_eval = horner_eval(coeffs1, degree, zs[i])
+            p_eval, coeffs1 = horner_eval(coeffs, zs[i])
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            p1_eval = horner_eval(coeffs1, degree - 1, zs[i])
+            p1_eval, _ = horner_eval(coeffs1[:-1], zs[i])
             tol = max(tol_i, tol)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
