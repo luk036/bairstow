@@ -197,10 +197,10 @@ def initial_aberth_autocorr(coeffs: List[float]) -> List[complex]:
         re = 1 / re
     degree //= 2
     # k = 2 * PI / degree
-    # z0s = []
     vgen = VdCorput(2)
     vgen.reseed(1)
     return [re * exp(2 * PI * vgen.pop() * 1j) for _ in range(degree)]
+    # z0s = []
     # for _ in range(degree):
     #     vdc = 2 * PI * vgen.pop()
     #     z0s += [re * exp(vdc * 1j)]
@@ -231,11 +231,12 @@ def initial_aberth_autocorr_orig(coeffs: List[float]) -> List[complex]:
         re = 1 / re
     degree //= 2
     k = 2 * PI / degree
-    z0s = []
-    for i in range(degree):
-        theta = k * (0.25 + i)
-        z0s += [re * exp(theta * 1j)]
-    return z0s
+    return [re * exp(k * (0.25 + i) * 1j) for i in range(degree)]
+    # z0s = []
+    # for i in range(degree):
+    #     theta = k * (0.25 + i)
+    #     z0s += [re * exp(theta * 1j)]
+    # return z0s
 
 
 def aberth_autocorr(
@@ -266,29 +267,26 @@ def aberth_autocorr(
         >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
     """
     M: int = len(zs)
-    # degree: int = len(coeffs) - 1
     converged: List[bool] = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol: float = 0.0
-        # exclude converged
-        for i in filter(lambda i: not converged[i], range(M)):
-            p_eval, coeffs1 = horner_eval(coeffs, zs[i])
+        for i, (zi, ci) in enumerate(zip(zs, converged)):
+            if ci:
+                continue
+            p_eval, coeffs1 = horner_eval(coeffs, zi)
             tol_i = abs(p_eval)
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            p1_eval, _ = horner_eval(coeffs1[:-1], zs[i])
+            p1_eval, _ = horner_eval(coeffs1[:-1], zi)
             tol = max(tol_i, tol)
-            # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
-                p1_eval -= p_eval / (zs[i] - zs[j])
-                # for j in range(M):  # exclude i
-                zsn = 1.0 / zs[j]
-                p1_eval -= p_eval / (zs[i] - zsn)
+                zj = zs[j]
+                p1_eval -= p_eval / (zi - zj)
+                zsn = 1.0 / zj
+                p1_eval -= p_eval / (zi - zsn)
             zs[i] -= p_eval / p1_eval
-            # if abs(zs[i]) > 1.0:  # pick those inside the unit circle
-            #     zs[i] = 1.0 / zs[i]
         if tol < options.tol:
             return zs, niter, True
     return zs, options.max_iters, False

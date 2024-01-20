@@ -36,8 +36,7 @@ def initial_autocorr_new(coeffs: List[float]) -> List[Vector2]:
     # vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, degree, 2)]
     vgen = VdCorput(2)
     vgen.reseed(1)
-    vr0s = [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, degree, 2)]
-    return vr0s
+    return [Vector2(2 * re * cos(PI * vgen.pop()), -m) for _ in range(1, degree, 2)]
 
 
 def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
@@ -59,8 +58,7 @@ def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
     degree //= 2
     k = PI / degree
     m = re * re
-    vr0s = [Vector2(2 * re * cos(k * i), -m) for i in range(1, degree, 2)]
-    return vr0s
+    return [Vector2(2 * re * cos(k * i), -m) for i in range(1, degree, 2)]
 
 
 def pbairstow_autocorr(
@@ -93,27 +91,29 @@ def pbairstow_autocorr(
     robin = Robin(M)
     for niter in range(options.max_iters):
         tol = 0.0
-        # found = True  # initial
-        for i in filter(lambda i: converged[i] is False, range(M)):
+        for i, (vri, ci) in enumerate(zip(vrs, converged)):
+            if ci:
+                continue
             coeffs1 = coeffs.copy()
-            vA = horner(coeffs1, degree, vrs[i])
+            vA = horner(coeffs1, degree, vri)
             tol_i = max(abs(vA.x), abs(vA.y))
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
             tol = max(tol, tol_i)
-            vA1 = horner(coeffs1, degree - 2, vrs[i])
+            vA1 = horner(coeffs1, degree - 2, vri)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             # for j in robin.exclude(i):
             #     suppress_old(vA, vA1, vrs[i], vrs[j])
             #     # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
             # vrs[i] -= delta2(vA, vrs[i], vA1)
             for j in robin.exclude(i):
-                suppress_old(vA, vA1, vrs[i], vrs[j])
+                vrj = vrs[j]
+                suppress_old(vA, vA1, vri, vrj)
                 # for j in range(M):
-                vrn = Vector2(-vrs[j].x, 1.0) / vrs[j].y
-                suppress_old(vA, vA1, vrs[i], vrn)
-            vrs[i] -= delta(vA, vrs[i], vA1)
+                vrn = Vector2(-vrj.x, 1.0) / vrj.y
+                suppress_old(vA, vA1, vri, vrn)
+            vrs[i] -= delta(vA, vri, vA1)
             # vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:
         #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
