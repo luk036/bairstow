@@ -248,7 +248,7 @@ class Vector2:
         return f"<{self.x}, {self.y}>"
 
 
-if __name__ == "__main__":
-    v = Vector2(3.0, 4.0)
-    w = Vector2(5.0, 6.0)
-    print(v.dot(w))
+# if __name__ == "__main__":
+#     v = Vector2(3.0, 4.0)
+#     w = Vector2(5.0, 6.0)
+#     print(v.dot(w))
