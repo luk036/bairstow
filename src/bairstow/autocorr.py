@@ -16,9 +16,9 @@ def initial_autocorr_new(coeffs: List[float]) -> List[Vector2]:
     coefficients.
 
     :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each
-    element in the list represents the coefficient of a term in the polynomial, starting
-    from the highest degree term down to the constant term. For example, if the polynomial
-    is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
+                   element in the list represents the coefficient of a term in the polynomial, starting
+                   from the highest degree term down to the constant term. For example, if the polynomial
+                   is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[float]
     :return: The function `initial_autocorr_new` returns a list of `Vector2` objects.
 
@@ -45,9 +45,9 @@ def initial_autocorr(coeffs: List[float]) -> List[Vector2]:
     list of coefficients.
 
     :param coeffs: The `coeffs` parameter is a list of coefficients of a polynomial. Each
-    element in the list represents the coefficient of a term in the polynomial, starting from
-    the highest degree term down to the constant term. For example, if the polynomial
-    is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
+                   element in the list represents the coefficient of a term in the polynomial, starting from
+                   the highest degree term down to the constant term. For example, if the polynomial
+                   is `3x^3 - 2x^2 + 5x - 1`, then `coeffs` would be `[3, -2, 5, -1]`
     :type coeffs: List[float]
     :return: The function `initial_autocorr` returns a list of `Vector2` objects.
     """
@@ -69,14 +69,14 @@ def pbairstow_autocorr(
     the autocorrelation method.
 
     :param coeffs: The `coeffs` parameter is a list of floating-point numbers representing the
-    coefficients of a polynomial. The polynomial is assumed to be of even degree
+                   coefficients of a polynomial. The polynomial is assumed to be of even degree
     :type coeffs: List[float]
     :param vrs: The `vrs` parameter is a list of `Vector2` objects. Each `Vector2` object represents
-    a complex number and is used as an initial guess for the roots of the polynomial. The
-    `pbairstow_autocorr` function uses these initial guesses to iteratively refine the
+                a complex number and is used as an initial guess for the roots of the polynomial. The
+                `pbairstow_autocorr` function uses these initial guesses to iteratively refine the
     :type vrs: List[Vector2]
     :param options: The `options` parameter is an instance of the `Options` class, which contains
-    various options for the algorithm. It has the following attributes:
+                    various options for the algorithm. It has the following attributes:
     :type options: Options
     :return: The function `pbairstow_autocorr` returns three values: `vrs`, `niter`, and `found`.
 
@@ -132,8 +132,8 @@ def extract_autocorr(vr: Vector2) -> Vector2:
     (x - a1)(x - a2) = x^2 - (a1 + a2) x + a1 * a2
 
     :param vr: The parameter `vr` is a Vector2 object, which represents a 2D vector. The `x` component
-    of the vector (`vr.x`) represents the value of `r`, and the `y` component of the vector (`vr.y`)
-    represents the value of `q`
+               of the vector (`vr.x`) represents the value of `r`, and the `y` component of the vector (`vr.y`)
+               represents the value of `q`
     :type vr: Vector2
     :return: The function `extract_autocorr` returns a `Vector2` object.
 
