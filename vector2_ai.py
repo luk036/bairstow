@@ -1,4 +1,3 @@
-
 [PYTHON_CODE]
 """
 The file 'vector2.py' contains a class 'Vector2'. The code below demonstrates how to use the Vector2 class by creating several instances of it and using the various methods to perform calculations with them.
@@ -7,6 +6,7 @@ The file 'vector2.py' contains a class 'Vector2'. The code below demonstrates ho
 #!/usr/bin/env python3
 import math
 from typing import Tuple, Any
+
 
 class Vector2:
     def __init__(self, x: float = 0.0, y: float = 0.0):
@@ -20,21 +20,21 @@ class Vector2:
         """
         self._x = x
         self._y = y
-    
+
     @property
     def x(self) -> float:
         return self._x
-    
+
     @x.setter
     def x(self, value: float):
         if not isinstance(value, (float, int)):
             raise TypeError("The 'x' attribute must be a float or an integer.")
         self._x = value
-    
+
     @property
     def y(self) -> float:
         return self._y
-    
+
     @y.setter
     def y(self, value: float):
         if not isinstance(value, (float, int)):
@@ -54,9 +54,11 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(v1, Vector2) or not isinstance(v2, Vector2):
-            raise TypeError("The 'distance' function expects both arguments to be instances of the Vector2 class.")
+            raise TypeError(
+                "The 'distance' function expects both arguments to be instances of the Vector2 class."
+            )
         return math.sqrt((v2.x - v1.x) ** 2 + (v2.y - v1.y) ** 2)
-    
+
     @staticmethod
     def magnitude(v: Any) -> float:
         """
@@ -68,9 +70,11 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(v, Vector2):
-            raise TypeError("The 'magnitude' function expects an argument to be an instance of the Vector2 class.")
-        return math.sqrt(v.x ** 2 + v.y ** 2)
-    
+            raise TypeError(
+                "The 'magnitude' function expects an argument to be an instance of the Vector2 class."
+            )
+        return math.sqrt(v.x**2 + v.y**2)
+
     @staticmethod
     def angle(v1: Any, v2: Any) -> float:
         """
@@ -84,9 +88,14 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(v1, Vector2) or not isinstance(v2, Vector2):
-            raise TypeError("The 'angle' function expects both arguments to be instances of the Vector2 class.")
-        return math.acos((v1.x * v2.x + v1.y * v2.y) / (Vector2.magnitude(v1) * Vector2.magnitude(v2)))
-    
+            raise TypeError(
+                "The 'angle' function expects both arguments to be instances of the Vector2 class."
+            )
+        return math.acos(
+            (v1.x * v2.x + v1.y * v2.y)
+            / (Vector2.magnitude(v1) * Vector2.magnitude(v2))
+        )
+
     def add(self, other: Any) -> Tuple[float, float]:
         """
         The function adds two vectors together and returns their sum as a tuple. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its addition with a specified scalar value.
@@ -97,14 +106,16 @@ class Vector2:
         :rtype: Tuple[float, float]
         """
         if not isinstance(other, Vector2) and not isinstance(other, (float, int)):
-            raise TypeError("The 'add' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value.")
-        
+            raise TypeError(
+                "The 'add' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value."
+            )
+
         if isinstance(other, Vector2):
             return self.x + other.x, self.y + other.y
-        
+
         elif isinstance(other, (float, int)):
             return self.x + other, self.y + other
-    
+
     def sub(self, other: Any) -> Tuple[float, float]:
         """
         The function subtracts a specified vector or scalar value from another vector and returns their difference as a tuple. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its subtraction with a specified scalar value.
@@ -115,14 +126,16 @@ class Vector2:
         :rtype: Tuple[float, float]
         """
         if not isinstance(other, Vector2) and not isinstance(other, (float, int)):
-            raise TypeError("The 'sub' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value.")
-        
+            raise TypeError(
+                "The 'sub' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value."
+            )
+
         elif isinstance(other, Vector2):
             return self.x - other.x, self.y - other.y
-        
+
         elif isinstance(other, (float, int)):
             return self.x - other, self.y - other
-    
+
     def mul(self, other: Any) -> Tuple[float, float]:
         """
         The function multiplies two vectors together and returns their product as a tuple. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its multiplication with a specified scalar value.
@@ -133,14 +146,16 @@ class Vector2:
         :rtype: Tuple[float, float]
         """
         if not isinstance(other, Vector2) and not isinstance(other, (float, int)):
-            raise TypeError("The 'mul' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value.")
-        
+            raise TypeError(
+                "The 'mul' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value."
+            )
+
         elif isinstance(other, Vector2):
             return self.x * other.x, self.y * other.y
-        
+
         elif isinstance(other, (float, int)):
             return self.x * other, self.y * other
-    
+
     def div(self, other: Any) -> Tuple[float, float]:
         """
         The function divides one vector by another and returns their ratio as a tuple. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its division with a specified scalar value.
@@ -151,14 +166,16 @@ class Vector2:
         :rtype: Tuple[float, float]
         """
         if not isinstance(other, Vector2) and not isinstance(other, (float, int)):
-            raise TypeError("The 'div' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value.")
-        
+            raise TypeError(
+                "The 'div' function expects either one argument to be an instance of the Vector2 class or another argument to be a scalar value."
+            )
+
         elif isinstance(other, Vector2):
             return self.x / other.x, self.y / other.y
-        
+
         elif isinstance(other, (float, int)):
             return self.x / other, self.y / other
-    
+
     def normalize(self) -> Tuple[float, float]:
         """
         The function normalizes a vector and returns its magnitude as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its normalization.
@@ -167,10 +184,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2):
-            raise TypeError("The 'normalize' function expects one argument to be an instance of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'normalize' function expects one argument to be an instance of the Vector2 class."
+            )
+
         return (self.x / self.mag), (self.y / self.mag)
-    
+
     def rotate(self, angle: float = 0) -> Tuple[float, float]:
         """
         The function rotates a vector by an angle in degrees and returns its new coordinates as a tuple. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its rotation with no specified angle.
@@ -181,15 +200,17 @@ class Vector2:
         :rtype: Tuple[float, float]
         """
         if not isinstance(self, Vector2):
-            raise TypeError("The 'rotate' function expects one argument to be an instance of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'rotate' function expects one argument to be an instance of the Vector2 class."
+            )
+
         cos = math.cos(math.radians(angle))
         sin = math.sin(math.radians(angle))
         x_new = self.x * cos - self.y * sin
         y_new = self.x * sin + self.y * cos
-        
+
         return (x_new, y_new)
-    
+
     def distance(self, other: Vector2) -> float:
         """
         The function calculates the Euclidean distance between two vectors and returns it as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its distance from another specified vector.
@@ -200,10 +221,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2) or not isinstance(other, Vector2):
-            raise TypeError("The 'distance' function expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'distance' function expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
-    
+
     def dot(self, other: Vector2) -> float:
         """
         The function calculates the dot product between two vectors and returns it as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its dot product with another specified vector.
@@ -214,10 +237,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2) or not isinstance(other, Vector2):
-            raise TypeError("The 'dot' function expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'dot' function expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return self.x * other.x + self.y * other.y
-    
+
     def cross(self, other: Vector2) -> float:
         """
         The function calculates the cross product between two vectors and returns it as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its cross product with another specified vector.
@@ -228,10 +253,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2) or not isinstance(other, Vector2):
-            raise TypeError("The 'cross' function expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'cross' function expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return self.x * other.y - self.y * other.x
-    
+
     def project(self, normal: Vector2) -> float:
         """
         The function projects a vector onto another vector and returns it as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its projection onto another specified vector.
@@ -242,10 +269,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2) or not isinstance(normal, Vector2):
-            raise TypeError("The 'project' function expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'project' function expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return normal.dot(self) / normal.mag
-    
+
     def reflect(self, normal: Vector2) -> float:
         """
         The function reflects a vector around another vector and returns it as a scalar value. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its reflection around another specified vector.
@@ -256,10 +285,12 @@ class Vector2:
         :rtype: float
         """
         if not isinstance(self, Vector2) or not isinstance(normal, Vector2):
-            raise TypeError("The 'reflect' function expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The 'reflect' function expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return self - 2 * normal.project(self) * normal
-    
+
     def __add__(self, other: Vector2) -> Vector2:
         """
         The function adds another vector to this one and returns it as a new instance of Vector2. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its addition with another specified vector.
@@ -270,10 +301,12 @@ class Vector2:
         :rtype: Vector2
         """
         if not isinstance(self, Vector2) or not isinstance(other, Vector2):
-            raise TypeError("The '+' operator expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The '+' operator expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return Vector2((self.x + other.x), (self.y + other.y))
-    
+
     def __sub__(self, other: Vector2) -> Vector2:
         """
         The function subtracts another vector from this one and returns it as a new instance of Vector2. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its subtraction with another specified vector.
@@ -284,10 +317,12 @@ class Vector2:
         :rtype: Vector2
         """
         if not isinstance(self, Vector2) or not isinstance(other, Vector2):
-            raise TypeError("The '-' operator expects one or two arguments to be instances of the Vector2 class.")
-        
+            raise TypeError(
+                "The '-' operator expects one or two arguments to be instances of the Vector2 class."
+            )
+
         return Vector2((self.x - other.x), (self.y - other.y))
-    
+
     def __mul__(self, other: float) -> Vector2:
         """
         The function multiplies this vector by a scalar and returns it as a new instance of Vector2. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its multiplication with another specified scalar.
@@ -298,10 +333,12 @@ class Vector2:
         :rtype: Vector2
         """
         if not isinstance(self, Vector2) or not isinstance(other, float):
-            raise TypeError("The '*' operator expects one or two arguments to be instances of the Vector2 class and a scalar.")
-        
+            raise TypeError(
+                "The '*' operator expects one or two arguments to be instances of the Vector2 class and a scalar."
+            )
+
         return Vector2((self.x * other), (self.y * other))
-    
+
     def __truediv__(self, other: float) -> Vector2:
         """
         The function divides this vector by a scalar and returns it as a new instance of Vector2. If no argument is provided, it assumes that the first argument is an instance of Vector2 and calculates its division by another specified scalar.
@@ -312,10 +349,12 @@ class Vector2:
         :rtype: Vector2
         """
         if not isinstance(self, Vector2) or not isinstance(other, float):
-            raise TypeError("The '/' operator expects one or two arguments to be instances of the Vector2 class and a scalar.")
-        
+            raise TypeError(
+                "The '/' operator expects one or two arguments to be instances of the Vector2 class and a scalar."
+            )
+
         return Vector2((self.x / other), (self.y / other))
-    
+
     def __str__(self) -> str:
         """
         The function returns this vector as a string representation.
@@ -324,4 +363,3 @@ class Vector2:
         :rtype: str
         """
         return f"{self.x}, {self.y}"
-
