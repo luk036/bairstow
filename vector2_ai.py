@@ -1,4 +1,3 @@
-[PYTHON_CODE]
 """
 The file 'vector2.py' contains a class 'Vector2'. The code below demonstrates how to use the Vector2 class by creating several instances of it and using the various methods to perform calculations with them.
 """
