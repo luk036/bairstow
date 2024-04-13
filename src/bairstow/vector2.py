@@ -227,6 +227,9 @@ class Vector2:
         """
         return Vector2(self.x / alpha, self.y / alpha)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.x}, {self.y}"
+
     def __str__(self):
         """
         The __str__ function returns a string representation of a Vector2 object in the format "<x, y>".
