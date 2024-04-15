@@ -143,7 +143,7 @@ def aberth(
         >>> h = [5.0, 2.0, 9.0, 6.0, 2.0]
         >>> z0s = initial_aberth(h)
         >>> opt = Options()
-        >>> opt.tol = 1e-8
+        >>> opt.tolerance = 1e-8
         >>> zs, niter, found = aberth(h, z0s, opt)
         >>> found
         True
@@ -153,7 +153,7 @@ def aberth(
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
-        tol = 0.0
+        tolerance = 0.0
         for i, (zi, ci) in enumerate(zip(zs, converged)):
             if ci:
                 continue
@@ -163,12 +163,12 @@ def aberth(
                 converged[i] = True
                 continue
             p1_eval, _ = horner_eval(coeffs1[:-1], zi)
-            tol = max(tol_i, tol)
+            tolerance = max(tol_i, tolerance)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
                 p1_eval -= p_eval / (zi - zs[j])
             zs[i] -= p_eval / p1_eval
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return zs, niter, True
     return zs, options.max_iters, False
 
@@ -259,14 +259,14 @@ def aberth_autocorr(
         >>> z0s = initial_aberth_autocorr(h)
         >>> zs, niter, found = aberth_autocorr(h, z0s)
         >>> opt = Options()
-        >>> opt.tol = 1e-8
+        >>> opt.tolerance = 1e-8
         >>> zs, niter, found = aberth_autocorr(h, z0s, opt)
     """
     M: int = len(zs)
     converged: List[bool] = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
-        tol: float = 0.0
+        tolerance: float = 0.0
         for i, (zi, ci) in enumerate(zip(zs, converged)):
             if ci:
                 continue
@@ -276,14 +276,14 @@ def aberth_autocorr(
                 converged[i] = True
                 continue
             p1_eval, _ = horner_eval(coeffs1[:-1], zi)
-            tol = max(tol_i, tol)
+            tolerance = max(tol_i, tolerance)
             for j in robin.exclude(i):
                 zj = zs[j]
                 p1_eval -= p_eval / (zi - zj)
                 zsn = 1.0 / zj
                 p1_eval -= p_eval / (zi - zsn)
             zs[i] -= p_eval / p1_eval
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return zs, niter, True
     return zs, options.max_iters, False
 
@@ -294,14 +294,14 @@ def aberth_autocorr(
 #     zs, niter, found = aberth(h, z0s)
 #     assert (niter == 2)
 #     assert (found)
-#     zs, niter, found = aberth(h, z0s, Options(tol=1e-10))
+#     zs, niter, found = aberth(h, z0s, Options(tolerance=1e-10))
 #     assert (niter == 2)
 #     assert (found)
 #     zs, niter, found = aberth(h, z0s, Options(max_iters=1))
 #     assert (niter == 1)
 #     assert (found)
-#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tol=1e-10))
+#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tolerance=1e-10))
 #     assert (niter == 1)
 #     assert (found)
-#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tol=1e-11))
+#     zs, niter, found = aberth(h, z0s, Options(max_iters=1, tolerance=1e-11))
 #     assert (niter == 0)

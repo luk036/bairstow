@@ -82,7 +82,7 @@ r = [
 def test_aberth_fir():
     z0s = initial_aberth(r)
     opt = Options()
-    opt.tol = 1e-8
+    opt.tolerance = 1e-8
     zs, niter, found = aberth(r, z0s, opt)
     print([niter, found])
     for z in zs:
@@ -93,7 +93,7 @@ def test_aberth_fir():
 def test_aberth_autocorr_fir():
     z0s = initial_aberth_autocorr(r)
     opt = Options()
-    opt.tol = 1e-14
+    opt.tolerance = 1e-14
     zs, niter, found = aberth_autocorr(r, z0s, opt)
     print([niter, found])
     for z in zs:
@@ -104,7 +104,7 @@ def test_aberth_autocorr_fir():
 def test_aberth_fir_orig():
     z0s = initial_aberth_orig(r)
     opt = Options()
-    opt.tol = 1e-8
+    opt.tolerance = 1e-8
     zs, niter, found = aberth(r, z0s, opt)
     print([niter, found])
     for z in zs:
@@ -115,7 +115,7 @@ def test_aberth_fir_orig():
 def test_aberth_autocorr_fir_orig():
     z0s = initial_aberth_autocorr_orig(r)
     opt = Options()
-    opt.tol = 1e-14
+    opt.tolerance = 1e-14
     zs, niter, found = aberth_autocorr(r, z0s, opt)
     print([niter, found])
     for z in zs:
@@ -177,7 +177,7 @@ def test_aberth_autocorr_fir_orig():
 #     ]
 #     z0s = initial_aberth_lds(r)
 #     opt = Options()
-#     opt.tol = 1e-8
+#     opt.tolerance = 1e-8
 #     zs, niter, found = aberth(r, z0s, opt)
 #     print([niter, found])
 #     print([z for z in zs])

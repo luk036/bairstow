@@ -6,7 +6,7 @@ def test_autocorr():
     h = [10.0, 34.0, 75.0, 94.0, 150.0, 94.0, 75.0, 34.0, 10.0]
     vr0s = initial_autocorr(h)
     opts = Options()
-    # opts.tol = 1e-30
+    # opts.tolerance = 1e-30
     vrs, niter, found = pbairstow_autocorr(h, vr0s, opts)
     print([niter, found])
 

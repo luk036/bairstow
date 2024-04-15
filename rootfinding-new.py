@@ -11,7 +11,7 @@ PI = acos(-1.0)
 
 class Options:
     max_iters: int = 2000
-    tol: float = 1e-12
+    tolerance: float = 1e-12
     tol_ind: float = 1e-15
     # tol_suppress: float = 1e-1
 
@@ -276,7 +276,7 @@ def pbairstow_even(
     converged = [False] * M
     robin = Robin(M)
     for niter in range(1, options.max_iters):
-        tol = 0.0
+        tolerance = 0.0
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
@@ -287,12 +287,12 @@ def pbairstow_even(
                 converged[i] = True
                 continue
             vA1 = horner(coeffs1, degree - 2, vrs[i])
-            tol = max(tol_i, tol)
+            tolerance = max(tol_i, tolerance)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             for j in robin.exclude(i):
                 vA1 -= delta(vA, vrs[j], vrs[i] - vrs[j])
             vrs[i] -= delta(vA, vrs[i], vA1)
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return vrs, niter, True
     return vrs, options.max_iters, False
 

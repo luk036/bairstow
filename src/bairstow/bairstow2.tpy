@@ -76,8 +76,8 @@ def bairstow2(
     for niter in range(options.max_iters):
         coeffs1 = coeffs.copy()
         vb = horner2(coeffs1, degree, vr)
-        tol = max(abs(vb.x), abs(vb.y))
-        if tol < options.tol:
+        tolerance = max(abs(vb.x), abs(vb.y))
+        if tolerance < options.tolerance:
             return vr, niter, True
         vc = horner2(coeffs1, degree - 2, vr)
         cb = vb.x + vr.x * vc.y + vr.y * vc.x
@@ -135,7 +135,7 @@ def pbairstow2_even(
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
-        tol = 0.0
+        tolerance = 0.0
         # exclude converged
         for i in filter(lambda i: converged[i] is False, range(M)):
             # for i in range(M):
@@ -146,13 +146,13 @@ def pbairstow2_even(
                 converged[i] = True
                 continue
             vc = horner2(coeffs1, degree - 2, vrs[i])
-            tol = max(tol_i, tol)
+            tolerance = max(tol_i, tolerance)
             for j in robin.exclude(i):
                 vb, vc = suppress(vb, vc, vrs[i], vrs[j])
 
             cb = vb.x + vrs[i].x * vc.y + vrs[i].y * vc.x
             mat_c = Matrix2(Vector2(vc.y, -vc.x), Vector2(-cb, vc.y))
             vrs[i] -= mat_c.mdot(vb) / mat_c.det()
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return vrs, niter, True
     return vrs, options.max_iters, False

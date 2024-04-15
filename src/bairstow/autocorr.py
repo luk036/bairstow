@@ -90,7 +90,7 @@ def pbairstow_autocorr(
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
-        tol = 0.0
+        tolerance = 0.0
         for i, (vri, ci) in enumerate(zip(vrs, converged)):
             if ci:
                 continue
@@ -100,7 +100,7 @@ def pbairstow_autocorr(
             if tol_i < options.tol_ind:
                 converged[i] = True
                 continue
-            tol = max(tol, tol_i)
+            tolerance = max(tolerance, tol_i)
             vA1 = horner(coeffs1, degree - 2, vri)
             # for j in filter(lambda j: j != i, range(M)):  # exclude i
             # for j in robin.exclude(i):
@@ -118,7 +118,7 @@ def pbairstow_autocorr(
         # if vrs[i].y > 1.0:
         #     vrs[i] = Vector2(vrs[i].x, 1.0) / vrs[i].y
         # for i in range(M):  # exclude converged
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return vrs, niter, True
     return vrs, options.max_iters, False
 

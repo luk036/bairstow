@@ -18,7 +18,7 @@ PI = pi
 # tolerance.
 class Options:
     max_iters: int = 2000
-    tol: float = 1e-12
+    tolerance: float = 1e-12
     tol_ind: float = 1e-15
     # tol_suppress: float = 1e-1
 
@@ -400,7 +400,7 @@ def pbairstow_even(
     converged = [False] * M
     robin = Robin(M)
     for niter in range(options.max_iters):
-        tol = 0.0
+        tolerance = 0.0
         for i, (vri, ci) in enumerate(zip(vrs, converged)):
             if ci:
                 continue
@@ -411,11 +411,11 @@ def pbairstow_even(
                 converged[i] = True
                 continue
             vA1 = horner(coeffs1, degree - 2, vri)
-            tol = max(tol_i, tol)
+            tolerance = max(tol_i, tolerance)
             for j in robin.exclude(i):
                 vA, vA1 = suppress(vA, vA1, vri, vrs[j])
             vrs[i] -= delta(vA, vri, vA1)
-        if tol < options.tol:
+        if tolerance < options.tolerance:
             return vrs, niter, True
     return vrs, options.max_iters, False
 
