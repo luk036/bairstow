@@ -14,7 +14,6 @@ With these tools, you can write parallel algorithms in C++ by breaking the probl
 
 Here's an example of a parallel algorithm that uses multiple threads to calculate the sum of an array in C++:
 
-
 ```cpp
 #include <iostream>
 #include <vector>
@@ -46,12 +45,12 @@ int main() {
     return 0;
 }
 ```
+
 In this example, we use the `std::execution::par` policy with the `std::accumulate` algorithm to calculate the sum of the elements in the array in parallel. The `std::execution::par` policy tells the algorithm to execute in parallel with respect to other threads.
 
 Note that writing effective parallel algorithms requires careful consideration of data dependencies, thread management, and synchronization. It is essential to analyze the problem and identify potential bottlenecks or sources of concurrency before attempting to parallelize the solution.
 
 Certainly! Here's a more complex example that demonstrates handling data dependencies in a parallel algorithm:
-
 
 ```cpp
 #include <iostream>
@@ -112,4 +111,5 @@ int main() {
     return 0;
 }
 ```
+
 In this example, we have a global array `data` that we want to calculate the sum of its elements in parallel. We divide the workload among multiple threads and each thread computes a partialSum by iterating over a portion of the array. Then, we synchronize the threads using a mutex (`mtx`) to combine the PartialSums and calculate the global sum. The updated sums are stored back in the correct positions in the `data` array. Finally, we wait for all threads to finish and calculate the total sum of all elements.

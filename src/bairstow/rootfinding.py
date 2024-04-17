@@ -254,27 +254,6 @@ def horner(coeffs: List[float], degree: int, vr: Vector2) -> Vector2:
     return Vector2(coeffs[degree - 1], coeffs[degree])
 
 
-def horner2(vcoeffs: List[Vector2], vr: Vector2) -> Tuple[Vector2, List[Vector2]]:
-    """Polynomial evaluation using Horner's scheme
-
-    The `horner_eval` function evaluates a polynomial using Horner's scheme and updates the coefficients
-    list in place.
-
-    :param coeffs: A list of coefficients of a polynomial.
-    :type coeffs: List
-    :param zval: The `zval` parameter represents the value at which the polynomial is to be evaluated. It can be a float or a complex number
-    :return: the value of the polynomial evaluated at the given value `zval`.
-
-    Examples:
-        >>> coeffs = [1, -8, -72, 382, 727, -2310]
-        >>> horner_eval(coeffs, 3)
-        (960, [1, -5, -87, 121, 1090, 960])
-    """
-    # vcoeffs = iter(Vector2(x, y) for x, y in zip(coeffs[:-1], coeffs[1:]))
-    vcoeffs2 = list(accumulate(vcoeffs, lambda res, coeff: vr * res.x + coeff))
-    return vcoeffs2[-1], vcoeffs2
-
-
 def initial_guess_orig(coeffs: List[float]) -> List[Vector2]:
     """Initial guess
 
