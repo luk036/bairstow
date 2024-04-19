@@ -1,6 +1,5 @@
 [![Documentation Status](https://readthedocs.org/projects/bairstow/badge/?version=latest)](https://bairstow.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/luk036/bairstow/branch/main/graph/badge.svg?token=hbjnTDpNeg)](https://codecov.io/gh/luk036/bairstow)
-[![Coverage Status](https://coveralls.io/repos/github/luk036/bairstow/badge.svg?branch=main)](https://coveralls.io/github/luk036/bairstow?branch=main)
 
 # bairstow
 
