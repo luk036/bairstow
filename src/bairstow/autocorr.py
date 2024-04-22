@@ -4,7 +4,7 @@ from typing import List
 from lds_gen.lds import VdCorput
 
 from .robin import Robin
-from .rootfinding import Options, delta, horner, suppress_old
+from .rootfinding import Options, delta, horner, suppress
 from .vector2 import Vector2
 
 PI = pi
@@ -102,17 +102,12 @@ def pbairstow_autocorr(
                 continue
             tolerance = max(tolerance, tol_i)
             vA1 = horner(coeffs1, degree - 2, vri)
-            # for j in filter(lambda j: j != i, range(M)):  # exclude i
-            # for j in robin.exclude(i):
-            #     suppress_old(vA, vA1, vrs[i], vrs[j])
-            #     # vA1 -= delta1(vA, vrs[j], vrs[i] - vrs[j])
-            # vrs[i] -= delta2(vA, vrs[i], vA1)
             for j in robin.exclude(i):
                 vrj = vrs[j]
-                suppress_old(vA, vA1, vri, vrj)
+                vA, vA1 = suppress(vA, vA1, vri, vrj)
                 # for j in range(M):
                 vrn = Vector2(-vrj.x, 1.0) / vrj.y
-                suppress_old(vA, vA1, vri, vrn)
+                vA, vA1 = suppress(vA, vA1, vri, vrn)
             vrs[i] -= delta(vA, vri, vA1)
             # vrs[i] = extract_autocorr(vrs[i])
         # if vrs[i].y > 1.0:

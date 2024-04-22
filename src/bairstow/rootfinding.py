@@ -79,7 +79,7 @@ def suppress_old(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> suppress_old(vA, vA1, vri, vrj)
         >>> dr = delta(vA, vri, vA1)
         >>> print(dr)
-        <-16.780821917808325, 1.4383561643835612>
+        <-16.78082191780822, 1.4383561643835616>
     """
     A, B = vA.x, vA.y
     A1, B1 = vA1.x, vA1.y
@@ -126,9 +126,9 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
         >>> vri = Vector2(-2, 0)
         >>> vrj = Vector2(4, 5)
         >>> vA, vA1 = suppress(vA, vA1, vri, vrj)
-        >>> dr = delta(vA, vri, Vector2(vA1._x, vA1._y))
+        >>> dr = delta(vA, vri, vA1)
         >>> print(dr)
-        <-16.780821917808325, 1.4383561643835612>
+        <-16.780821917808254, 1.4383561643835616>
     """
     vp = vri - vrj
     r, q = vri.x, vri.y
@@ -140,6 +140,47 @@ def suppress(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
     vc._y -= va._x * p
     va *= e
     va1 = m_adjoint.mdot(vc)
+    return va, va1
+
+
+def suppress2(vA: Vector2, vA1: Vector2, vri: Vector2, vrj: Vector2):
+    """Zero suppresion
+
+    The `suppress` function performs zero suppression on a given set of vectors using the Bairsow's
+    method.
+
+    :param vA: The parameter `vA` represents a 2D vector. It is not clear what this vector represents without further context
+    :type vA: Vector2
+    :param vA1: The parameter `vA1` represents a 2D vector
+    :type vA1: Vector2
+    :param vri: The parameter `vri` represents a vector with components `x` and `y`
+    :type vri: Vector2
+    :param vrj: The parameter `vrj` represents a vector `vrj` in the function `suppress()`. It is a `Vector2` object that represents the vector `vrj` in a mathematical context
+    :type vrj: Vector2
+    :return: The function `suppress` returns two values: `va` and `va1`.
+
+    Reference:
+        D. C. Handscomb, Computation of the latent roots of a Hessenberg matrix
+        by Bairsow's method, Computer Journal, 5 (1962), pp. 139-141.
+
+    Examples:
+        >>> vA = Vector2(3, 3)
+        >>> vA1 = Vector2(1, 2)
+        >>> vri = Vector2(-2, 0)
+        >>> vrj = Vector2(4, 5)
+        >>> vA, vA1 = suppress2(vA, vA1, vri, vrj)
+        >>> dr = delta(vA, vri, vA1)
+        >>> print(dr)
+        <-16.78082191780822, 1.4383561643835616>
+    """
+    vp = vri - vrj
+    r, q = vrj.x, vrj.y
+    p, s = vp.x, vp.y
+    m_adjoint = Matrix2(Vector2(s, -p), Vector2(-p * q, p * r + s))
+    e = m_adjoint.det()
+    # m_inv = m_adjoint / e
+    va = vA * e
+    va1 = vA1 * e - m_adjoint.mdot(vA)
     return va, va1
 
 

@@ -87,6 +87,16 @@ class Matrix2:
         a21, a22 = self.y.x, self.y.y
         return a11 * a22 - a12 * a21
 
+    def __truediv__(self, alpha: float):
+        """
+        The `__truediv__` function divides the x and y components of a Matrix2 object by a scalar value.
+
+        :param alpha: The parameter `alpha` is a scalar value that is used to divide the x and y components of the vector. It is used to scale down the vector by dividing each component by the scalar value
+        :type alpha: float
+        :return: The `__truediv__` method returns a new `Matrix2` object with the x and y components divided by the given scalar `alpha`.
+        """
+        return Matrix2(self.x / alpha, self.y / alpha)
+
 
 if __name__ == "__main__":
     v = Vector2(3.0, 4.0)
