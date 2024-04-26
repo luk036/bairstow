@@ -1,4 +1,4 @@
-name: multiplierless
+name: bairstow
 channels:
   - conda-forge
 dependencies:
